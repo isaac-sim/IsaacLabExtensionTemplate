@@ -1,0 +1,25 @@
+[package]
+# Semantic Versioning is used: https://semver.org/
+version = "0.0.1"
+
+# The title and description fields are primarily for displaying extension info in UI
+title = "Extension template."
+description="Extension template for orbit."
+
+# Path (relative to the root) or content of readme markdown file for UI.
+readme  = "README.md"
+
+# URL of the extension source repository.
+repository = "https://github.com/isaac-orbit/orbit.ext_template.git"
+
+# One of categories for UI.
+category = "orbit"
+
+keywords = ["kit", "robotics", "orbit"]
+
+[dependencies]
+"omni.isaac.orbit" = {}
+
+# Main python module this extension provides.
+[[python.module]]
+name = "orbit.ext_template"
