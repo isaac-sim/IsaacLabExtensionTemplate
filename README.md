@@ -59,6 +59,8 @@ TODO
 
 ## Usage
 
+### Simple
+
 Illustrate the key funcionalities of your extension, for example:
 
 ```python
@@ -66,6 +68,20 @@ from orbit.ext_template import hello_world
 
 # print 'Hello World!'
 hello_world()
+```
+
+### Use rsl_rl
+
+Train a policy with rsl_rl.
+
+```bash
+orbit -p orbit/ext_template/scripts/train.py --task Isaac-Velocity-Flat-Anymal-D-v0 --headless
+```
+
+Play a policy that was trained on rsl_rl.
+
+```bash
+orbit -p orbit/ext_template/scripts/play.py --task Isaac-Velocity-Flat-Anymal-D-v0 --num_envs 16 --checkpoint <model.pt>
 ```
 
 ## Bugs & Feature Requests
