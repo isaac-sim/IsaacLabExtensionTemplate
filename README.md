@@ -31,10 +31,16 @@ This is research code, expect that it changes often and any fitness for a partic
 
 #### Dependencies
 
-- [Omniverse](https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_workstation.html)
+- [Isaac Sim](https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_workstation.html)
 - [Orbit](https://isaac-orbit.github.io/orbit/source/setup/installation.html)
 
 #### Building
+
+Set the your orbit path as an environment variable.
+
+```bash
+export ORBIT_PATH=<path-to-orbit>
+```
 
 Clone the latest version of the extension.
 
@@ -42,11 +48,11 @@ Clone the latest version of the extension.
 git clone https://github.com/isaac-orbit/orbit.ext_template.git
 ```
 
-Install the extension as a python package using pip.
+Install the extension as a python package to the isaac sim python executable.
 
 ```bash
 sudo apt install python3-pip
-${ISAACSIM_PATH}/python.sh -m pip install -e .
+${ORBIT_PATH}/_isaac_sim/python.sh -m pip install -e .
 ```
 
 ### Running in Docker
@@ -94,3 +100,7 @@ Please report bugs and request features using the [Issue Tracker](https://github
 [Eigen]: http://eigen.tuxfamily.org
 [std_srvs/Trigger]: http://docs.ros.org/api/std_srvs/html/srv/Trigger.html
 [sensor_msgs/Temperature]: http://docs.ros.org/api/sensor_msgs/html/msg/Temperature.html
+
+## TODO
+
+- how to connect with conda environments, rather than ISAACSIM_PYTHON_EXE
