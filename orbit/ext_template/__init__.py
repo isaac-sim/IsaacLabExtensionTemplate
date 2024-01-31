@@ -7,8 +7,6 @@ Python module serving as an extension template.
 import os
 import toml
 
-from .hello_world import hello_world
-
 # Conveniences to other module directories via relative paths
 EXT_TEMPLATE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 """Path to the extension source directory."""
