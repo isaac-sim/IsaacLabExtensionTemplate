@@ -1,11 +1,9 @@
 # Extension Template for Orbit
 
-## Example: Making use of extension modules
+## Interfacing with Orbit
 
-You can import your modules from the extension as follows:
+Within your extension you can make use of all functionalities of [Orbit](https://isaac-orbit.github.io/):
 
 ```python
-from orbit.ext_template import hello_world
-
-hello_world()
+import omni.isaac.orbit
 ```
