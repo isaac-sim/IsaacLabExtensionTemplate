@@ -6,7 +6,11 @@
 		"ms-python.python",
         "ms-python.vscode-pylance",
 		"ban.spellright",
+		"streetsidesoftware.code-spell-checker",
 		"ms-iot.vscode-ros",
 		"ExecutableBookProject.myst-highlight",
+		"ms-python.black-formatter",
+		"ms-python.flake8",
+		"njpwerner.autodocstring"
 	]
 }
