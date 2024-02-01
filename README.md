@@ -22,7 +22,7 @@ The EXTENSION TEMPLATE package has been tested on Ubuntu 22.04.
 This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
 
-![Example image](docs/ai-flowers.png)
+![Example image](docs/bdaii.png)
 
 
 ## Installation
