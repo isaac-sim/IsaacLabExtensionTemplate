@@ -1,5 +1,3 @@
 **/__pycache__/
-
-
-# ignore logs
 logs/
+dist/

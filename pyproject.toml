@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ext_template"
+version = "0.1.0"
+dependencies = [
+  "httpx",
+  "gidgethub[httpx]>4.0.0",
+  "django>2.1; os_name != 'nt'",
+  "django>2.0; os_name == 'nt'",
+]
+requires-python = ">=3.10"
+authors = [
+  {name = "Nico Burger", email = "nburger@theaiinstitute.com"},
+]
+maintainers = [
+  {name = "Nico Burger", email = "nburger@theaiinstitute.com"},
+]
+description = "Extension template for orbit"
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+keywords = ["isaac sim", "orbit", "extension", "template"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+]
+
+[project.optional-dependencies]
+gui = ["PyQt5"]
+cli = [
+  "rich",
+  "click",
+]
+
+[project.urls]
+Documentation = "https://github.com/isaac-orbit/orbit.ext_template/tree/main"
+Issues = "https://github.com/isaac-orbit/orbit.ext_template/issues"
+Repository = "https://github.com/isaac-orbit/orbit.ext_template.git"
+
+[project.scripts]
+spam-cli = "spam:main_cli"
+
+[project.gui-scripts]
+spam-gui = "spam:main_gui"
+
+[project.entry-points."spam.magical"]
+tomatoes = "spam:main_tomatoes"
+
+[tool.setuptools]
+py-modules = ['orbit']

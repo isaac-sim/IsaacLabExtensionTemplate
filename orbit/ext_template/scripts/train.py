@@ -14,7 +14,6 @@ import argparse
 import os
 
 from omni.isaac.orbit.app import AppLauncher
-import omni.exporter.urdf
 
 # local imports
 import cli_args  # isort: skip
