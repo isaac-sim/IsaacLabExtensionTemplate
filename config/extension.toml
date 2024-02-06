@@ -10,7 +10,7 @@ description="Extension Template for Orbit"  #TODO
 readme  = "docs/README.md"
 
 # URL of the extension source repository.
-repository = "https://github.com/isaac-orbit/orbit.ext_template.git"  # TODO
+repository = "https://github.com/isaac-orbit/orbit.ext_template.git"  # TODO, add your_repository_url
 
 # One of categories for UI.
 category = "orbit"

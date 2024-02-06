@@ -23,6 +23,8 @@ Maintainer: Nico Burger, nburger@theaiinstitute.com**
 
 ### Build
 
+**`[WARNING]`** If you will use your extension within a docker container, follow these build steps before starting the container.
+
 - Set build variables by tracking your orbit path and coming up with an extension name (e.g. `my_extension`).
 
 ```bash
@@ -34,6 +36,16 @@ export EXT_NAME=<your_extension_name>
 
 ```bash
 git clone https://github.com/isaac-orbit/orbit.ext_template.git
+```
+
+- Create a new git repository called `orbit.<your_extension_name>`.
+
+- Update the remote repository url.
+
+```bash
+rm -rf .git
+git init
+git remote add origin <your_repository_url>
 ```
 
 - Configure this template to your specific extension. Search for and replace **`TODO`**'s according to your extension's needs within the following files:
@@ -59,6 +71,8 @@ mv orbit.ext_template orbit.${EXT_NAME}
 
 ### VSCode Setup Instructions
 
+**`[WARNING]`** If you will use your extension within a docker container, now you can start a container and continue the next steps from within the container.
+
 To configure your Python environment in Visual Studio Code, you can follow these simple steps:
 
 1. **Open the Command Palette**: Use the shortcut `Ctrl+Shift+P` to bring up the Command Palette, which allows you to access various commands and tasks within the editor.
@@ -74,6 +88,12 @@ By following these steps, you will successfully prepare your VSCode environment 
 The extension can either live isolated from or integrated in the orbit repository.
 The installation method is a matter of preference and not relevant.
 For consistency, we recommend using the isolated installation method.
+
+
+Be sure to be in this repository for the following installation.
+```bash
+cd <path_to_your_extension>
+```
 
 #### A. Isolated **`RECOMMENDED`**
 
@@ -115,16 +135,6 @@ For further validation, we provide a sample script to train and play an agent wi
 
 ```bash
 rm -rf orbit/ext_template/scripts
-```
-
-- Create a new git repository called `orbit.<your_extension_name>`.
-
-- Update the remote repository url.
-
-```bash
-rm -rf .git
-git init
-git remote add origin <your_repository_url>
 ```
 
 - You are all set and no longer need these instructions. Replace this file (`README.md`) with the contents of `README_TEMPLATE.md` and delete the `README_TEMPLATE.md` file.

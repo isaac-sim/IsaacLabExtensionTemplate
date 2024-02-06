@@ -17,7 +17,6 @@ from omni.isaac.orbit.app import AppLauncher
 
 # local imports
 import cli_args  # isort: skip
-import orbit.ext_template
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")

@@ -39,10 +39,10 @@ export ORBIT_PATH=<path_to_orbit_repository>
 
 Clone the latest version of this extension template.
 
-**`TODO`** Update <your_extension_name>.
+**`TODO`** Update your git repository url.
 
 ```bash
-git clone https://github.com/isaac-orbit/orbit.<your_extension_name>.git
+git clone https://github.com/isaac-orbit/orbit.your_extension_name.git
 ```
 
 Install the extension as a python package to the isaac sim python executable.
