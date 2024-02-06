@@ -1,5 +1,7 @@
 # Extension Template
 
+**`TODO`** Rename title
+
 ## Overview
 
 **`TODO`** This section shall contain the extension description.
@@ -10,7 +12,7 @@
 
 The source code is released under a [BSD 3-Clause license](ros_package_template/LICENSE).
 
-**Author: `TODO` Nico Burger<br />
+**Author: `TODO` The ORBIT Project Developers<br />
 Affiliation: `TODO` [The AI Institute](https://theaiinstitute.com/)<br />
 Maintainer: `TODO` Nico Burger, nburger@theaiinstitute.com**
 

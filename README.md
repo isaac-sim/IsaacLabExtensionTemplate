@@ -69,6 +69,14 @@ cd ..
 mv orbit.ext_template "orbit.${EXT_NAME}"
 ```
 
+- Commit your changes with Git.
+
+```bash
+cd <path_to_your_extension>
+git add .
+git commit -m "Extension Setup."
+```
+
 ### VSCode Setup Instructions
 
 **`[WARNING]`** If you will use your extension within a docker container, now you can start a container and continue the next steps from within the container. Within your container, reinitialize your extension name: `export EXT_NAME=<your_extension_name>`
@@ -140,7 +148,7 @@ For further validation, we provide a sample script to train and play an agent wi
 - The `orbit/ext_template/scripts` act as a reference template for your convenience. Delete them if no longer required:
 
 ```bash
-rm -rf orbit/ext_template/scripts
+rm -rf orbit/${EXT_NAME}/scripts
 ```
 
 - You are all set and no longer need these instructions. Replace this file (`README.md`) with the contents of `README_TEMPLATE.md` and delete the `README_TEMPLATE.md` file.
