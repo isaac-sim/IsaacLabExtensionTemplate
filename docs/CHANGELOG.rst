@@ -7,4 +7,4 @@ Changelog
 Added
 ^^^^^
 
-* Funcional basic extension template. To be discussed and iterated upon.
+* Extension Template for Orbit.

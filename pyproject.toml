@@ -6,24 +6,24 @@ build-backend = "setuptools.build_meta"
 
 # Project metadata
 [project]
-name = "ext_template"
+name = "ext_template"  # TODO
 version = "0.1.0"
 requires-python = ">=3.10"
-description = "Extension template for orbit"
+description = "Extension Template for Orbit"  # TODO
 readme = "README.md"
 license = {file = "LICENSE.txt"}
-keywords = ["isaac sim", "orbit", "extension", "template"]
+keywords = ["extension", "template", "orbit"]  # TODO
 classifiers = [
   "Programming Language :: Python :: 3",
 ]
 authors = [
-  {name = "Nico Burger", email = "nburger@theaiinstitute.com"},
+  {name = "Nico Burger", email = "nburger@theaiinstitute.com"},  # TODO
 ]
 maintainers = [
-  {name = "Nico Burger", email = "nburger@theaiinstitute.com"},
+  {name = "Nico Burger", email = "nburger@theaiinstitute.com"},  # TODO
 ]
 
 
 # Tool dependent subtables
 [tool.setuptools]
-py-modules = ['orbit']
+py-modules = ['orbit']  # TODO, add modules required for your extension

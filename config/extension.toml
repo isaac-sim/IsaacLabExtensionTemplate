@@ -3,23 +3,23 @@
 version = "0.1.0"
 
 # The title and description fields are primarily for displaying extension info in UI
-title = "Extension template."
-description="Extension template for orbit."
+title = "Extension Template"  # TODO
+description="Extension Template for Orbit"  #TODO
 
 # Path (relative to the root) or content of readme markdown file for UI.
 readme  = "docs/README.md"
 
 # URL of the extension source repository.
-repository = "https://github.com/isaac-orbit/orbit.ext_template.git"
+repository = "https://github.com/isaac-orbit/orbit.ext_template.git"  # TODO
 
 # One of categories for UI.
 category = "orbit"
 
-keywords = ["kit", "robotics", "orbit"]
+keywords = ["extension", "template", "orbit"]  # TODO
 
 [dependencies]
-"omni.isaac.orbit" = {}
+"omni.isaac.orbit" = {}  # TODO, add additional dependencies if required
 
 # Main python module this extension provides.
 [[python.module]]
-name = "orbit.ext_template"
+name = "orbit.ext_template"  # TODO, replace <ext_template> with <your_extension_name>
