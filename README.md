@@ -10,7 +10,7 @@ This repository acts as a template to build extensions for orbit.
 
 The source code is released under a [BSD 3-Clause license](ros_package_template/LICENSE).
 
-**Author: Nico Burger<br />
+**Author: The ORBIT Project Developers<br />
 Affiliation: [The AI Institute](https://theaiinstitute.com/)<br />
 Maintainer: Nico Burger, nburger@theaiinstitute.com**
 
@@ -25,10 +25,9 @@ Maintainer: Nico Burger, nburger@theaiinstitute.com**
 
 **`[WARNING]`** If you will use your extension within a docker container, follow these build steps before starting the container.
 
-- Set build variables by tracking your orbit path and coming up with an extension name (e.g. `my_extension`).
+- Set your extension name (e.g. `my_extension`).
 
 ```bash
-export ORBIT_PATH=<path_to_orbit_repository>
 export EXT_NAME=<your_extension_name>
 ```
 
@@ -43,6 +42,7 @@ git clone https://github.com/isaac-orbit/orbit.ext_template.git
 - Update the remote repository url.
 
 ```bash
+cd orbit.ext_template
 rm -rf .git
 git init
 git remote add origin <your_repository_url>
@@ -64,14 +64,14 @@ cp README_TEMPLATE.md docs/README.md
 - Rename your source folders and base repository.
 
 ```bash
-mv orbit/ext_template orbit/${EXT_NAME}
+mv orbit/ext_template "orbit/${EXT_NAME}"
 cd ..
-mv orbit.ext_template orbit.${EXT_NAME}
+mv orbit.ext_template "orbit.${EXT_NAME}"
 ```
 
 ### VSCode Setup Instructions
 
-**`[WARNING]`** If you will use your extension within a docker container, now you can start a container and continue the next steps from within the container.
+**`[WARNING]`** If you will use your extension within a docker container, now you can start a container and continue the next steps from within the container. Within your container, reinitialize your extension name: `export EXT_NAME=<your_extension_name>`
 
 To configure your Python environment in Visual Studio Code, you can follow these simple steps:
 
@@ -89,10 +89,16 @@ The extension can either live isolated from or integrated in the orbit repositor
 The installation method is a matter of preference and not relevant.
 For consistency, we recommend using the isolated installation method.
 
+- Be sure to be in this repository for the following installation.
 
-Be sure to be in this repository for the following installation.
 ```bash
 cd <path_to_your_extension>
+```
+
+- Set the path to your orbit repository.
+
+```bash
+export ORBIT_PATH=<path_to_orbit_repository>
 ```
 
 #### A. Isolated **`RECOMMENDED`**

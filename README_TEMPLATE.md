@@ -39,7 +39,7 @@ export ORBIT_PATH=<path_to_orbit_repository>
 
 Clone the latest version of this extension template.
 
-**`TODO`** Update your git repository url.
+**`TODO`** Update your git repository url in the bash command below.
 
 ```bash
 git clone https://github.com/isaac-orbit/orbit.your_extension_name.git
