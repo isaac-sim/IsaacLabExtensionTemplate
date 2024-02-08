@@ -109,7 +109,7 @@ To verify that your setup is correct and you can successfully import modules fro
 python -c "import orbit.<your_extension_name>"
 ```
 
-#### Run UI Apps
+#### Run from Omniverse
 
 For the moment, refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui)
 
@@ -129,13 +129,13 @@ Train a policy.
 
 ```bash
 cd <path_to_your_extension>
-python scripts/rsl_rl/train.py --task Isaac-Velocity-Flat-Anymal-D-Template-v0 --headless
+python scripts/rsl_rl/train.py --task Isaac-Anymal-D-Flat-Template-v0 --headless
 ```
 
 Play the trained policy.
 
 ```bash
-python scripts/rsl_rl/play.py --task Isaac-Velocity-Flat-Anymal-D-Template-Play-v0 --num_envs 16
+python scripts/rsl_rl/play.py --task Isaac-Anymal-D-Flat-Template-Play-v0 --num_envs 16
 ```
 
 ## Finalize

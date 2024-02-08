@@ -53,7 +53,9 @@
         "arange",
         "discretization",
         "trimesh",
-        "uninstanceable"
+        "uninstanceable",
+        "configclass",
+        "omni"
     ],
     // This enables python language server. Seems to work slightly better than jedi:
     "python.languageServer": "Pylance",

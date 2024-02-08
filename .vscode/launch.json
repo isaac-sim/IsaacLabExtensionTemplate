@@ -18,7 +18,7 @@
             "type": "debugpy",
             "request": "launch",
             "args" : ["--task", "Isaac-Reach-Franka-v0", "--headless"],
-            "program": "${workspaceFolder}/orbit/scripts/rsl_rl/train.py",
+            "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.vscode/.python.env",
             "preLaunchTask": "setup_python_env"
@@ -28,7 +28,7 @@
             "type": "debugpy",
             "request": "launch",
             "args" : ["--task", "Isaac-Reach-Franka-v0", "--num_envs", "32"],
-            "program": "${workspaceFolder}/orbit/scripts/rsl_rl/play.py",
+            "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.vscode/.python.env",
             "preLaunchTask": "setup_python_env"
