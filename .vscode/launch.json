@@ -6,42 +6,30 @@
     "configurations": [
         {
             "name": "Python: Current File",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "env": {
-                "EXP_PATH": "${env:ORBIT_PATH}/_isaac_sim/apps",
-                "RESOURCE_NAME": "IsaacSim"
-            },
             "envFile": "${workspaceFolder}/.vscode/.python.env",
             "preLaunchTask": "setup_python_env"
         },
         {
             "name": "Python: Train Environment",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "args" : ["--task", "Isaac-Reach-Franka-v0", "--headless"],
-            "program": "${workspaceFolder}/orbit/ext_template/scripts/train.py",
+            "program": "${workspaceFolder}/orbit/scripts/rsl_rl/train.py",
             "console": "integratedTerminal",
-            "env": {
-                "EXP_PATH": "${env:ORBIT_PATH}/_isaac_sim/apps",
-                "RESOURCE_NAME": "IsaacSim"
-            },
             "envFile": "${workspaceFolder}/.vscode/.python.env",
             "preLaunchTask": "setup_python_env"
         },
         {
             "name": "Python: Play Environment",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "args" : ["--task", "Isaac-Reach-Franka-v0", "--num_envs", "32"],
-            "program": "${workspaceFolder}/orbit/ext_template/scripts/play.py",
+            "program": "${workspaceFolder}/orbit/scripts/rsl_rl/play.py",
             "console": "integratedTerminal",
-            "env": {
-                "EXP_PATH": "${env:ORBIT_PATH}/_isaac_sim/apps",
-                "RESOURCE_NAME": "IsaacSim"
-            },
             "envFile": "${workspaceFolder}/.vscode/.python.env",
             "preLaunchTask": "setup_python_env"
         }

@@ -7,4 +7,4 @@ Changelog
 Added
 ^^^^^
 
-* Extension Template for Orbit.
+* Created an initial template for building an extension or project based on Orbit

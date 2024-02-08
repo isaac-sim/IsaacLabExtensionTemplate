@@ -1,7 +1,7 @@
 # TODO: Add license if required.
 
 """
-Python module serving as an extension template.  # TODO: Replace with a description of your extension
+Python module serving as a project/extension template.
 """
 
 import os

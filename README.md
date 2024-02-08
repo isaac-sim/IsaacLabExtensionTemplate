@@ -1,8 +1,19 @@
 # Extension Template for Orbit
 
+[![IsaacSim](https://img.shields.io/badge/IsaacSim-2023.1.0--hotfix.1-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
+[![Orbit](https://img.shields.io/badge/Orbit-0.2.0-silver)](https://isaac-orbit.github.io/orbit/)
+[![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://docs.python.org/3/whatsnew/3.10.html)
+[![Linux platform](https://img.shields.io/badge/platform-linux--64-orange.svg)](https://releases.ubuntu.com/20.04/)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
+
 ## Overview
 
-This repository acts as a template to build extensions for orbit.
+This repository serves as a template for building projects or extensions based on Orbit. It allows you to develop in an isolated environment, outside of the core Orbit repository. 
+
+**Key Features:**
+
+- `Isolation` Work outside the core Orbit repository, ensuring that your development efforts remain self-contained.
+- `Flexibility` This template is set up to allow your code to be run as an extension in Omniverse.
 
 **Keywords:** extension, template, orbit
 
@@ -14,167 +25,126 @@ The source code is released under a [BSD 3-Clause license](ros_package_template/
 Affiliation: [The AI Institute](https://theaiinstitute.com/)<br />
 Maintainer: Nico Burger, nburger@theaiinstitute.com**
 
-## Setup Extension
+## Setup
 
-### Dependencies
+### Project
 
-- [Isaac Sim](https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_workstation.html)
-- [Orbit](https://isaac-orbit.github.io/orbit/source/setup/installation.html) (version 0.2.0)
+#### Dependencies
 
-### Build
+This template depends on Isaac Sim and Orbit. For detailed instructions on how to install these dependencies, please refer to the [installation guide](https://isaac-orbit.github.io/orbit/source/setup/installation.html).
 
-**`[WARNING]`** If you will use your extension within a docker container, follow these build steps before starting the container.
+- [Isaac Sim](https://docs.omniverse.nvidia.com/isaacsim/latest/index.html)
+- [Orbit](https://isaac-orbit.github.io/orbit/)
 
-- Set your extension name (e.g. `my_extension`).
+#### Configuration
 
-```bash
-export EXT_NAME=<your_extension_name>
-```
+Decide on a name for your project or extension. This guide will refer to this name as `<your_extension_name>`.
 
-- Clone the latest version of this extension template outside of the orbit repository, e.g. `home/code/orbit.ext_template`.
+- Fork the latest version of this template [here](https://github.com/isaac-orbit/orbit.ext_template). Name your forked repository using the following convention: `"orbit.<your_extension_name>"`.
 
-```bash
-git clone https://github.com/isaac-orbit/orbit.ext_template.git
-```
-
-- Create a new git repository called `orbit.<your_extension_name>`.
-
-- Update the remote repository url.
+- Clone your forked repository to a location **outside** the orbit repository.
 
 ```bash
-cd orbit.ext_template
-rm -rf .git
-git init
-git remote add origin <your_repository_url>
+git clone <your_repository_url>
 ```
 
 - Configure this template to your specific extension. Search for and replace **`TODO`**'s according to your extension's needs within the following files:
 
     - `config/extension.toml`
-    - `orbit/ext_template/__init__.py`
     - `pyproject.toml`
-    - `README_TEMPLATE.md`
-
-- Copy the `README_TEMPLATE.md` file to the documentation folder.
-
-```bash
-cp README_TEMPLATE.md docs/README.md
-```
 
 - Rename your source folders and base repository.
 
 ```bash
-mv orbit/ext_template "orbit/${EXT_NAME}"
-cd ..
-mv orbit.ext_template "orbit.${EXT_NAME}"
+mv orbit/ext_template orbit/<your_extension_name>
 ```
 
-- Commit your changes with Git.
+#### Environment (Optional)
+
+Although optional, this guide assumes you will be working within a virtual environment set up through Orbit, allowing you to use the `python` command directly. If you will not be using a virtual environment, you will need to run Python using `./<path_to_orbit>/orbit.sh -p`.
+
+If you have not already, set up a virtual environment with Orbit by installing conda [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) and use the following commands:
+
+- Create a virtual environment
 
 ```bash
-cd <path_to_your_extension>
-git add .
-git commit -m "Extension Setup."
+# Option 1: Default name for conda environment is 'orbit'
+./<path_to_orbit>/orbit.sh --conda
+# Option 2: Custom name for conda environment
+./<path_to_orbit>/orbit.sh --conda my_env
 ```
 
-### VSCode Setup Instructions
-
-**`[WARNING]`** If you will use your extension within a docker container, now you can start a container and continue the next steps from within the container. Within your container, reinitialize your extension name: `export EXT_NAME=<your_extension_name>`
-
-To configure your Python environment in Visual Studio Code, you can follow these simple steps:
-
-1. **Open the Command Palette**: Use the shortcut `Ctrl+Shift+P` to bring up the Command Palette, which allows you to access various commands and tasks within the editor.
-
-2. **Execute the Run Task Command**: Type `Tasks: Run Task` into the Command Palette input area and hit `Enter`.
-
-3. **Launch the Python Environment Setup**: Look for `setup_python_env` in the list of tasks that appears, and select it to start the setup process for your Python environment.
-
-By following these steps, you will successfully prepare your VSCode environment for Python development.
-
-### Installation
-
-The extension can either live isolated from or integrated in the orbit repository.
-The installation method is a matter of preference and not relevant.
-For consistency, we recommend using the isolated installation method.
-
-- Be sure to be in this repository for the following installation.
+- Activate your virtual environment
 
 ```bash
-cd <path_to_your_extension>
+conda activate orbit  # or "conda activate my_env"
 ```
 
-- Set the path to your orbit repository.
+#### Configure Python Interpreter
+
+In the provided configuration, we set the default Python interpreter to use the Python executable provided by Omniverse. This is specified in the `.vscode/settings.json` file:
+
+```json
+    "python.defaultInterpreterPath": "${env:ISAACSIM_PATH}/python.sh",
+```
+
+If you want to use a different Python interpreter, you need to change the Python interpreter used by selecting and activating the Python interpreter of your choice in the bottom left corner of VSCode, or opening the command palette (`Ctrl+Shift+P`) and selecting `Python: Select Interpreter`. We recommend using the Python interpreter from your conda environment.
+
+### Run Project as Extension
+
+Your project can be run as an extension in Omniverse, allowing you to import source code or run UI apps.
+
+#### Import Source Code
+
+From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
 
 ```bash
-export ORBIT_PATH=<path_to_orbit_repository>
+python -m pip install --upgrade pip
+python -m pip install -e .
 ```
 
-#### A. Isolated **`RECOMMENDED`**
-
-- Install the extension as a python package to the isaac sim python executable. This keeps the extension outside of the orbit repository.
+To verify that your setup is correct and you can successfully import modules from your extension, execute the command below. If it completes without displaying any errors, your setup is correctly configured:
 
 ```bash
-${ORBIT_PATH}/_isaac_sim/python.sh -m pip install --upgrade pip
-${ORBIT_PATH}/_isaac_sim/python.sh -m pip install -e .
+python -c "import orbit.<your_extension_name>"
 ```
 
-#### B. Integrated
+#### Run UI Apps
 
-- Create a symbolic link into the `source/extensions` directory in the orbit repository.
+For the moment, refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui)
 
-```bash
-ln -s $(pwd)/orbit.${EXT_NAME} orbit/source/extensions/orbit.${EXT_NAME}
-```
+TODO: @Nico, add UI template in `orbit/ext_template/scripts/...`
 
-- Setup the python module for orbit.
-
-```bash
-cd ${ORBIT_PATH}
-./orbit.sh --install
-```
-
-### Validate
-
-To verify that your setup is correct and you can successfully import modules from orbit as well as this extension, execute the command below. If it completes without displaying any errors, your setup is correctly configured:
-
-```bash
-${ORBIT_PATH}/_isaac_sim/python.sh -c "import omni.isaac.orbit; import orbit.<your_extension_name>"
-```
-
-For further validation, we provide a sample script to train and play an agent with [RSL_RL](https://github.com/leggedrobotics/rsl_rl) in [Example Usage](#example-usage).
-
-### Finalize
-
-- The `orbit/ext_template/scripts` act as a reference template for your convenience. Delete them if no longer required:
-
-```bash
-rm -rf orbit/${EXT_NAME}/scripts
-```
-
-- You are all set and no longer need these instructions. Replace this file (`README.md`) with the contents of `README_TEMPLATE.md` and delete the `README_TEMPLATE.md` file.
-
-## Example Usage
+## Usage
 
 Install [RSL_RL](https://github.com/leggedrobotics/rsl_rl) outside of the orbit repository, e.g. `home/code/rsl_rl`.
 
 ```bash
 git clone https://github.com/leggedrobotics/rsl_rl.git
 cd rsl_rl
-${ORBIT_PATH}/_isaac_sim/python.sh -m pip install -e .
+python -m pip install -e .
 ```
 
 Train a policy.
 
 ```bash
 cd <path_to_your_extension>
-orbit -p orbit/<your_extension_name>/scripts/train.py --task Isaac-Velocity-Flat-Anymal-D-v0 --headless
+python orbit/<your_extension_name>/scripts/train.py --task Isaac-Velocity-Flat-Anymal-D-v0 --headless
 ```
 
 Play the trained policy.
 
 ```bash
-orbit -p orbit/<your_extension_name>/scripts/play.py --task Isaac-Velocity-Flat-Anymal-D-v0 --num_envs 16
+python orbit/<your_extension_name>/scripts/play.py --task Isaac-Velocity-Flat-Anymal-D-v0 --num_envs 16
 ```
+
+## Finalize
+
+You are all set and no longer need the template instructions
+
+- The `orbit/ext_template/scripts` act as a reference template for your convenience. Delete them if no longer required.
+
+- When ready, replace this `README.md` with the contents of `README_TEMPLATE.md` and customize where appropriate.
 
 ## Bugs & Feature Requests
 

@@ -6,13 +6,13 @@ build-backend = "setuptools.build_meta"
 
 # Project metadata
 [project]
-name = "ext_template"  # TODO
 version = "0.1.0"
-requires-python = ">=3.10"
+name = "ext_template"  # TODO
 description = "Extension Template for Orbit"  # TODO
-readme = "README.md"
-license = {file = "LICENSE.txt"}
 keywords = ["extension", "template", "orbit"]  # TODO
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE.txt"}
 classifiers = [
   "Programming Language :: Python :: 3",
 ]
