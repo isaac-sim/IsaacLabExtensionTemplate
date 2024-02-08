@@ -129,13 +129,13 @@ Train a policy.
 
 ```bash
 cd <path_to_your_extension>
-python orbit/<your_extension_name>/scripts/train.py --task Isaac-Velocity-Flat-Anymal-D-v0 --headless
+python scripts/rsl_rl/train.py --task Isaac-Velocity-Flat-Anymal-D-Template-v0 --headless
 ```
 
 Play the trained policy.
 
 ```bash
-python orbit/<your_extension_name>/scripts/play.py --task Isaac-Velocity-Flat-Anymal-D-v0 --num_envs 16
+python scripts/rsl_rl/play.py --task Isaac-Velocity-Flat-Anymal-D-Template-Play-v0 --num_envs 16
 ```
 
 ## Finalize

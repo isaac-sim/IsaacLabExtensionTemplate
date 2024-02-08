@@ -33,6 +33,8 @@ args_cli = parser.parse_args()
 # launch omniverse app
 app_launcher = AppLauncher(args_cli)
 simulation_app = app_launcher.app
+from omni.isaac.orbit.utils import omni_stream
+omni_stream(simulation_app)
 
 """Rest everything follows."""
 
@@ -45,8 +47,11 @@ import traceback
 import carb
 from rsl_rl.runners import OnPolicyRunner
 
+# Import extensions to set up environment tasks
+import orbit.ext_template  # noqa: F401  TODO: import orbit.<your_extension_name>
 import omni.isaac.contrib_tasks  # noqa: F401
 import omni.isaac.orbit_tasks  # noqa: F401
+
 from omni.isaac.orbit_tasks.utils import get_checkpoint_path, parse_env_cfg
 from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import (
     RslRlOnPolicyRunnerCfg,

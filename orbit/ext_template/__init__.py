@@ -1,5 +1,3 @@
-# TODO: Add license if required.
-
 """
 Python module serving as a project/extension template.
 """
@@ -16,3 +14,15 @@ EXT_METADATA = toml.load(os.path.join(EXT_DIR, "config", "extension.toml"))
 
 # Configure the module-level variables
 __version__ = EXT_METADATA["package"]["version"]
+
+
+##
+# Register Gym environments.
+##
+
+from omni.isaac.orbit_tasks.utils import import_packages
+
+# The blacklist is used to prevent importing configs from sub-packages
+_BLACKLIST_PKGS = ["utils"]
+# Import all configs in this package
+import_packages(__name__, _BLACKLIST_PKGS)
