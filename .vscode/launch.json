@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "Python: Current File",
             "type": "debugpy",
@@ -11,7 +12,22 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.vscode/.python.env",
-            "preLaunchTask": "setup_python_env"
+            "preLaunchTask": "setup_python_env",
+        },
+        {
+            "name": "Python: Test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/rsl_rl/test.py",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.vscode/.python.env",
+            "args" : ["--task", "asdf"],
+            "preLaunchTask": "setup_python_env",
+            "env": {
+                "EXP_PATH": "${workspaceFolder}/_isaac_sim/apps",
+                "RESOURCE_NAME": "IsaacSim",
+                "HEADLESS": "1"
+            },
         },
         {
             "name": "Python: Train Environment",
