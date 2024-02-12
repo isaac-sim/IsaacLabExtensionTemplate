@@ -26,3 +26,10 @@ from omni.isaac.orbit_tasks.utils import import_packages
 _BLACKLIST_PKGS = ["utils"]
 # Import all configs in this package
 import_packages(__name__, _BLACKLIST_PKGS)
+
+
+##
+# Register UI extensions.
+##
+
+from .ui_example import *

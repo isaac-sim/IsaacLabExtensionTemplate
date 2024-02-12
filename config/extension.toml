@@ -12,7 +12,8 @@ category = "orbit"
 readme  = "README.md"
 
 [dependencies]
-"omni.isaac.orbit" = {}  # TODO, add additional dependencies if required
+"omni.kit.uiapp" = {}
+# "omni.isaac.orbit" = {}  # TODO, add additional dependencies if required
 
 [[python.module]]
 name = "orbit.ext_template"  # TODO, replace <ext_template> with <your_extension_name>

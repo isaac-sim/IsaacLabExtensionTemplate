@@ -103,11 +103,21 @@ ${ISAACSIM_PATH}/python.sh -m pip install --upgrade pip
 ${ISAACSIM_PATH}/python.sh -m pip install -e .
 ```
 
-#### Run from Omniverse
+#### Run from Extension Manager
 
-For the moment, refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui)
+To enable your extension, follow these steps:
 
-TODO: @Nico, add UI template in `orbit/ext_template/scripts/...`
+1. **Add the search path of your repository** to the extension manager:
+    - Navigate to the extension manager using `Window` -> `Extensions`.
+    - Click on the **Hamburger Icon** (☰), then go to `Settings`.
+    - In the `Extension Search Paths`, enter the path that goes up to your repository's location without actually including the repository's own directory. For example, if your repository is located at `/home/extensions/orbit.ext_template`, you should add `/home/extensions` as the search path.
+    - Click on the **Hamburger Icon** (☰), then click `Refresh`.
+
+2. **Search and enable your extension**:
+    - Find your extension under the `Third Party` category.
+    - Toggle it to enable your extension.
+
+We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
 ## Usage
 
