@@ -103,12 +103,6 @@ ${ISAACSIM_PATH}/python.sh -m pip install --upgrade pip
 ${ISAACSIM_PATH}/python.sh -m pip install -e .
 ```
 
-To verify that your setup is correct and you can successfully import modules from your extension, execute the command below. If it completes without displaying any errors, your setup is correctly configured:
-
-```bash
-${ISAACSIM_PATH}/python.sh -c "import orbit.<your_extension_name>"
-```
-
 #### Run from Omniverse
 
 For the moment, refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui)

@@ -33,8 +33,6 @@ args_cli = parser.parse_args()
 # launch omniverse app
 app_launcher = AppLauncher(args_cli)
 simulation_app = app_launcher.app
-from omni.isaac.orbit.utils import omni_stream
-omni_stream(simulation_app)
 
 """Rest everything follows."""
 
