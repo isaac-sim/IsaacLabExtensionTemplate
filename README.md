@@ -61,7 +61,7 @@ mv orbit/ext_template orbit/<your_extension_name>
 
 #### Environment (Optional)
 
-Although optional, this guide assumes you will be working within a virtual environment set up through Orbit, allowing you to use the `python` command directly. If you will not be using a virtual environment, you will need to run Python using `./<path_to_orbit>/orbit.sh -p`.
+Although optional, this guide assumes you will be working within a virtual environment set up through Orbit, allowing you to use the `python` command directly, instead of `${ISAACSIM_PATH}/python.sh`.
 
 If you have not already, set up a virtual environment with Orbit by installing conda [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) and use the following commands:
 
@@ -99,14 +99,14 @@ Your project can be run as an extension in Omniverse, allowing you to import sou
 From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
 
 ```bash
-python -m pip install --upgrade pip
-python -m pip install -e .
+${ISAACSIM_PATH}/python.sh -m pip install --upgrade pip
+${ISAACSIM_PATH}/python.sh -m pip install -e .
 ```
 
 To verify that your setup is correct and you can successfully import modules from your extension, execute the command below. If it completes without displaying any errors, your setup is correctly configured:
 
 ```bash
-python -c "import orbit.<your_extension_name>"
+${ISAACSIM_PATH}/python.sh -c "import orbit.<your_extension_name>"
 ```
 
 #### Run from Omniverse
@@ -122,20 +122,20 @@ Install [RSL_RL](https://github.com/leggedrobotics/rsl_rl) outside of the orbit 
 ```bash
 git clone https://github.com/leggedrobotics/rsl_rl.git
 cd rsl_rl
-python -m pip install -e .
+${ISAACSIM_PATH}/python.sh -m pip install -e .
 ```
 
 Train a policy.
 
 ```bash
 cd <path_to_your_extension>
-python scripts/rsl_rl/train.py --task Isaac-Anymal-D-Flat-Template-v0 --headless
+${ISAACSIM_PATH}/python.sh scripts/rsl_rl/train.py --task Isaac-Anymal-D-Flat-Template-v0 --num_envs 4096 --headless
 ```
 
 Play the trained policy.
 
 ```bash
-python scripts/rsl_rl/play.py --task Isaac-Anymal-D-Flat-Template-Play-v0 --num_envs 16
+${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Isaac-Anymal-D-Flat-Template-Play-v0 --num_envs 16
 ```
 
 ## Finalize

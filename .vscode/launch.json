@@ -11,43 +11,25 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
-            "preLaunchTask": "setup_python_env",
-        },
-        {
-            "name": "Python: Test",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/scripts/rsl_rl/test.py",
-            "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
-            "args" : ["--task", "asdf"],
-            "preLaunchTask": "setup_python_env",
-            "env": {
-                "EXP_PATH": "${workspaceFolder}/_isaac_sim/apps",
-                "RESOURCE_NAME": "IsaacSim",
-                "HEADLESS": "1"
-            },
+            "envFile": "${workspaceFolder}/.vscode/.python.env"
         },
         {
             "name": "Python: Train Environment",
             "type": "debugpy",
             "request": "launch",
-            "args" : ["--task", "Isaac-Reach-Franka-v0", "--headless"],
+            "args" : ["--task", "Isaac-Anymal-D-Flat-Template-v0", "--num_envs", "4096", "--headless"],
             "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
-            "preLaunchTask": "setup_python_env"
+            "envFile": "${workspaceFolder}/.vscode/.python.env"
         },
         {
             "name": "Python: Play Environment",
             "type": "debugpy",
             "request": "launch",
-            "args" : ["--task", "Isaac-Reach-Franka-v0", "--num_envs", "32"],
+            "args" : ["--task", "Isaac-Anymal-D-Flat-Template-Play-v0", "--num_envs", "32"],
             "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
-            "preLaunchTask": "setup_python_env"
+            "envFile": "${workspaceFolder}/.vscode/.python.env"
         }
     ]
 }
