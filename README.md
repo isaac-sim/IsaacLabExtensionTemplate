@@ -53,7 +53,7 @@ git clone <your_repository_url>
     - `config/extension.toml`
     - `pyproject.toml`
 
-- Rename your source folders and base repository.
+- Rename your source folder.
 
 ```bash
 mv orbit/ext_template orbit/<your_extension_name>
@@ -90,11 +90,11 @@ In the provided configuration, we set the default Python interpreter to use the 
 
 If you want to use a different Python interpreter, you need to change the Python interpreter used by selecting and activating the Python interpreter of your choice in the bottom left corner of VSCode, or opening the command palette (`Ctrl+Shift+P`) and selecting `Python: Select Interpreter`. We recommend using the Python interpreter from your conda environment.
 
-### Run Project as Extension
+### Installation
 
-Your project can be run as an extension in Omniverse, allowing you to import source code or run UI apps.
+Your extension can be accessed either as a python package or through the Omniverse extension manager.
 
-#### Import Source Code
+#### Install as Python Package
 
 From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
 
@@ -103,7 +103,7 @@ ${ISAACSIM_PATH}/python.sh -m pip install --upgrade pip
 ${ISAACSIM_PATH}/python.sh -m pip install -e .
 ```
 
-#### Run from Extension Manager
+#### Enable as Omniverse Extension
 
 To enable your extension, follow these steps:
 
@@ -111,6 +111,7 @@ To enable your extension, follow these steps:
     - Navigate to the extension manager using `Window` -> `Extensions`.
     - Click on the **Hamburger Icon** (☰), then go to `Settings`.
     - In the `Extension Search Paths`, enter the path that goes up to your repository's location without actually including the repository's own directory. For example, if your repository is located at `/home/extensions/orbit.ext_template`, you should add `/home/extensions` as the search path.
+    - If not already present, in the `Extension Search Paths`, enter the path that leads to your local Orbit directory. For example: `/home/orbit/source/extensions`
     - Click on the **Hamburger Icon** (☰), then click `Refresh`.
 
 2. **Search and enable your extension**:
@@ -146,7 +147,7 @@ ${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Isaac-Anymal-D-Flat-Tem
 
 You are all set and no longer need the template instructions
 
-- The `orbit/ext_template/scripts` act as a reference template for your convenience. Delete them if no longer required.
+- The `orbit/ext_template` and `scripts/rsl_rl` directories act as a reference template for your convenience. Delete them if no longer required.
 
 - When ready, replace this `README.md` with the contents of `README_TEMPLATE.md` and customize where appropriate.
 
