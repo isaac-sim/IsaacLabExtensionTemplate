@@ -8,7 +8,16 @@
 
 ## Overview
 
-This repository serves as a template for building projects or extensions based on Orbit. It allows you to develop in an isolated environment, outside of the core Orbit repository. 
+This repository serves as a template for building projects or extensions based on Orbit. It allows you to develop in an isolated environment, outside of the core Orbit repository. Furthermore, this template serves three use cases:
+
+- **Python Package**  
+    Can be installed into Isaac Sim's Python environment, making it suitable for users who want to integrate their extension to `Orbit` as a python package.
+
+- **Project Template**  
+    Ensures access to `Isaac Sim` and `Orbit` functionalities, which can be used as a project template.
+
+- **Omniverse Extension**  
+    Can be used as an Omniverse extension, ideal for projects that leverage the Omniverse platform's graphical user interface.
 
 **Key Features:**
 
@@ -19,7 +28,7 @@ This repository serves as a template for building projects or extensions based o
 
 ### License
 
-The source code is released under a [BSD 3-Clause license](ros_package_template/LICENSE).
+The source code is released under a [BSD 3-Clause license](https://opensource.org/licenses/BSD-3-Clause).
 
 **Author: The ORBIT Project Developers<br />
 Affiliation: [The AI Institute](https://theaiinstitute.com/)<br />
@@ -27,7 +36,9 @@ Maintainer: Nico Burger, nburger@theaiinstitute.com**
 
 ## Setup
 
-### Project
+Depending on the use case defined [above](#overview), follow the instructions to set up your extension template. Start with the [Basic Setup](#basic-setup), which is required for either use case.
+
+### Basic Setup
 
 #### Dependencies
 
@@ -90,11 +101,8 @@ In the provided configuration, we set the default Python interpreter to use the 
 
 If you want to use a different Python interpreter, you need to change the Python interpreter used by selecting and activating the Python interpreter of your choice in the bottom left corner of VSCode, or opening the command palette (`Ctrl+Shift+P`) and selecting `Python: Select Interpreter`. We recommend using the Python interpreter from your conda environment.
 
-### Installation
 
-Your extension can be accessed either as a python package or through the Omniverse extension manager.
-
-#### Install as Python Package
+### Setup as Python Package / Project Template
 
 From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
 
@@ -103,7 +111,7 @@ ${ISAACSIM_PATH}/python.sh -m pip install --upgrade pip
 ${ISAACSIM_PATH}/python.sh -m pip install -e .
 ```
 
-#### Enable as Omniverse Extension
+### Setup as Omniverse Extension
 
 To enable your extension, follow these steps:
 
@@ -118,11 +126,19 @@ To enable your extension, follow these steps:
     - Find your extension under the `Third Party` category.
     - Toggle it to enable your extension.
 
-We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
-
 ## Usage
 
-Install [RSL_RL](https://github.com/leggedrobotics/rsl_rl) outside of the orbit repository, e.g. `home/code/rsl_rl`.
+### Python Package
+
+Import your python package within `Isaac Sim` and `Orbit` using:
+
+```python
+import orbit.<your_extension_name>
+```
+
+### Project Template
+
+We provide an example for training and playing a policy for ANYmal on flat terrain. Install [RSL_RL](https://github.com/leggedrobotics/rsl_rl) outside of the orbit repository, e.g. `home/code/rsl_rl`.
 
 ```bash
 git clone https://github.com/leggedrobotics/rsl_rl.git
@@ -142,6 +158,10 @@ Play the trained policy.
 ```bash
 ${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Isaac-Anymal-D-Flat-Template-Play-v0 --num_envs 16
 ```
+
+### Omniverse Extension
+
+We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
 ## Finalize
 
