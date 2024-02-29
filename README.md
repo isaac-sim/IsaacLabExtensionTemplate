@@ -1,1 +1,176 @@
-# orbit.ext_template
+# Extension Template for Orbit
+
+[![IsaacSim](https://img.shields.io/badge/IsaacSim-2023.1.0--hotfix.1-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
+[![Orbit](https://img.shields.io/badge/Orbit-0.2.0-silver)](https://isaac-orbit.github.io/orbit/)
+[![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://docs.python.org/3/whatsnew/3.10.html)
+[![Linux platform](https://img.shields.io/badge/platform-linux--64-orange.svg)](https://releases.ubuntu.com/20.04/)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
+
+## Overview
+
+This repository serves as a template for building projects or extensions based on Orbit. It allows you to develop in an isolated environment, outside of the core Orbit repository. Furthermore, this template serves three use cases:
+
+- **Python Package**  
+    Can be installed into Isaac Sim's Python environment, making it suitable for users who want to integrate their extension to `Orbit` as a python package.
+
+- **Project Template**  
+    Ensures access to `Isaac Sim` and `Orbit` functionalities, which can be used as a project template.
+
+- **Omniverse Extension**  
+    Can be used as an Omniverse extension, ideal for projects that leverage the Omniverse platform's graphical user interface.
+
+**Key Features:**
+
+- `Isolation` Work outside the core Orbit repository, ensuring that your development efforts remain self-contained.
+- `Flexibility` This template is set up to allow your code to be run as an extension in Omniverse.
+
+**Keywords:** extension, template, orbit
+
+### License
+
+The source code is released under a [BSD 3-Clause license](https://opensource.org/licenses/BSD-3-Clause).
+
+**Author: The ORBIT Project Developers<br />
+Affiliation: [The AI Institute](https://theaiinstitute.com/)<br />
+Maintainer: Nico Burger, nburger@theaiinstitute.com**
+
+## Setup
+
+Depending on the use case defined [above](#overview), follow the instructions to set up your extension template. Start with the [Basic Setup](#basic-setup), which is required for either use case.
+
+### Basic Setup
+
+#### Dependencies
+
+This template depends on Isaac Sim and Orbit. For detailed instructions on how to install these dependencies, please refer to the [installation guide](https://isaac-orbit.github.io/orbit/source/setup/installation.html).
+
+- [Isaac Sim](https://docs.omniverse.nvidia.com/isaacsim/latest/index.html)
+- [Orbit](https://isaac-orbit.github.io/orbit/)
+
+#### Configuration
+
+Decide on a name for your project or extension. This guide will refer to this name as `<your_extension_name>`.
+
+- Fork the latest version of this template [here](https://github.com/isaac-orbit/orbit.ext_template). Name your forked repository using the following convention: `"orbit.<your_extension_name>"`.
+
+- Clone your forked repository to a location **outside** the orbit repository.
+
+```bash
+git clone <your_repository_url>
+```
+
+- Configure this template to your specific extension. Search for and replace **`TODO`**'s according to your extension's needs within the following files:
+
+    - `config/extension.toml`
+    - `pyproject.toml`
+
+- Rename your source folder.
+
+```bash
+mv orbit/ext_template orbit/<your_extension_name>
+```
+
+#### Environment (Optional)
+
+Although optional, this guide assumes you will be working within a virtual environment set up through Orbit, allowing you to use the `python` command directly, instead of `${ISAACSIM_PATH}/python.sh`.
+
+If you have not already, set up a virtual environment with Orbit by installing conda [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) and use the following commands:
+
+- Create a virtual environment
+
+```bash
+# Option 1: Default name for conda environment is 'orbit'
+./<path_to_orbit>/orbit.sh --conda
+# Option 2: Custom name for conda environment
+./<path_to_orbit>/orbit.sh --conda my_env
+```
+
+- Activate your virtual environment
+
+```bash
+conda activate orbit  # or "conda activate my_env"
+```
+
+#### Configure Python Interpreter
+
+In the provided configuration, we set the default Python interpreter to use the Python executable provided by Omniverse. This is specified in the `.vscode/settings.json` file:
+
+```json
+    "python.defaultInterpreterPath": "${env:ISAACSIM_PATH}/python.sh",
+```
+
+If you want to use a different Python interpreter, you need to change the Python interpreter used by selecting and activating the Python interpreter of your choice in the bottom left corner of VSCode, or opening the command palette (`Ctrl+Shift+P`) and selecting `Python: Select Interpreter`. We recommend using the Python interpreter from your conda environment.
+
+
+### Setup as Python Package / Project Template
+
+From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
+
+```bash
+${ISAACSIM_PATH}/python.sh -m pip install --upgrade pip
+${ISAACSIM_PATH}/python.sh -m pip install -e .
+```
+
+### Setup as Omniverse Extension
+
+To enable your extension, follow these steps:
+
+1. **Add the search path of your repository** to the extension manager:
+    - Navigate to the extension manager using `Window` -> `Extensions`.
+    - Click on the **Hamburger Icon** (☰), then go to `Settings`.
+    - In the `Extension Search Paths`, enter the path that goes up to your repository's location without actually including the repository's own directory. For example, if your repository is located at `/home/extensions/orbit.ext_template`, you should add `/home/extensions` as the search path.
+    - If not already present, in the `Extension Search Paths`, enter the path that leads to your local Orbit directory. For example: `/home/orbit/source/extensions`
+    - Click on the **Hamburger Icon** (☰), then click `Refresh`.
+
+2. **Search and enable your extension**:
+    - Find your extension under the `Third Party` category.
+    - Toggle it to enable your extension.
+
+## Usage
+
+### Python Package
+
+Import your python package within `Isaac Sim` and `Orbit` using:
+
+```python
+import orbit.<your_extension_name>
+```
+
+### Project Template
+
+We provide an example for training and playing a policy for ANYmal on flat terrain. Install [RSL_RL](https://github.com/leggedrobotics/rsl_rl) outside of the orbit repository, e.g. `home/code/rsl_rl`.
+
+```bash
+git clone https://github.com/leggedrobotics/rsl_rl.git
+cd rsl_rl
+${ISAACSIM_PATH}/python.sh -m pip install -e .
+```
+
+Train a policy.
+
+```bash
+cd <path_to_your_extension>
+${ISAACSIM_PATH}/python.sh scripts/rsl_rl/train.py --task Isaac-Anymal-D-Flat-Template-v0 --num_envs 4096 --headless
+```
+
+Play the trained policy.
+
+```bash
+${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Isaac-Anymal-D-Flat-Template-Play-v0 --num_envs 16
+```
+
+### Omniverse Extension
+
+We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
+
+## Finalize
+
+You are all set and no longer need the template instructions
+
+- The `orbit/ext_template` and `scripts/rsl_rl` directories act as a reference template for your convenience. Delete them if no longer required.
+
+- When ready, replace this `README.md` with the contents of `README_TEMPLATE.md` and customize where appropriate.
+
+## Bugs & Feature Requests
+
+Please report bugs and request features using the [Issue Tracker](https://github.com/isaac-orbit/orbit.ext_template/issues).
