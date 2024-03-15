@@ -13,6 +13,15 @@
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.vscode/.python.env"
         },
+        // Attach to simulation during runtime. This is useful for debugging extensions.
+        // For more information, visit: https://docs.omniverse.nvidia.com/isaacsim/latest/advanced_tutorials/tutorial_advanced_python_debugging.html#attaching-the-debugger-to-a-running-app
+        {
+            "name": "Python: Attach (windows-x86_64/linux-x86_64)",
+            "type": "python",
+            "request": "attach",
+            "port": 3000,
+            "host": "localhost"
+        },
         {
             "name": "Python: Train Environment",
             "type": "debugpy",

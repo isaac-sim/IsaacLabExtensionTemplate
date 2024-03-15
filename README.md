@@ -1,6 +1,6 @@
 # Extension Template for Orbit
 
-[![IsaacSim](https://img.shields.io/badge/IsaacSim-2023.1.0--hotfix.1-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
+[![IsaacSim](https://img.shields.io/badge/IsaacSim-2023.1.1-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
 [![Orbit](https://img.shields.io/badge/Orbit-0.2.0-silver)](https://isaac-orbit.github.io/orbit/)
 [![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://docs.python.org/3/whatsnew/3.10.html)
 [![Linux platform](https://img.shields.io/badge/platform-linux--64-orange.svg)](https://releases.ubuntu.com/20.04/)
@@ -51,7 +51,7 @@ This template depends on Isaac Sim and Orbit. For detailed instructions on how t
 
 Decide on a name for your project or extension. This guide will refer to this name as `<your_extension_name>`.
 
-- Fork the latest version of this template [here](https://github.com/isaac-orbit/orbit.ext_template). Name your forked repository using the following convention: `"orbit.<your_extension_name>"`.
+- Create a new repository based off this template [here](https://github.com/new?owner=isaac-orbit&template_name=orbit.ext_template&template_owner=isaac-orbit). Name your forked repository using the following convention: `"orbit.<your_extension_name>"`.
 
 - Clone your forked repository to a location **outside** the orbit repository.
 
@@ -59,7 +59,7 @@ Decide on a name for your project or extension. This guide will refer to this na
 git clone <your_repository_url>
 ```
 
-- Configure this template to your specific extension. Search for and replace **`TODO`**'s according to your extension's needs within the following files:
+- Configure the template. Search for and replace **`TODO`**'s according to your extension's needs within the following files:
 
     - `config/extension.toml`
     - `pyproject.toml`
@@ -72,34 +72,17 @@ mv orbit/ext_template orbit/<your_extension_name>
 
 #### Environment (Optional)
 
-Although optional, this guide assumes you will be working within a virtual environment set up through Orbit, allowing you to use the `python` command directly, instead of `${ISAACSIM_PATH}/python.sh`.
-
-If you have not already, set up a virtual environment with Orbit by installing conda [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) and use the following commands:
-
-- Create a virtual environment
-
-```bash
-# Option 1: Default name for conda environment is 'orbit'
-./<path_to_orbit>/orbit.sh --conda
-# Option 2: Custom name for conda environment
-./<path_to_orbit>/orbit.sh --conda my_env
-```
-
-- Activate your virtual environment
-
-```bash
-conda activate orbit  # or "conda activate my_env"
-```
+For clarity, we will be using the `${ISAACSIM_PATH}/python.sh` command to call the Orbit specific python interpreter. However, you might be working from within a virtual environment, allowing you to use the `python` command directly, instead of `${ISAACSIM_PATH}/python.sh`. Information on setting up a virtual environment for Orbit can be found [here](https://isaac-orbit.github.io/orbit/source/setup/installation.html#setting-up-the-environment)
 
 #### Configure Python Interpreter
 
 In the provided configuration, we set the default Python interpreter to use the Python executable provided by Omniverse. This is specified in the `.vscode/settings.json` file:
 
 ```json
-    "python.defaultInterpreterPath": "${env:ISAACSIM_PATH}/python.sh",
+"python.defaultInterpreterPath": "${env:ISAACSIM_PATH}/python.sh"
 ```
 
-If you want to use a different Python interpreter, you need to change the Python interpreter used by selecting and activating the Python interpreter of your choice in the bottom left corner of VSCode, or opening the command palette (`Ctrl+Shift+P`) and selecting `Python: Select Interpreter`. We recommend using the Python interpreter from your conda environment.
+This setup requires you to have set up the `ISAACSIM_PATH` environment variable. If you want to use a different Python interpreter, you need to change the Python interpreter used by selecting and activating the Python interpreter of your choice in the bottom left corner of VSCode, or opening the command palette (`Ctrl+Shift+P`) and selecting `Python: Select Interpreter`.
 
 
 ### Setup as Python Package / Project Template
