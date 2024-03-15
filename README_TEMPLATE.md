@@ -1,6 +1,6 @@
 # Package Name
 
-[![IsaacSim](https://img.shields.io/badge/IsaacSim-2023.1.0--hotfix.1-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
+[![IsaacSim](https://img.shields.io/badge/IsaacSim-2023.1.1-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
 [![Orbit](https://img.shields.io/badge/Orbit-0.2.0-silver)](https://isaac-orbit.github.io/orbit/)
 [![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://docs.python.org/3/whatsnew/3.10.html)
 [![Linux platform](https://img.shields.io/badge/platform-linux--64-orange.svg)](https://releases.ubuntu.com/20.04/)
@@ -42,11 +42,7 @@ If you use this work in an academic context, please cite the following publicati
 
 ### Installation from Packages
 
-To install all packages from this repository as Debian packages use
-
-```bash
-sudo apt-get install x11-apps
-```
+Add if applicable.
 
 ### Building from Source
 
@@ -59,45 +55,23 @@ This template depends on Isaac Sim and Orbit. For detailed instructions on how t
 
 #### Building
 
-To build from source, clone the latest version from this repository and ...
-
-```bash
-cd extensions
-git clone https://github.com/isaac-orbit/orbit.ext_template.git
-cd orbit.ext_template
-```
+Add build instructions.
 
 ### Running in Docker
 
 Docker is a great way to run an application with all dependencies and libraries bundles together. 
-Make sure to [install Docker](https://docs.docker.com/get-docker/) first. 
-
-First, spin up a simple container:
-
-```bash
-docker run -it --rm --name my_container
-```
-
-From within the container, run some setup commands...
-
-### Unit Tests
-
-Run the unit tests with
-
-```bash
-python unittest.py
-```
+Make sure to [install Docker](https://docs.docker.com/get-docker/) first.
 
 ## Usage
 
-Describe the quickest way to run this software, for example:
-
-Run the main script
+Add minimal instruction set for running key functionalities of your package.
 
 ```bash
-python scripts/main.py
+python scripts/example.py
 ```
 
 ## Bugs & Feature Requests
 
-Please report bugs and request features using the [Issue Tracker](https://github.com/isaac-orbit/orbit.ext_template/issues).
+Add link to repository issue tracker.
+
+Please report bugs and request features using the [Issue Tracker](add_link_here).
