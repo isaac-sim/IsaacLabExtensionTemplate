@@ -4,7 +4,7 @@
 	"recommendations": [
 		"ms-vscode.cpptools",
 		"ms-python.python",
-        "ms-python.vscode-pylance",
+		"ms-python.vscode-pylance",
 		"ban.spellright",
 		"streetsidesoftware.code-spell-checker",
 		"ms-iot.vscode-ros",

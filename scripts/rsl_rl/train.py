@@ -46,26 +46,25 @@ simulation_app = app_launcher.app
 """Rest everything follows."""
 
 
-import gymnasium as gym
 import os
-import torch
-import traceback
 from datetime import datetime
 
-import carb
-from rsl_rl.runners import OnPolicyRunner
-
+import gymnasium as gym
+import omni.isaac.contrib_tasks  # noqa: F401
+import omni.isaac.orbit_tasks  # noqa: F401
+import torch
 from omni.isaac.orbit.envs import RLTaskEnvCfg
 from omni.isaac.orbit.utils.dict import print_dict
 from omni.isaac.orbit.utils.io import dump_pickle, dump_yaml
+from omni.isaac.orbit_tasks.utils import get_checkpoint_path, parse_env_cfg
+from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import (
+    RslRlOnPolicyRunnerCfg,
+    RslRlVecEnvWrapper,
+)
+from rsl_rl.runners import OnPolicyRunner
 
 # Import extensions to set up environment tasks
 import orbit.ext_template  # noqa: F401  TODO: import orbit.<your_extension_name>
-import omni.isaac.contrib_tasks  # noqa: F401
-import omni.isaac.orbit_tasks  # noqa: F401
-
-from omni.isaac.orbit_tasks.utils import get_checkpoint_path, parse_env_cfg
-from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
@@ -134,13 +133,7 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        # run the main execution
-        main()
-    except Exception as err:
-        carb.log_error(err)
-        carb.log_error(traceback.format_exc())
-        raise
-    finally:
-        # close sim app
-        simulation_app.close()
+    # run the main execution
+    main()
+    # close sim app
+    simulation_app.close()

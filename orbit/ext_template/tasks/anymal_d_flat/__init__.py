@@ -1,7 +1,7 @@
 import gymnasium as gym
 
-from .environment import AnymalDFlatEnvTemplateCfg, AnymalDFlatEnvTemplateCfg_PLAY
 from .agent import AnymalDFlatPPORunnerTemplateCfg
+from .environment import AnymalDFlatEnvTemplateCfg, AnymalDFlatEnvTemplateCfg_PLAY
 
 ##
 # Register Gym environments.

@@ -60,7 +60,7 @@ Add build instructions.
 
 ### Running in Docker
 
-Docker is a great way to run an application with all dependencies and libraries bundles together. 
+Docker is a great way to run an application with all dependencies and libraries bundles together.
 Make sure to [install Docker](https://docs.docker.com/get-docker/) first.
 
 ## Usage

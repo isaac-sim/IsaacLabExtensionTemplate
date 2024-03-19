@@ -37,25 +37,22 @@ simulation_app = app_launcher.app
 """Rest everything follows."""
 
 
-import gymnasium as gym
 import os
-import torch
-import traceback
 
-import carb
-from rsl_rl.runners import OnPolicyRunner
-
-# Import extensions to set up environment tasks
-import orbit.ext_template  # noqa: F401  TODO: import orbit.<your_extension_name>
+import gymnasium as gym
 import omni.isaac.contrib_tasks  # noqa: F401
 import omni.isaac.orbit_tasks  # noqa: F401
-
+import torch
 from omni.isaac.orbit_tasks.utils import get_checkpoint_path, parse_env_cfg
 from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import (
     RslRlOnPolicyRunnerCfg,
     RslRlVecEnvWrapper,
     export_policy_as_onnx,
 )
+from rsl_rl.runners import OnPolicyRunner
+
+# Import extensions to set up environment tasks
+import orbit.ext_template  # noqa: F401  TODO: import orbit.<your_extension_name>
 
 
 def main():
@@ -104,13 +101,7 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        # run the main execution
-        main()
-    except Exception as err:
-        carb.log_error(err)
-        carb.log_error(traceback.format_exc())
-        raise
-    finally:
-        # close sim app
-        simulation_app.close()
+    # run the main execution
+    main()
+    # close sim app
+    simulation_app.close()

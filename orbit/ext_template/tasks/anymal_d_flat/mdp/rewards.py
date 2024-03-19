@@ -1,10 +1,10 @@
 import math
-import torch
 
+import omni.isaac.orbit_tasks.locomotion.velocity.mdp as mdp  # noqa: F401, F403
+import torch
 from omni.isaac.orbit.managers import RewardTermCfg as RewTerm
 from omni.isaac.orbit.managers import SceneEntityCfg
 from omni.isaac.orbit.utils import configclass
-import omni.isaac.orbit_tasks.locomotion.velocity.mdp as mdp  # noqa: F401, F403
 
 
 @configclass

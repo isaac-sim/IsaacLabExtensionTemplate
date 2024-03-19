@@ -1,5 +1,5 @@
-from omni.isaac.orbit.utils import configclass
 from omni.isaac.orbit.envs import RLTaskEnvCfg
+from omni.isaac.orbit.utils import configclass
 
 from .mdp import (
     ActionsCfg,
@@ -9,7 +9,7 @@ from .mdp import (
     RandomizationCfg,
     RewardsCfg,
     SceneCfg,
-    TerminationsCfg
+    TerminationsCfg,
 )
 
 

@@ -3,6 +3,7 @@ Python module serving as a project/extension template.
 """
 
 import os
+
 import toml
 
 # Conveniences to other module directories via relative paths

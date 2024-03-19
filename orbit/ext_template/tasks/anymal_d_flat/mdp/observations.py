@@ -1,8 +1,8 @@
+import omni.isaac.orbit_tasks.locomotion.velocity.mdp as mdp  # noqa: F401, F403
 from omni.isaac.orbit.managers import ObservationGroupCfg as ObsGroup
 from omni.isaac.orbit.managers import ObservationTermCfg as ObsTerm
 from omni.isaac.orbit.utils import configclass
 from omni.isaac.orbit.utils.noise import AdditiveUniformNoiseCfg as Unoise
-import omni.isaac.orbit_tasks.locomotion.velocity.mdp as mdp  # noqa: F401, F403
 
 
 @configclass

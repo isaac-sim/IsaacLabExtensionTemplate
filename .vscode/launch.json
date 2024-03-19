@@ -4,19 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
-        {
-            "name": "Python: Current File",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
-            // For running in docker container
-            // "env": {
-            //     "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
-            // }
-        },
         // Attach to simulation during runtime. This is useful for debugging extensions.
         // For more information, visit: https://docs.omniverse.nvidia.com/isaacsim/latest/advanced_tutorials/tutorial_advanced_python_debugging.html#attaching-the-debugger-to-a-running-app
         {
@@ -26,6 +13,16 @@
             "port": 3000,
             "host": "localhost"
         },
+
+        // For standalone script execution
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.vscode/.python.env",
+        },
         {
             "name": "Python: Train Environment",
             "type": "debugpy",
@@ -34,10 +31,6 @@
             "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.vscode/.python.env",
-            // For running in docker container
-            // "env": {
-            //     "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
-            // }
         },
         {
             "name": "Python: Play Environment",
@@ -47,10 +40,43 @@
             "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.vscode/.python.env",
-            // For running in docker container
-            // "env": {
-            //     "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
-            // }
+        },
+
+        // For script execution inside a Docker
+        {
+            "name": "Docker: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.vscode/.python.env",
+            "env": {
+                "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Docker: Train Environment",
+            "type": "debugpy",
+            "request": "launch",
+            "args" : ["--task", "Isaac-Anymal-D-Flat-Template-v0", "--num_envs", "4096", "--headless"],
+            "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.vscode/.python.env",
+            "env": {
+                "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Docker: Play Environment",
+            "type": "debugpy",
+            "request": "launch",
+            "args" : ["--task", "Isaac-Anymal-D-Flat-Template-Play-v0", "--num_envs", "32"],
+            "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.vscode/.python.env",
+            "env": {
+                "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
+            }
         }
     ]
 }

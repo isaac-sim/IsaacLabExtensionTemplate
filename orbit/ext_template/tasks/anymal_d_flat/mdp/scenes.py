@@ -4,6 +4,7 @@ from omni.isaac.orbit.scene import InteractiveSceneCfg
 from omni.isaac.orbit.sensors import ContactSensorCfg
 from omni.isaac.orbit.terrains import TerrainImporterCfg
 from omni.isaac.orbit.utils import configclass
+
 from omni.isaac.orbit_assets.anymal import ANYMAL_D_CFG  # isort: skip
 
 

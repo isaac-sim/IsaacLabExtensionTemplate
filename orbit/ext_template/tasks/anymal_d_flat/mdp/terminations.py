@@ -1,7 +1,7 @@
-from omni.isaac.orbit.managers import TerminationTermCfg as DoneTerm
-from omni.isaac.orbit.managers import SceneEntityCfg
-from omni.isaac.orbit.utils import configclass
 import omni.isaac.orbit_tasks.locomotion.velocity.mdp as mdp  # noqa: F401, F403
+from omni.isaac.orbit.managers import SceneEntityCfg
+from omni.isaac.orbit.managers import TerminationTermCfg as DoneTerm
+from omni.isaac.orbit.utils import configclass
 
 
 @configclass

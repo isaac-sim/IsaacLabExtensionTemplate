@@ -10,13 +10,13 @@
 
 This repository serves as a template for building projects or extensions based on Orbit. It allows you to develop in an isolated environment, outside of the core Orbit repository. Furthermore, this template serves three use cases:
 
-- **Python Package**  
+- **Python Package**
     Can be installed into Isaac Sim's Python environment, making it suitable for users who want to integrate their extension to `Orbit` as a python package.
 
-- **Project Template**  
+- **Project Template**
     Ensures access to `Isaac Sim` and `Orbit` functionalities, which can be used as a project template.
 
-- **Omniverse Extension**  
+- **Omniverse Extension**
     Can be used as an Omniverse extension, ideal for projects that leverage the Omniverse platform's graphical user interface.
 
 **Key Features:**
