@@ -154,6 +154,20 @@ ${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Isaac-Velocity-Flat-Any
 
 We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
+## Pre-Commit
+
+To pre-commit your code, we use the [pre-commit](https://pre-commit.com/) module. Install the module using:
+
+```bash
+pip install pre-commit
+```
+
+Run your pre-commits with:
+
+```bash
+pre-commit run --all-files
+```
+
 ## Finalize
 
 You are all set and no longer need the template instructions
