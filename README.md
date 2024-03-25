@@ -109,7 +109,7 @@ To enable your extension, follow these steps:
 1. **Add the search path of your repository** to the extension manager:
     - Navigate to the extension manager using `Window` -> `Extensions`.
     - Click on the **Hamburger Icon** (☰), then go to `Settings`.
-    - In the `Extension Search Paths`, enter the path that goes up to your repository's location without actually including the repository's own directory. For example, if your repository is located at `/home/extensions/orbit.ext_template`, you should add `/home/extensions` as the search path.
+    - In the `Extension Search Paths`, enter the path that goes up to your repository's location without actually including the repository's own directory. For example, if your repository is located at `/home/code/orbit.ext_template`, you should add `/home/code` as the search path.
     - If not already present, in the `Extension Search Paths`, enter the path that leads to your local Orbit directory. For example: `/home/orbit/source/extensions`
     - Click on the **Hamburger Icon** (☰), then click `Refresh`.
 
@@ -152,7 +152,7 @@ ${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Isaac-Velocity-Flat-Any
 
 ### Omniverse Extension
 
-We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
+We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
 ## Finalize
 

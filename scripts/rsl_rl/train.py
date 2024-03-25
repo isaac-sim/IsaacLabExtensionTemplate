@@ -50,7 +50,6 @@ import os
 from datetime import datetime
 
 import gymnasium as gym
-import omni.isaac.contrib_tasks  # noqa: F401
 import omni.isaac.orbit_tasks  # noqa: F401
 import torch
 from omni.isaac.orbit.envs import RLTaskEnvCfg
@@ -64,7 +63,7 @@ from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import (
 from rsl_rl.runners import OnPolicyRunner
 
 # Import extensions to set up environment tasks
-import orbit.ext_template  # noqa: F401  TODO: import orbit.<your_extension_name>
+import orbit.ext_template.tasks  # noqa: F401  TODO: import orbit.<your_extension_name>
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
