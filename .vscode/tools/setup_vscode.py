@@ -79,12 +79,6 @@ def header_msg(src: str):
 
 
 def main():
-    # Parse arguments
-    parser = argparse.ArgumentParser(description='Setup Environment')
-    parser.add_argument('src_path', type=str, help='Path to Isaac Sim')
-    args = parser.parse_args()
-    isaacsim_path = args.src_path
-
     # SETTINGS.JSON ----------------------------------------------------------------------------------------------------
 
     # Read workspace template settings
@@ -95,6 +89,7 @@ def main():
         settings_template = f.read()
 
     # Overwrite the python.analysis.extraPaths in the orbit settings file with the path names
+    isaacsim_path = os.path.join(WS_DIR, "_orbit", "_isaac_sim")
     settings = overwrite_python_analysis_extra_paths(settings_template, isaacsim_path)
 
     # add template notice to the top of the file

@@ -67,7 +67,15 @@ git clone <your_repository_url>
 - Rename your source folder.
 
 ```bash
+cd orbit.<your_extension_name>
 mv orbit/ext_template orbit/<your_extension_name>
+```
+
+- Set up a symbolic link from Orbit to this directory.
+This makes it convenient to index the python modules and look for extensions shipped with Isaac Sim and Orbit.
+
+```bash
+ln -s <your_orbit_path> _orbit
 ```
 
 #### Environment (Optional)

@@ -5,7 +5,7 @@
             "label": "setup_python_env",
             "type": "shell",
             "linux": {
-                "command": "export ISAAC_PATH=${ORBIT_PATH}/_isaac_sim && export CARB_APP_PATH=${ISAAC_PATH}/kit && export EXP_PATH=${ISAAC_PATH}/apps && source ${ISAAC_PATH}/setup_python_env.sh && printenv >${workspaceFolder}/.vscode/.python.env && ${ISAAC_PATH}/python.sh ${workspaceFolder}/.vscode/tools/setup_vscode.py ${ISAAC_PATH}"
+                "command": "export CARB_APP_PATH=${workspaceFolder}/_orbit/_isaac_sim/kit && export ISAAC_PATH=${workspaceFolder}/_orbit/_isaac_sim && export EXP_PATH=${workspaceFolder}/_orbit/_isaac_sim/apps && source ${workspaceFolder}/_orbit/_isaac_sim/setup_python_env.sh && printenv >${workspaceFolder}/.vscode/.python.env && ${workspaceFolder}/_orbit/_isaac_sim/python.sh ${workspaceFolder}/.vscode/tools/setup_vscode.py"
             }
         }
     ]
