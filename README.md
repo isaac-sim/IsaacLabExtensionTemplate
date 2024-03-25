@@ -160,7 +160,7 @@ You are all set and no longer need the template instructions
 
 - The `orbit/ext_template` and `scripts/rsl_rl` directories act as a reference template for your convenience. Delete them if no longer required.
 
-- When ready, replace this `README.md` with the contents of `README_TEMPLATE.md` and customize where appropriate.
+- When ready, use this `README.md` as a template and customize where appropriate.
 
 ## Docker Usage
 
