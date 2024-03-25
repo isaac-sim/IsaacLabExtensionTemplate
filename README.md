@@ -164,13 +164,14 @@ We provide an example UI extension that will load upon enabling your extension d
 
 ## Pre-Commit
 
-To pre-commit your code, we use the [pre-commit](https://pre-commit.com/) module. Install the module using:
+
+Pre-committing involves using a framework to automate the process of enforcing code quality standards before code is actually committed to a version control system, like Git. This process involves setting up hooks that run automated checks, such as code formatting, linting (checking for programming errors, bugs, stylistic errors, and suspicious constructs), and running tests. If these checks pass, the commit is allowed; if not, the commit is blocked until the issues are resolved. This ensures that all code committed to the repository adheres to the defined quality standards, leading to a cleaner, more maintainable codebase. To do so, we use the [pre-commit](https://pre-commit.com/) module. Install the module using:
 
 ```bash
 pip install pre-commit
 ```
 
-Run your pre-commits with:
+Run the pre-commit with:
 
 ```bash
 pre-commit run --all-files
@@ -184,11 +185,9 @@ You are all set and no longer need the template instructions
 
 - When ready, use this `README.md` as a template and customize where appropriate.
 
-## Docker Usage
+## Docker / Cluster
 
-```bash
-git config --global --add safe.directory /workspace/orbit.<your_extension_name>
-```
+We are currently working on a docker and cluster setup for this template. In the meanwhile, please refer to the current setup provided in the Orbit [documentation](https://isaac-orbit.github.io/orbit/source/deployment/index.html).
 
 ## Troubleshooting
 
