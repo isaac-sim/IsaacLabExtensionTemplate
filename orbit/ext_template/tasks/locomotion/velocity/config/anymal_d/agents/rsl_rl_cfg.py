@@ -1,3 +1,8 @@
+# Copyright (c) 2022-2024, The ORBIT Project Developers.
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 from omni.isaac.orbit.utils import configclass
 from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import (
     RslRlOnPolicyRunnerCfg,
@@ -7,16 +12,16 @@ from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import (
 
 
 @configclass
-class AnymalDFlatPPORunnerTemplateCfg(RslRlOnPolicyRunnerCfg):
+class AnymalDRoughPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
-    max_iterations = 300
+    max_iterations = 1500
     save_interval = 50
-    experiment_name = "anymal_d_flat"
+    experiment_name = "anymal_d_rough"
     empirical_normalization = False
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
-        actor_hidden_dims=[128, 128, 128],
-        critic_hidden_dims=[128, 128, 128],
+        actor_hidden_dims=[512, 256, 128],
+        critic_hidden_dims=[512, 256, 128],
         activation="elu",
     )
     algorithm = RslRlPpoAlgorithmCfg(
@@ -33,3 +38,14 @@ class AnymalDFlatPPORunnerTemplateCfg(RslRlOnPolicyRunnerCfg):
         desired_kl=0.01,
         max_grad_norm=1.0,
     )
+
+
+@configclass
+class AnymalDFlatPPORunnerCfg(AnymalDRoughPPORunnerCfg):
+    def __post_init__(self):
+        super().__post_init__()
+
+        self.max_iterations = 300
+        self.experiment_name = "anymal_d_flat"
+        self.policy.actor_hidden_dims = [128, 128, 128]
+        self.policy.critic_hidden_dims = [128, 128, 128]

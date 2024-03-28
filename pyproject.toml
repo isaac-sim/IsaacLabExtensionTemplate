@@ -26,4 +26,6 @@ maintainers = [
 
 # Tool dependent subtables
 [tool.setuptools]
-py-modules = ['orbit']  # TODO, add modules required for your extension
+py-modules = [
+  'orbit'
+]  # TODO, add modules required for your extension

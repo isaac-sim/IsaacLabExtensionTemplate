@@ -67,12 +67,20 @@ git clone <your_repository_url>
 - Rename your source folder.
 
 ```bash
+cd orbit.<your_extension_name>
 mv orbit/ext_template orbit/<your_extension_name>
+```
+
+- Set up a symbolic link from Orbit to this directory.
+This makes it convenient to index the python modules and look for extensions shipped with Isaac Sim and Orbit.
+
+```bash
+ln -s <your_orbit_path> _orbit
 ```
 
 #### Environment (Optional)
 
-For clarity, we will be using the `${ISAACSIM_PATH}/python.sh` command to call the Orbit specific python interpreter. However, you might be working from within a virtual environment, allowing you to use the `python` command directly, instead of `${ISAACSIM_PATH}/python.sh`. Information on setting up a virtual environment for Orbit can be found [here](https://isaac-orbit.github.io/orbit/source/setup/installation.html#setting-up-the-environment)
+For clarity, we will be using the `${ISAACSIM_PATH}/python.sh` command to call the Orbit specific python interpreter. However, you might be working from within a virtual environment, allowing you to use the `python` command directly, instead of `${ISAACSIM_PATH}/python.sh`. Information on setting up a virtual environment for Orbit can be found [here](https://isaac-orbit.github.io/orbit/source/setup/installation.html#setting-up-the-environment). The `ISAACSIM_PATH` should already be set from installing Orbit, see [here](https://isaac-orbit.github.io/orbit/source/setup/installation.html#configuring-the-environment-variables).
 
 #### Configure Python Interpreter
 
@@ -84,6 +92,14 @@ In the provided configuration, we set the default Python interpreter to use the 
 
 This setup requires you to have set up the `ISAACSIM_PATH` environment variable. If you want to use a different Python interpreter, you need to change the Python interpreter used by selecting and activating the Python interpreter of your choice in the bottom left corner of VSCode, or opening the command palette (`Ctrl+Shift+P`) and selecting `Python: Select Interpreter`.
 
+#### Set up IDE
+
+To setup the IDE, please follow these instructions:
+
+1. Open the `orbit.<your_extension_template>` directory on Visual Studio Code IDE
+2. Run VSCode Tasks, by pressing Ctrl+Shift+P, selecting Tasks: Run Task and running the setup_python_env in the drop down menu.
+
+If everything executes correctly, it should create a file .python.env in the .vscode directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
 
 ### Setup as Python Package / Project Template
 
@@ -101,7 +117,7 @@ To enable your extension, follow these steps:
 1. **Add the search path of your repository** to the extension manager:
     - Navigate to the extension manager using `Window` -> `Extensions`.
     - Click on the **Hamburger Icon** (☰), then go to `Settings`.
-    - In the `Extension Search Paths`, enter the path that goes up to your repository's location without actually including the repository's own directory. For example, if your repository is located at `/home/extensions/orbit.ext_template`, you should add `/home/extensions` as the search path.
+    - In the `Extension Search Paths`, enter the path that goes up to your repository's location without actually including the repository's own directory. For example, if your repository is located at `/home/code/orbit.ext_template`, you should add `/home/code` as the search path.
     - If not already present, in the `Extension Search Paths`, enter the path that leads to your local Orbit directory. For example: `/home/orbit/source/extensions`
     - Click on the **Hamburger Icon** (☰), then click `Refresh`.
 
@@ -133,18 +149,33 @@ Train a policy.
 
 ```bash
 cd <path_to_your_extension>
-${ISAACSIM_PATH}/python.sh scripts/rsl_rl/train.py --task Isaac-Anymal-D-Flat-Template-v0 --num_envs 4096 --headless
+${ISAACSIM_PATH}/python.sh scripts/rsl_rl/train.py --task Isaac-Velocity-Flat-Anymal-D-Template-v0 --num_envs 4096 --headless
 ```
 
 Play the trained policy.
 
 ```bash
-${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Isaac-Anymal-D-Flat-Template-Play-v0 --num_envs 16
+${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Isaac-Velocity-Flat-Anymal-D-Template-Play-v0 --num_envs 16
 ```
 
 ### Omniverse Extension
 
-We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
+We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
+
+## Pre-Commit
+
+
+Pre-committing involves using a framework to automate the process of enforcing code quality standards before code is actually committed to a version control system, like Git. This process involves setting up hooks that run automated checks, such as code formatting, linting (checking for programming errors, bugs, stylistic errors, and suspicious constructs), and running tests. If these checks pass, the commit is allowed; if not, the commit is blocked until the issues are resolved. This ensures that all code committed to the repository adheres to the defined quality standards, leading to a cleaner, more maintainable codebase. To do so, we use the [pre-commit](https://pre-commit.com/) module. Install the module using:
+
+```bash
+pip install pre-commit
+```
+
+Run the pre-commit with:
+
+```bash
+pre-commit run --all-files
+```
 
 ## Finalize
 
@@ -152,7 +183,11 @@ You are all set and no longer need the template instructions
 
 - The `orbit/ext_template` and `scripts/rsl_rl` directories act as a reference template for your convenience. Delete them if no longer required.
 
-- When ready, replace this `README.md` with the contents of `README_TEMPLATE.md` and customize where appropriate.
+- When ready, use this `README.md` as a template and customize where appropriate.
+
+## Docker / Cluster
+
+We are currently working on a docker and cluster setup for this template. In the meanwhile, please refer to the current setup provided in the Orbit [documentation](https://isaac-orbit.github.io/orbit/source/deployment/index.html).
 
 ## Troubleshooting
 
