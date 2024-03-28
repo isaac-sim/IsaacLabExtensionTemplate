@@ -5,7 +5,9 @@
 
 from omni.isaac.orbit.utils import configclass
 
-from orbit.ext_template.tasks.locomotion.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg
+from orbit.ext_template.tasks.locomotion.velocity.velocity_env_cfg import (
+    LocomotionVelocityRoughEnvCfg,
+)
 
 ##
 # Pre-defined configs

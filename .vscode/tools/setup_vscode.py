@@ -12,12 +12,11 @@ This is necessary because Isaac Sim 2022.2.1 does not add the necessary python p
 when the "setup_python_env.sh" is run as part of the vs-code launch configuration.
 """
 
-import re
-import sys
+import argparse
 import os
 import pathlib
-import argparse
-
+import re
+import sys
 
 WS_DIR = pathlib.Path(__file__).parents[2]
 """Path to the orbit directory."""
@@ -54,7 +53,7 @@ def overwrite_python_analysis_extra_paths(ws_settings: str, isaac_sim_dir: str) 
     # change the path names to be relative to the orbit directory
     path_names = settings.split(",")
     path_names = [path_name.strip().strip('"') for path_name in path_names]
-    path_names = ['"' + isaac_sim_dir + '/'+ path_name + '"' for path_name in path_names if len(path_name) > 0]
+    path_names = ['"' + isaac_sim_dir + "/" + path_name + '"' for path_name in path_names if len(path_name) > 0]
     path_names = ",\n\t\t".expandtabs(4).join(path_names)  # combine them into a single string
 
     # replace the path names in the orbit settings file with the path names from the isaac-sim settings file
