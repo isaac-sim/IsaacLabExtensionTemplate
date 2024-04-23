@@ -24,7 +24,13 @@ INSTALL_REQUIRES = [
 
 # Installation operation
 setup(
-    name=EXTENSION_TOML_DATA["python"]["module"][0]["name"],
+
+    # TODO: Change your package naming
+    # -----------------------------------------------------------------
+    name="orbit.ext_template",
+    packages=["orbit.ext_template"],
+    # -----------------------------------------------------------------
+
     author=EXTENSION_TOML_DATA["package"]["author"],
     maintainer=EXTENSION_TOML_DATA["package"]["maintainer"],
     maintainer_email=EXTENSION_TOML_DATA["package"]["maintainer_email"],
@@ -36,7 +42,6 @@ setup(
     license="BSD-3-Clause",
     include_package_data=True,
     python_requires=">=3.10",
-    packages=[EXTENSION_TOML_DATA["python"]["module"][0]["name"]],
     classifiers=[
         "Natural Language :: English",
         "Programming Language :: Python :: 3.10",

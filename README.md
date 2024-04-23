@@ -59,7 +59,7 @@ Decide on a name for your project or extension. This guide will refer to this na
 git clone <your_repository_url>
 ```
 
-- Configure this template to your specifications in `config/extension.toml`.
+- To tailor this template to your needs, customize the settings in `config/extension.toml` and `setup.py` by completing the sections marked with TODO.
 
 - Rename your source folder.
 
