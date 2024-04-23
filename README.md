@@ -59,10 +59,7 @@ Decide on a name for your project or extension. This guide will refer to this na
 git clone <your_repository_url>
 ```
 
-- Configure the template. Search for and replace **`TODO`**'s according to your extension's needs within the following files:
-
-    - `config/extension.toml`
-    - `pyproject.toml`
+- Configure this template to your specifications in `config/extension.toml`.
 
 - Rename your source folder.
 
