@@ -12,7 +12,7 @@ from . import agents, flat_env_cfg, rough_env_cfg
 ##
 
 gym.register(
-    id="Isaac-Velocity-Flat-Anymal-D-Template-v0",
+    id="Template-Velocity-Flat-Anymal-D-v0",
     entry_point="omni.isaac.orbit.envs:RLTaskEnv",
     disable_env_checker=True,
     kwargs={
@@ -22,7 +22,7 @@ gym.register(
 )
 
 gym.register(
-    id="Isaac-Velocity-Flat-Anymal-D-Template-Play-v0",
+    id="Template-Velocity-Flat-Anymal-D-Play-v0",
     entry_point="omni.isaac.orbit.envs:RLTaskEnv",
     disable_env_checker=True,
     kwargs={
@@ -32,7 +32,7 @@ gym.register(
 )
 
 gym.register(
-    id="Isaac-Velocity-Rough-Anymal-D-Template-v0",
+    id="Template-Velocity-Rough-Anymal-D-v0",
     entry_point="omni.isaac.orbit.envs:RLTaskEnv",
     disable_env_checker=True,
     kwargs={
@@ -42,7 +42,7 @@ gym.register(
 )
 
 gym.register(
-    id="Isaac-Velocity-Rough-Anymal-D-Template-Play-v0",
+    id="Template-Velocity-Rough-Anymal-D-Play-v0",
     entry_point="omni.isaac.orbit.envs:RLTaskEnv",
     disable_env_checker=True,
     kwargs={

@@ -12,11 +12,9 @@ This is necessary because Isaac Sim 2022.2.1 does not add the necessary python p
 when the "setup_python_env.sh" is run as part of the vs-code launch configuration.
 """
 
-import argparse
 import os
 import pathlib
 import re
-import sys
 
 WS_DIR = pathlib.Path(__file__).parents[2]
 """Path to the orbit directory."""

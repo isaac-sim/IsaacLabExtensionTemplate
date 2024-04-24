@@ -5,9 +5,9 @@
 
 from __future__ import annotations
 
+import torch
 from typing import TYPE_CHECKING
 
-import torch
 from omni.isaac.orbit.managers import SceneEntityCfg
 from omni.isaac.orbit.sensors import ContactSensor
 
