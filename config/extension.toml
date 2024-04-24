@@ -4,12 +4,19 @@
 version = "0.1.0"
 
 # Description
-title = "Extension Template"  # TODO: Please adapt to your title.
-description="Extension Template for Orbit"  #TODO: Please adapt to your description.
-repository = "https://github.com/isaac-orbit/orbit.ext_template.git"  # TODO: Please adapt to your repository.
-keywords = ["extension", "template", "orbit"]  # TODO: Please adapt to your keywords.
 category = "orbit"
 readme  = "README.md"
+
+# TODO: Change your package specifications
+# -----------------------------------------------------------------
+title = "Extension Template"
+author = "ORBIT Project Developers"
+maintainer = "Nico Burger"
+maintainer_email = "nburger@theaiinstitute.com"
+description="Extension Template for Orbit"
+repository = "https://github.com/isaac-orbit/orbit.ext_template.git"
+keywords = ["extension", "template", "orbit"]
+# -----------------------------------------------------------------
 
 [dependencies]
 "omni.kit.uiapp" = {}
@@ -19,9 +26,10 @@ readme  = "README.md"
 "omni.isaac.core" = {}
 "omni.isaac.gym" = {}
 "omni.replicator.isaac" = {}
-# Note: You can add additional dependencies here for your extension.
-# For example, if you want to use the omni.kit module, you can add it as a dependency:
-# "omni.kit" = {}
+# NOTE: Add additional dependencies here
 
 [[python.module]]
-name = "orbit.ext_template"  # TODO: Please adapt to your package name.
+# TODO: Change your package name
+# -----------------------------------------------------------------
+name = "orbit.ext_template"
+# -----------------------------------------------------------------
