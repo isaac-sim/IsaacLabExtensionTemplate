@@ -6,7 +6,6 @@
 """Package containing task implementations for various robotic environments."""
 
 import os
-
 import toml
 
 # Conveniences to other module directories via relative paths

@@ -5,10 +5,7 @@
 
 """Script to play a checkpoint if an RL agent from RSL-RL."""
 
-from __future__ import annotations
-
 """Launch Isaac Sim Simulator first."""
-
 
 import argparse
 
@@ -16,7 +13,6 @@ from omni.isaac.orbit.app import AppLauncher
 
 # local imports
 import cli_args  # isort: skip
-
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
@@ -37,19 +33,19 @@ simulation_app = app_launcher.app
 """Rest everything follows."""
 
 
-import os
-
 import gymnasium as gym
-import omni.isaac.contrib_tasks  # noqa: F401
-import omni.isaac.orbit_tasks  # noqa: F401
+import os
 import torch
+
+from rsl_rl.runners import OnPolicyRunner
+
+import omni.isaac.orbit_tasks  # noqa: F401
 from omni.isaac.orbit_tasks.utils import get_checkpoint_path, parse_env_cfg
 from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import (
     RslRlOnPolicyRunnerCfg,
     RslRlVecEnvWrapper,
     export_policy_as_onnx,
 )
-from rsl_rl.runners import OnPolicyRunner
 
 # Import extensions to set up environment tasks
 import orbit.ext_template.tasks  # noqa: F401  TODO: import orbit.<your_extension_name>

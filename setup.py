@@ -24,13 +24,11 @@ INSTALL_REQUIRES = [
 
 # Installation operation
 setup(
-
     # TODO: Change your package naming
     # -----------------------------------------------------------------
     name="orbit.ext_template",
     packages=["orbit.ext_template"],
     # -----------------------------------------------------------------
-
     author=EXTENSION_TOML_DATA["package"]["author"],
     maintainer=EXTENSION_TOML_DATA["package"]["maintainer"],
     maintainer_email=EXTENSION_TOML_DATA["package"]["maintainer_email"],

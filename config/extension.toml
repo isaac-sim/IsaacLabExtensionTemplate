@@ -19,13 +19,9 @@ keywords = ["extension", "template", "orbit"]
 # -----------------------------------------------------------------
 
 [dependencies]
-"omni.kit.uiapp" = {}
 "omni.isaac.orbit" = {}
 "omni.isaac.orbit_assets" = {}
 "omni.isaac.orbit_tasks" = {}
-"omni.isaac.core" = {}
-"omni.isaac.gym" = {}
-"omni.replicator.isaac" = {}
 # NOTE: Add additional dependencies here
 
 [[python.module]]
