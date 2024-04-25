@@ -12,7 +12,7 @@
     "inputs": [
         {
             "id": "orbit_path",
-            "description": "Path to Orbit:",
+            "description": "Absolute path to Orbit:",
             "default": "",
             "type": "promptString"
         },
