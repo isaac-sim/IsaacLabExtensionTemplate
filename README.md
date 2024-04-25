@@ -94,6 +94,8 @@ ${ORBIT_PATH}/orbit.sh --install
 
 - Set your `conda` environment as the default interpreter in VSCode by opening the command palette (`Ctrl+Shift+P`), choosing `Python: Select Interpreter` and selecting your `conda` environment.
 
+Once you are in the virtual environment, you do not need to use `${ORBIT_PATH}/orbit.sh -p` to run python scripts. You can use the default python executable in your environment by running `python` or `python3`. However, for the rest of the documentation, we will assume that you are using `${ORBIT_PATH}/orbit.sh -p` to run python scripts.
+
 #### Set up IDE
 
 To setup the IDE, please follow these instructions:
