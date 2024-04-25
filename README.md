@@ -153,13 +153,13 @@ Train a policy.
 
 ```bash
 cd <path_to_your_extension>
-${ORBIT_PATH}/orbit.sh -p scripts/rsl_rl/train.py --task Isaac-Velocity-Flat-Anymal-D-Template-v0 --num_envs 4096 --headless
+${ORBIT_PATH}/orbit.sh -p scripts/rsl_rl/train.py --task Template-Velocity-Flat-Anymal-D-v0 --num_envs 4096 --headless
 ```
 
 Play the trained policy.
 
 ```bash
-${ORBIT_PATH}/orbit.sh -p scripts/rsl_rl/play.py --task Isaac-Velocity-Flat-Anymal-D-Template-Play-v0 --num_envs 16
+${ORBIT_PATH}/orbit.sh -p scripts/rsl_rl/play.py --task Template-Velocity-Flat-Anymal-D-Play-v0 --num_envs 16
 ```
 
 ### Omniverse Extension
