@@ -73,9 +73,6 @@ mv orbit/ext_template orbit/<your_extension_name>
 ```bash
 # Set the ORBIT_PATH environment variable to point to your Orbit installation directory
 export ORBIT_PATH=<your_orbit_path>
-
-# Append the ORBIT_PATH variable definition to your .bashrc file for automatic setup in future sessions
-echo -e "\nexport ORBIT_PATH=${ORBIT_PATH}" >> $HOME/.bashrc
 ```
 
 #### Set Python Interpreter
@@ -102,7 +99,7 @@ ${ORBIT_PATH}/orbit.sh --install
 To setup the IDE, please follow these instructions:
 
 1. Open the `orbit.<your_extension_template>` directory on Visual Studio Code IDE
-2. Run VSCode Tasks, by pressing Ctrl+Shift+P, selecting Tasks: Run Task and running the setup_python_env in the drop down menu.
+2. Run VSCode Tasks, by pressing `Ctrl+Shift+P`, selecting `Tasks: Run Task` and running the `setup_python_env` in the drop down menu. When running this task, you will be prompted to add the absolute path to your Orbit installation.
 
 If everything executes correctly, it should create a file .python.env in the .vscode directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
 
