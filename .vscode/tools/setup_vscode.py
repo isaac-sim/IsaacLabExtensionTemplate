@@ -15,9 +15,39 @@ when the "setup_python_env.sh" is run as part of the vs-code launch configuratio
 import os
 import pathlib
 import re
+import argparse
+
 
 WS_DIR = pathlib.Path(__file__).parents[2]
 """Path to the orbit directory."""
+
+
+def overwrite_python_default_interpreter_path(ws_settings: str, isaac_sim_dir: str) -> str:
+    """Overwrite the python.defaultInterpreterPath in the workspace settings file.
+
+    The defaultInterpreterPath is replaced with the absolute path to Isaac Sim's bundled Python.
+
+    Args:
+        ws_settings: The settings string to manipulate.
+
+    Returns:
+        The settings string with overwritten python analysis extra paths.
+    """
+
+    # Define pattern
+    default_python_interpreter_key = '"python.defaultInterpreterPath": '
+    default_python_interpreter_value = '"${env:ORBIT_PATH}/_isaac_sim/python.sh"'
+
+    # Define the new interpreter path
+    new_interpreter_path = f'{default_python_interpreter_key}"{os.path.join(isaac_sim_dir, "python.sh")}"'
+
+    # Regex pattern to find and replace the specific path
+    pattern = re.escape(default_python_interpreter_key + default_python_interpreter_value)
+
+    # Replace the existing path with the new path using re.sub
+    settings = re.sub(pattern, new_interpreter_path, ws_settings)
+
+    return settings
 
 
 def overwrite_python_analysis_extra_paths(ws_settings: str, isaac_sim_dir: str) -> str:
@@ -76,6 +106,11 @@ def header_msg(src: str):
 
 
 def main():
+    # Read arguments
+    parser = argparse.ArgumentParser(description="Setup VSCode.")
+    parser.add_argument('--orbit_path', type=str, help='The absolute path to your Orbit installation.')
+    args = parser.parse_args()
+
     # SETTINGS.JSON ----------------------------------------------------------------------------------------------------
 
     # Read workspace template settings
@@ -84,10 +119,13 @@ def main():
         raise FileNotFoundError(f"Could not find the orbit template settings file: {settings_template_path}")
     with open(settings_template_path) as f:
         settings_template = f.read()
-
+    
     # Overwrite the python.analysis.extraPaths in the orbit settings file with the path names
-    isaacsim_path = os.path.join(WS_DIR, "_orbit", "_isaac_sim")
+    isaacsim_path = os.path.join(args.orbit_path, "_isaac_sim")
     settings = overwrite_python_analysis_extra_paths(settings_template, isaacsim_path)
+
+    # Overwrite the python.defaultInterpreterPath
+    settings = overwrite_python_default_interpreter_path(settings, isaacsim_path)
 
     # add template notice to the top of the file
     settings = header_msg(settings_template_path) + settings

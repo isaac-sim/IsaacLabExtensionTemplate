@@ -5,8 +5,16 @@
             "label": "setup_python_env",
             "type": "shell",
             "linux": {
-                "command": "export CARB_APP_PATH=${workspaceFolder}/_orbit/_isaac_sim/kit && export ISAAC_PATH=${workspaceFolder}/_orbit/_isaac_sim && export EXP_PATH=${workspaceFolder}/_orbit/_isaac_sim/apps && source ${workspaceFolder}/_orbit/_isaac_sim/setup_python_env.sh && printenv >${workspaceFolder}/.vscode/.python.env && ${workspaceFolder}/_orbit/_isaac_sim/python.sh ${workspaceFolder}/.vscode/tools/setup_vscode.py"
+                "command": "export CARB_APP_PATH=${input:orbit_path}/_isaac_sim/kit && export ISAAC_PATH=${input:orbit_path}/_isaac_sim && export EXP_PATH=${input:orbit_path}/_isaac_sim/apps && source ${input:orbit_path}/_isaac_sim/setup_python_env.sh && printenv >${workspaceFolder}/.vscode/.python.env && ${input:orbit_path}/_isaac_sim/python.sh ${workspaceFolder}/.vscode/tools/setup_vscode.py --orbit_path ${input:orbit_path}"
             }
         }
+    ],
+    "inputs": [
+        {
+            "id": "orbit_path",
+            "description": "Absolute path to Orbit:",
+            "default": "",
+            "type": "promptString"
+        },
     ]
 }

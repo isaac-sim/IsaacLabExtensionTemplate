@@ -68,33 +68,40 @@ cd orbit.<your_extension_name>
 mv orbit/ext_template orbit/<your_extension_name>
 ```
 
-- Set up a symbolic link from Orbit to this directory.
-This makes it convenient to index the python modules and look for extensions shipped with Isaac Sim and Orbit.
+- Define the following environment variable to specify the path to your Orbit installation:
 
 ```bash
-ln -s <your_orbit_path> _orbit
+# Set the ORBIT_PATH environment variable to point to your Orbit installation directory
+export ORBIT_PATH=<your_orbit_path>
 ```
 
-#### Environment (Optional)
+#### Set Python Interpreter
 
-For clarity, we will be using the `${ISAACSIM_PATH}/python.sh` command to call the Orbit specific python interpreter. However, you might be working from within a virtual environment, allowing you to use the `python` command directly, instead of `${ISAACSIM_PATH}/python.sh`. Information on setting up a virtual environment for Orbit can be found [here](https://isaac-orbit.github.io/orbit/source/setup/installation.html#setting-up-the-environment). The `ISAACSIM_PATH` should already be set from installing Orbit, see [here](https://isaac-orbit.github.io/orbit/source/setup/installation.html#configuring-the-environment-variables).
+Although using a virtual environment is optional, we recommend using `conda` (detailed instructions [here](https://isaac-orbit.github.io/orbit/source/setup/installation.html#setting-up-the-environment)). If you decide on using Isaac Sim's bundled Python, you can skip these steps.
 
-#### Configure Python Interpreter
+- If you haven't already: create and activate your `conda` environment, followed by installing extensions inside Orbit:
 
-In the provided configuration, we set the default Python interpreter to use the Python executable provided by Omniverse. This is specified in the `.vscode/settings.json` file:
+```bash
+# Create conda environment
+${ORBIT_PATH}/orbit.sh --conda
 
-```json
-"python.defaultInterpreterPath": "${env:ISAACSIM_PATH}/python.sh"
+# Activate conda environment
+conda activate orbit
+
+# Install all Orbit extensions in orbit/source/extensions
+${ORBIT_PATH}/orbit.sh --install
 ```
 
-This setup requires you to have set up the `ISAACSIM_PATH` environment variable. If you want to use a different Python interpreter, you need to change the Python interpreter used by selecting and activating the Python interpreter of your choice in the bottom left corner of VSCode, or opening the command palette (`Ctrl+Shift+P`) and selecting `Python: Select Interpreter`.
+- Set your `conda` environment as the default interpreter in VSCode by opening the command palette (`Ctrl+Shift+P`), choosing `Python: Select Interpreter` and selecting your `conda` environment.
+
+Once you are in the virtual environment, you do not need to use `${ORBIT_PATH}/orbit.sh -p` to run python scripts. You can use the default python executable in your environment by running `python` or `python3`. However, for the rest of the documentation, we will assume that you are using `${ORBIT_PATH}/orbit.sh -p` to run python scripts.
 
 #### Set up IDE
 
 To setup the IDE, please follow these instructions:
 
 1. Open the `orbit.<your_extension_template>` directory on Visual Studio Code IDE
-2. Run VSCode Tasks, by pressing Ctrl+Shift+P, selecting Tasks: Run Task and running the setup_python_env in the drop down menu.
+2. Run VSCode Tasks, by pressing `Ctrl+Shift+P`, selecting `Tasks: Run Task` and running the `setup_python_env` in the drop down menu. When running this task, you will be prompted to add the absolute path to your Orbit installation.
 
 If everything executes correctly, it should create a file .python.env in the .vscode directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
 
@@ -103,8 +110,8 @@ If everything executes correctly, it should create a file .python.env in the .vs
 From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
 
 ```bash
-${ISAACSIM_PATH}/python.sh -m pip install --upgrade pip
-${ISAACSIM_PATH}/python.sh -m pip install -e .
+${ORBIT_PATH}/orbit.sh -p -m pip install --upgrade pip
+${ORBIT_PATH}/orbit.sh -p -m pip install -e .
 ```
 
 ### Setup as Omniverse Extension
@@ -139,20 +146,20 @@ We provide an example for training and playing a policy for ANYmal on flat terra
 ```bash
 git clone https://github.com/leggedrobotics/rsl_rl.git
 cd rsl_rl
-${ISAACSIM_PATH}/python.sh -m pip install -e .
+${ORBIT_PATH}/orbit.sh -p -m pip install -e .
 ```
 
 Train a policy.
 
 ```bash
 cd <path_to_your_extension>
-${ISAACSIM_PATH}/python.sh scripts/rsl_rl/train.py --task Template-Velocity-Flat-Anymal-D-v0 --num_envs 4096 --headless
+${ORBIT_PATH}/orbit.sh -p scripts/rsl_rl/train.py --task Isaac-Velocity-Flat-Anymal-D-Template-v0 --num_envs 4096 --headless
 ```
 
 Play the trained policy.
 
 ```bash
-${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Template-Velocity-Flat-Anymal-D-Play-v0 --num_envs 16
+${ORBIT_PATH}/orbit.sh -p scripts/rsl_rl/play.py --task Isaac-Velocity-Flat-Anymal-D-Template-Play-v0 --num_envs 16
 ```
 
 ### Omniverse Extension
@@ -160,7 +167,6 @@ ${ISAACSIM_PATH}/python.sh scripts/rsl_rl/play.py --task Template-Velocity-Flat-
 We provide an example UI extension that will load upon enabling your extension defined in `orbit/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
 ## Pre-Commit
-
 
 Pre-committing involves using a framework to automate the process of enforcing code quality standards before code is actually committed to a version control system, like Git. This process involves setting up hooks that run automated checks, such as code formatting, linting (checking for programming errors, bugs, stylistic errors, and suspicious constructs), and running tests. If these checks pass, the commit is allowed; if not, the commit is blocked until the issues are resolved. This ensures that all code committed to the repository adheres to the defined quality standards, leading to a cleaner, more maintainable codebase. To do so, we use the [pre-commit](https://pre-commit.com/) module. Install the module using:
 
