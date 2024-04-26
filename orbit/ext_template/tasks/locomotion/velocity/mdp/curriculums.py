@@ -1,8 +1,3 @@
-# Copyright (c) 2022-2024, The ORBIT Project Developers.
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
-
 """Common functions that can be used to create curriculum for the learning environment.
 
 The functions can be passed to the :class:`omni.isaac.orbit.managers.CurriculumTermCfg` object to enable

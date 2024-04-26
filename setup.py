@@ -1,8 +1,3 @@
-# Copyright (c) 2022-2024, The ORBIT Project Developers.
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
-
 """Installation script for the 'orbit.ext_template' python package."""
 
 import os
