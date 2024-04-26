@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools", "toml"]
+build-backend = "setuptools.build_meta"
+
 [tool.isort]
 
 atomic = true
