@@ -129,14 +129,6 @@ To enable your extension, follow these steps:
     - Find your extension under the `Third Party` category.
     - Toggle it to enable your extension.
 
-### Setup as Python Package / Project Template
-
-From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
-
-```bash
-${ORBIT_PATH}/orbit.sh -p -m pip install --upgrade pip
-${ORBIT_PATH}/orbit.sh -p -m pip install -e .
-```
 
 ### Installing Dependencies
 
