@@ -129,6 +129,24 @@ To enable your extension, follow these steps:
     - Find your extension under the `Third Party` category.
     - Toggle it to enable your extension.
 
+### Setup as Python Package / Project Template
+
+From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
+
+```bash
+${ORBIT_PATH}/orbit.sh -p -m pip install --upgrade pip
+${ORBIT_PATH}/orbit.sh -p -m pip install -e .
+```
+
+### Installing Dependencies
+
+To ensure that your program works as expected, please add your extensions's dependencies to the appropriate configuration file. Below are links for how to specify extension dependencies on ``IsaacSim`` and ``Orbit`` extensions, ``pip`` packages, ``apt`` packages, and [rosdep packages](https://docs.ros.org/en/humble/Tutorials/Intermediate/Rosdep.html).
+
+- [Extensions](https://docs.omniverse.nvidia.com/kit/docs/kit-manual/latest/guide/extensions_advanced.html#dependencies-section)
+- [pip packages](https://packaging.python.org/en/latest/discussions/install-requires-vs-requirements/#install-requires)
+- [apt packages](TODO: Put link to Orbit docs when merged)
+- [rosdep packages](TODO: Put link to Orbit docs when merged)
+
 ## Usage
 
 ### Python Package
