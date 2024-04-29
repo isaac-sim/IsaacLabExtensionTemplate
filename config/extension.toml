@@ -30,7 +30,7 @@ keywords = ["extension", "template", "orbit"]
 name = "orbit.ext_template"
 # -----------------------------------------------------------------
 
-# [orbit_settings]
+[orbit_settings]
 # TODO: Uncomment and list any apt dependencies here.
 #       If none, leave it commented out.
 # apt_deps = ["example_package"]
