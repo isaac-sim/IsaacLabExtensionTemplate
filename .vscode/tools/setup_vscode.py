@@ -1,8 +1,3 @@
-# Copyright (c) 2022-2024, The ORBIT Project Developers.
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
-
 """This script sets up the vs-code settings for the orbit project.
 
 This script merges the python.analysis.extraPaths from the "_isaac_sim/.vscode/settings.json" file into
