@@ -136,7 +136,7 @@ To ensure that your program works as expected, please add your extensions's depe
 
 - [Extensions](https://docs.omniverse.nvidia.com/kit/docs/kit-manual/latest/guide/extensions_advanced.html#dependencies-section)
 - [pip packages](https://packaging.python.org/en/latest/discussions/install-requires-vs-requirements/#install-requires)
-- [apt packages](TODO: Put link to Orbit docs when merged)
+- [apt packages](https://isaac-orbit.github.io/orbit/source/setup/developer.html#extension-dependency-management)
 - [rosdep packages](TODO: Put link to Orbit docs when merged)
 
 ## Usage
