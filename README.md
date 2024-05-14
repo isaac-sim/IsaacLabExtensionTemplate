@@ -130,6 +130,16 @@ To enable your extension, follow these steps:
     - Find your extension under the `Third Party` category.
     - Toggle it to enable your extension.
 
+
+### Installing Dependencies
+
+To ensure that your program works as expected, please add your extensions's dependencies to the appropriate configuration file. Below are links for how to specify extension dependencies on ``IsaacSim`` and ``Orbit`` extensions, ``pip`` packages, ``apt`` packages, and [rosdep packages](https://docs.ros.org/en/humble/Tutorials/Intermediate/Rosdep.html).
+
+- [Extensions](https://docs.omniverse.nvidia.com/kit/docs/kit-manual/latest/guide/extensions_advanced.html#dependencies-section)
+- [pip packages](https://packaging.python.org/en/latest/discussions/install-requires-vs-requirements/#install-requires)
+- [apt packages](https://isaac-orbit.github.io/orbit/source/setup/developer.html#extension-dependency-management)
+- [rosdep packages](https://isaac-orbit.github.io/orbit/source/setup/developer.html#extension-dependency-management)
+
 ## Usage
 
 ### Python Package
