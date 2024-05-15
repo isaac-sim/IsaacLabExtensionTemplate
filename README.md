@@ -9,10 +9,7 @@
 
 ## Overview
 
-This repository serves as a template for building projects or extensions based on Orbit. It allows you to develop in an isolated environment, outside of the core Orbit repository. Furthermore, this template serves three use cases:
-
-- **Python Package**
-    Can be installed into Isaac Sim's Python environment, making it suitable for users who want to integrate their extension to `Orbit` as a python package.
+This repository serves as a template for building projects or extensions based on Orbit. It allows you to develop in an isolated environment, outside of the core Orbit repository.
 
 - **Project Template**
     Ensures access to `Isaac Sim` and `Orbit` functionalities, which can be used as a project template.
@@ -106,7 +103,7 @@ To setup the IDE, please follow these instructions:
 
 If everything executes correctly, it should create a file .python.env in the .vscode directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
 
-### Setup as Python Package / Project Template
+### Setup as Project Template
 
 From within this repository, install your extension as a Python package to the Isaac Sim Python executable.
 
@@ -141,14 +138,6 @@ To ensure that your program works as expected, please add your extensions's depe
 - [rosdep packages](https://isaac-orbit.github.io/orbit/source/setup/developer.html#extension-dependency-management)
 
 ## Usage
-
-### Python Package
-
-Import your python package within `Isaac Sim` and `Orbit` using:
-
-```python
-import orbit.<your_extension_name>
-```
 
 ### Project Template
 
