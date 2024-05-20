@@ -205,7 +205,7 @@ container with:
 ${ORBIT_PATH}/docker/container.sh start
 
 # enter container
-${ORBIT_PATH}/docker/container.sh enter base
+${ORBIT_PATH}/docker/container.sh enter
 ```
 
 More information on working with Docker in combination with Orbit can be found [here](https://isaac-orbit.github.io/orbit/source/deployment/index.html).
