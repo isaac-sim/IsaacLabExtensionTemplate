@@ -188,9 +188,27 @@ You are all set and no longer need the template instructions
 
 - When ready, use this `README.md` as a template and customize where appropriate.
 
-## Docker / Cluster
+## Docker
 
-We are currently working on a docker and cluster setup for this template. In the meanwhile, please refer to the current setup provided in the Orbit [documentation](https://isaac-orbit.github.io/orbit/source/deployment/index.html).
+For docker usage, we require the following dependencies to be set up:
+
+- [Docker and Docker Compose](https://isaac-orbit.github.io/orbit/source/deployment/docker.html#docker-and-docker-compose)
+
+- [Isaac Sim Container](https://isaac-orbit.github.io/orbit/source/deployment/docker.html#obtaining-the-isaac-sim-container)
+
+Clone this template into the `${ORBIT_PATH}/source/extensions` directory, and set it up as described
+above in [Configuration](#configuration) (no other steps in Setup section required). Once done, start and enter your 
+container with:
+
+```bash
+# start container
+${ORBIT_PATH}/docker/container.sh start
+
+# enter container
+${ORBIT_PATH}/docker/container.sh enter
+```
+
+More information on working with Docker in combination with Orbit can be found [here](https://isaac-orbit.github.io/orbit/source/deployment/index.html).
 
 ## Troubleshooting
 
