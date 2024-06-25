@@ -33,7 +33,7 @@ This repository serves as a template for building projects or extensions based o
 
 ```
 # Rename all occurences of ext_template (in files/directories) to your_fancy_extension
-python rename_template.py your_fancy_extension
+python scripts/rename_template.py your_fancy_extension
 ```
 
 - Install Isaac Lab, see the [installation guide](https://isaac-sim.github.io/IsaacLab/source/setup/installation/index.html).

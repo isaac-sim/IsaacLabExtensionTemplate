@@ -32,7 +32,7 @@ if __name__ == '__main__':
         print('Usage: python rename_template.py <new_name>')
         sys.exit(1)
 
-    root_dir_path = parent_dir = Path(__file__).resolve().parent.parent
+    root_dir_path = str(Path(__file__).resolve().parent.parent)
     old_name = "ext_template"
     new_name = sys.argv[1]
 
@@ -41,7 +41,8 @@ if __name__ == '__main__':
 
     if proceed.lower() == 'y':
         # rename the ext_template folder
-        os.rename(os.path.join(root_dir_path, 'ext_template'), os.path.join(root_dir_path, new_name))
+        os.rename(os.path.join(root_dir_path, 'exts', 'ext_template', 'ext_template'), os.path.join(root_dir_path, 'exts', 'ext_template', new_name))
+        os.rename(os.path.join(root_dir_path, 'exts', 'ext_template'), os.path.join(root_dir_path, 'exts', new_name))
         # rename the file contents
         rename_file_contents(root_dir_path, old_name, new_name, exclude_dirs=['.git'])
     else:
