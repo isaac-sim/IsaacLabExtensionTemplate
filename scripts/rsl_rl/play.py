@@ -32,12 +32,13 @@ import gymnasium as gym
 import os
 import torch
 
-from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
-from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper, export_policy_as_onnx
 from rsl_rl.runners import OnPolicyRunner
 
 # Import extensions to set up environment tasks
 import ext_template.tasks  # noqa: F401
+
+from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper, export_policy_as_onnx
 
 
 def main():

@@ -48,7 +48,7 @@ To setup the IDE, please follow these instructions:
 If everything executes correctly, it should create a file .python.env in the .vscode directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
 
 
-#### Setup as Omniverse Extension
+#### Setup as Omniverse Extension (Optional)
 
 We provide an example UI extension that will load upon enabling your extension defined in `exts/ext_template/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 

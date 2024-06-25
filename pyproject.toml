@@ -16,6 +16,7 @@ sections = [
     "STDLIB",
     "THIRDPARTY",
     "FIRSTPARTY",
+    "ISAACLABPARTY",
     "LOCALFOLDER",
 ]
 extra_standard_library = [
