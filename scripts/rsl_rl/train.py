@@ -3,7 +3,6 @@
 """Launch Isaac Sim Simulator first."""
 
 import argparse
-import os
 
 from omni.isaac.lab.app import AppLauncher
 
@@ -36,13 +35,13 @@ import os
 import torch
 from datetime import datetime
 
-from rsl_rl.runners import OnPolicyRunner
-
 from omni.isaac.lab.envs import ManagerBasedRLEnvCfg
 from omni.isaac.lab.utils.dict import print_dict
 from omni.isaac.lab.utils.io import dump_pickle, dump_yaml
 from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
 from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper
+
+from rsl_rl.runners import OnPolicyRunner
 
 # Import extensions to set up environment tasks
 import ext_template.tasks  # noqa: F401

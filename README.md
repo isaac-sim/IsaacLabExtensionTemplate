@@ -12,12 +12,6 @@
 
 This repository serves as a template for building projects or extensions based on Isaac Lab. It allows you to develop in an isolated environment, outside of the core Isaac Lab repository.
 
-- **Project Template**
-    Ensures access to `Isaac Sim` and `Isaac Lab` functionalities, which can be used as a project template.
-
-- **Omniverse Extension**
-    Can be used as an Omniverse extension, ideal for projects that leverage the Omniverse platform's graphical user interface.
-
 **Key Features:**
 
 - `Isolation` Work outside the core Isaac Lab repository, ensuring that your development efforts remain self-contained.
@@ -32,8 +26,8 @@ This repository serves as a template for building projects or extensions based o
 - Throughout the repository, the name `ext_template` only serves as an example and we provide a script to rename all the references to it automatically:
 
 ```
-# Rename all occurences of ext_template (in files/directories) to your_fancy_extension
-python scripts/rename_template.py your_fancy_extension
+# Rename all occurrences of ext_template (in files/directories) to your_fancy_extension_name
+python scripts/rename_template.py your_fancy_extension_name
 ```
 
 - Install Isaac Lab, see the [installation guide](https://isaac-sim.github.io/IsaacLab/source/setup/installation/index.html).
@@ -63,7 +57,7 @@ To enable your extension, follow these steps:
 1. **Add the search path of your repository** to the extension manager:
     - Navigate to the extension manager using `Window` -> `Extensions`.
     - Click on the **Hamburger Icon** (☰), then go to `Settings`.
-    - In the `Extension Search Paths`, enter the aboluste path to `IsaacLabExtensionTemplate/exts`
+    - In the `Extension Search Paths`, enter the absolute path to `IsaacLabExtensionTemplate/exts`
     - If not already present, in the `Extension Search Paths`, enter the path that leads to Isaac Lab's extension directory directory (`IsaacLab/source/extensions`)
     - Click on the **Hamburger Icon** (☰), then click `Refresh`.
 
@@ -74,7 +68,7 @@ To enable your extension, follow these steps:
 
 ## Code formatting
 
-We have a pre-commit template to automatically format your code. 
+We have a pre-commit template to automatically format your code.
 To install pre-commit:
 
 ```bash

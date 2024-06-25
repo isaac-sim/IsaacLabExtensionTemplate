@@ -7,11 +7,10 @@ This is necessary because Isaac Sim 2022.2.1 does not add the necessary python p
 when the "setup_python_env.sh" is run as part of the vs-code launch configuration.
 """
 
+import argparse
 import os
 import pathlib
 import re
-import argparse
-
 
 WS_DIR = pathlib.Path(__file__).parents[2]
 """Path to the template directory."""
@@ -96,7 +95,7 @@ def header_msg(src: str):
 def main():
     # Read arguments
     parser = argparse.ArgumentParser(description="Setup VSCode.")
-    parser.add_argument('--isaacsim_path', type=str, help='The absolute path to your Isaac Sim installation.')
+    parser.add_argument("--isaacsim_path", type=str, help="The absolute path to your Isaac Sim installation.")
     args = parser.parse_args()
 
     # SETTINGS.JSON ----------------------------------------------------------------------------------------------------
@@ -107,7 +106,7 @@ def main():
         raise FileNotFoundError(f"Could not find the Isaac Lab template settings file: {settings_template_path}")
     with open(settings_template_path) as f:
         settings_template = f.read()
-    
+
     # Overwrite the python.analysis.extraPaths in the Isaac Lab settings file with the path names
     isaacsim_path = args.isaacsim_path
     settings = overwrite_python_analysis_extra_paths(settings_template, isaacsim_path)
