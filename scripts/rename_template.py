@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import sys
 
 
@@ -31,7 +32,7 @@ if __name__ == '__main__':
         print('Usage: python rename_template.py <new_name>')
         sys.exit(1)
 
-    root_dir_path = os.path.dirname(os.path.realpath(__file__))
+    root_dir_path = parent_dir = Path(__file__).resolve().parent.parent
     old_name = "ext_template"
     new_name = sys.argv[1]
 

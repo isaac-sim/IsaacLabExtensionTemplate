@@ -1,4 +1,4 @@
-# Extension Template for Isaac Lab
+# Template for Isaac Lab Projects
 
 [![IsaacSim](https://img.shields.io/badge/IsaacSim-4.0.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
 [![Isaac Lab](https://img.shields.io/badge/IsaacLab-1.0.0-silver)](https://isaac-sim.github.io/IsaacLab)
@@ -28,7 +28,6 @@ This repository serves as a template for building projects or extensions based o
 
 ### Installation
 
-- You must have installed Isaac Lab first, see the [installation guide](https://isaac-sim.github.io/IsaacLab/source/setup/installation/index.html).
 
 - Throughout the repository, the name `ext_template` only serves as an example and we provide a script to rename all the references to it automatically:
 
@@ -37,9 +36,12 @@ This repository serves as a template for building projects or extensions based o
 python rename_template.py your_fancy_extension
 ```
 
+- Install Isaac Lab, see the [installation guide](https://isaac-sim.github.io/IsaacLab/source/setup/installation/index.html).
+
 - Using a python interpreter that has Isaac Lab installed, install the library
 
 ```
+cd ext/ext_template
 python -m pip install -e .
 ```
 
@@ -54,15 +56,15 @@ If everything executes correctly, it should create a file .python.env in the .vs
 
 #### Setup as Omniverse Extension
 
-We provide an example UI extension that will load upon enabling your extension defined in `ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
+We provide an example UI extension that will load upon enabling your extension defined in `exts/ext_template/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
 To enable your extension, follow these steps:
 
 1. **Add the search path of your repository** to the extension manager:
     - Navigate to the extension manager using `Window` -> `Extensions`.
     - Click on the **Hamburger Icon** (☰), then go to `Settings`.
-    - In the `Extension Search Paths`, enter the path that goes up to your repository's location without actually including the repository's own directory. For example, if your repository is located at `/home/code/IsaacLabExtensionTemplate`, you should add `/home/code` as the search path.
-    - If not already present, in the `Extension Search Paths`, enter the path that leads to your local Isaac Lab directory. For example: `/home/IsaacLab/source/extensions`
+    - In the `Extension Search Paths`, enter the aboluste path to `IsaacLabExtensionTemplate/exts`
+    - If not already present, in the `Extension Search Paths`, enter the path that leads to Isaac Lab's extension directory directory (`IsaacLab/source/extensions`)
     - Click on the **Hamburger Icon** (☰), then click `Refresh`.
 
 2. **Search and enable your extension**:
@@ -70,15 +72,16 @@ To enable your extension, follow these steps:
     - Toggle it to enable your extension.
 
 
-## Pre-Commit
+## Code formatting
 
-Pre-committing involves using a framework to automate the process of enforcing code quality standards before code is actually committed to a version control system, like Git. This process involves setting up hooks that run automated checks, such as code formatting, linting (checking for programming errors, bugs, stylistic errors, and suspicious constructs), and running tests. If these checks pass, the commit is allowed; if not, the commit is blocked until the issues are resolved. This ensures that all code committed to the repository adheres to the defined quality standards, leading to a cleaner, more maintainable codebase. To do so, we use the [pre-commit](https://pre-commit.com/) module. Install the module using:
+We have a pre-commit template to automatically format your code. 
+To install pre-commit:
 
 ```bash
 pip install pre-commit
 ```
 
-Run the pre-commit with:
+Then you can run pre-commit with:
 
 ```bash
 pre-commit run --all-files
