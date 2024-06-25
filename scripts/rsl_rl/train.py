@@ -3,9 +3,8 @@
 """Launch Isaac Sim Simulator first."""
 
 import argparse
-import os
 
-from omni.isaac.orbit.app import AppLauncher
+from omni.isaac.lab.app import AppLauncher
 
 # local imports
 import cli_args  # isort: skip
@@ -38,15 +37,14 @@ from datetime import datetime
 
 from rsl_rl.runners import OnPolicyRunner
 
-import omni.isaac.orbit_tasks  # noqa: F401
-from omni.isaac.orbit.envs import RLTaskEnvCfg
-from omni.isaac.orbit.utils.dict import print_dict
-from omni.isaac.orbit.utils.io import dump_pickle, dump_yaml
-from omni.isaac.orbit_tasks.utils import get_checkpoint_path, parse_env_cfg
-from omni.isaac.orbit_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper
-
 # Import extensions to set up environment tasks
-import orbit.ext_template.tasks  # noqa: F401  TODO: import orbit.<your_extension_name>
+import ext_template.tasks  # noqa: F401
+
+from omni.isaac.lab.envs import ManagerBasedRLEnvCfg
+from omni.isaac.lab.utils.dict import print_dict
+from omni.isaac.lab.utils.io import dump_pickle, dump_yaml
+from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
@@ -57,7 +55,7 @@ torch.backends.cudnn.benchmark = False
 def main():
     """Train with RSL-RL agent."""
     # parse configuration
-    env_cfg: RLTaskEnvCfg = parse_env_cfg(args_cli.task, use_gpu=not args_cli.cpu, num_envs=args_cli.num_envs)
+    env_cfg: ManagerBasedRLEnvCfg = parse_env_cfg(args_cli.task, use_gpu=not args_cli.cpu, num_envs=args_cli.num_envs)
     agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
 
     # specify directory for logging experiments

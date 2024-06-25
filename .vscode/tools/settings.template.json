@@ -65,7 +65,7 @@
     "autoDocstring.docstringFormat": "google",
     "autoDocstring.guessTypes": true,
     // Python environment path
-    "python.defaultInterpreterPath": "${env:ORBIT_PATH}/_isaac_sim/python.sh",
+    "python.defaultInterpreterPath": "_isaac_sim/python.sh",
     "python.envFile": "${workspaceFolder}/.vscode/.python.env",
     // ROS distribution
     "ros.distro": "noetic",
@@ -79,6 +79,6 @@
         "editor.tabSize": 2
     },
     // Python extra paths
-    // Note: this is filled up when "./orbit.sh -i" is run
+    // Note: this is will be auto-filled
     "python.analysis.extraPaths": []
 }

@@ -5,14 +5,14 @@
             "label": "setup_python_env",
             "type": "shell",
             "linux": {
-                "command": "export CARB_APP_PATH=${input:orbit_path}/_isaac_sim/kit && export ISAAC_PATH=${input:orbit_path}/_isaac_sim && export EXP_PATH=${input:orbit_path}/_isaac_sim/apps && source ${input:orbit_path}/_isaac_sim/setup_python_env.sh && printenv >${workspaceFolder}/.vscode/.python.env && ${input:orbit_path}/_isaac_sim/python.sh ${workspaceFolder}/.vscode/tools/setup_vscode.py --orbit_path ${input:orbit_path}"
+                "command": "export CARB_APP_PATH=${input:isaacsim_path}/kit && export ISAAC_PATH=${input:isaacsim_path} && export EXP_PATH=${input:isaacsim_path}/apps && source ${input:isaacsim_path}/setup_python_env.sh && printenv >${workspaceFolder}/.vscode/.python.env && ${input:isaacsim_path}/python.sh ${workspaceFolder}/.vscode/tools/setup_vscode.py --isaacsim_path ${input:isaacsim_path}"
             }
         }
     ],
     "inputs": [
         {
-            "id": "orbit_path",
-            "description": "Absolute path to Orbit:",
+            "id": "isaacsim_path",
+            "description": "Absolute path to Isaac Sim:",
             "default": "",
             "type": "promptString"
         },
