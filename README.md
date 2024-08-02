@@ -25,7 +25,7 @@ This repository serves as a template for building projects or extensions based o
 
 - Throughout the repository, the name `ext_template` only serves as an example and we provide a script to rename all the references to it automatically:
 
-```
+```bash
 # Rename all occurrences of ext_template (in files/directories) to your_fancy_extension_name
 python scripts/rename_template.py your_fancy_extension_name
 ```
@@ -34,10 +34,17 @@ python scripts/rename_template.py your_fancy_extension_name
 
 - Using a python interpreter that has Isaac Lab installed, install the library
 
-```
+```bash
 cd ext/ext_template
 python -m pip install -e .
 ```
+
+- Verify that the extension is correctly installed by running the following command:
+
+```bash
+python scripts/rsl_rl/train.py --task=Template-Isaac-Velocity-Rough-Anymal-D-v0
+```
+
 
 #### Set up IDE (Optional)
 
@@ -79,4 +86,21 @@ Then you can run pre-commit with:
 
 ```bash
 pre-commit run --all-files
+```
+
+
+## Troubleshooting
+
+### Pylance Crash
+
+If you encounter a crash in `pylance`, it is likely that too many files are indexed and you run out of memory.
+A possible solution is exclude some of omniverse packages that are not used in your project. 
+To do so, modify `.vscode/settings.json` and comment out e.g. all packages related to:
+
+```json
+"<path-to-isaac-sim>/extscache/omni.anim.*"         // Animation packages
+"<path-to-isaac-sim>/extscache/omni.kit.*"          // Kit UI tools
+"<path-to-isaac-sim>/extscache/omni.graph.*"        // Graph UI tools
+"<path-to-isaac-sim>/extscache/omni.services.*"     // Services tools
+...
 ```
