@@ -93,9 +93,10 @@ pre-commit run --all-files
 
 ### Pylance Crash
 
-If you encounter a crash in `pylance`, it is likely that too many files are indexed and you run out of memory.
-A possible solution is exclude some of omniverse packages that are not used in your project. 
-To do so, modify `.vscode/settings.json` and comment out e.g. all packages related to:
+If you encounter a crash in `pylance`, it is probable that too many files are indexed and you run out of memory.
+A possible solution is to exclude some of omniverse packages that are not used in your project.
+To do so, modify `.vscode/settings.json` and comment out packages under the key `"python.analysis.extraPaths"`
+Some examples of packages that can likely be excluded are:
 
 ```json
 "<path-to-isaac-sim>/extscache/omni.anim.*"         // Animation packages
