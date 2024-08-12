@@ -35,7 +35,7 @@ python scripts/rename_template.py your_fancy_extension_name
 - Using a python interpreter that has Isaac Lab installed, install the library
 
 ```
-cd ext/ext_template
+cd exts/ext_template
 python -m pip install -e .
 ```
 
