@@ -25,7 +25,7 @@ This repository serves as a template for building projects or extensions based o
 
 - Throughout the repository, the name `ext_template` only serves as an example and we provide a script to rename all the references to it automatically:
 
-```
+```bash
 # Rename all occurrences of ext_template (in files/directories) to your_fancy_extension_name
 python scripts/rename_template.py your_fancy_extension_name
 ```
@@ -38,6 +38,13 @@ python scripts/rename_template.py your_fancy_extension_name
 cd exts/ext_template
 python -m pip install -e .
 ```
+
+- Verify that the extension is correctly installed by running the following command:
+
+```bash
+python scripts/rsl_rl/train.py --task=Template-Isaac-Velocity-Rough-Anymal-D-v0
+```
+
 
 #### Set up IDE (Optional)
 
@@ -79,4 +86,34 @@ Then you can run pre-commit with:
 
 ```bash
 pre-commit run --all-files
+```
+
+
+## Troubleshooting
+
+### Pylance Missing Indexing of Extensions
+
+IN some VsCode versions, the indexing of part of the extensions is missing. In this case, add the path to your extension in `.vscode/settings.json` under the key `"python.analysis.extraPaths"`.
+
+```json
+{
+    "python.analysis.extraPaths": [
+        "<path-to-ext-repo>/exts/ext_template"
+    ]
+}
+```
+
+### Pylance Crash
+
+If you encounter a crash in `pylance`, it is probable that too many files are indexed and you run out of memory.
+A possible solution is to exclude some of omniverse packages that are not used in your project.
+To do so, modify `.vscode/settings.json` and comment out packages under the key `"python.analysis.extraPaths"`
+Some examples of packages that can likely be excluded are:
+
+```json
+"<path-to-isaac-sim>/extscache/omni.anim.*"         // Animation packages
+"<path-to-isaac-sim>/extscache/omni.kit.*"          // Kit UI tools
+"<path-to-isaac-sim>/extscache/omni.graph.*"        // Graph UI tools
+"<path-to-isaac-sim>/extscache/omni.services.*"     // Services tools
+...
 ```
