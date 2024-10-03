@@ -21,20 +21,31 @@ This repository serves as a template for building projects or extensions based o
 
 ### Installation
 
+- Install Isaac Lab by following the [installation guide](https://isaac-sim.github.io/IsaacLab/source/setup/installation/index.html). We recommend using the conda installation as it simplifies calling Python scripts from the terminal.
+
+- Clone the repository separately from the Isaac Lab installation (i.e. outside the `IsaacLab` directory):
+
+```bash
+# Option 1: HTTPS
+git clone https://github.com/isaac-sim/IsaacLabExtensionTemplate.git
+
+# Option 2: SSH
+git clone git@github.com:isaac-sim/IsaacLabExtensionTemplate.git
+```
+
 - Throughout the repository, the name `ext_template` only serves as an example and we provide a script to rename all the references to it automatically:
 
 ```bash
+# Enter the repository
+cd IsaacLabExtensionTemplate
 # Rename all occurrences of ext_template (in files/directories) to your_fancy_extension_name
 python scripts/rename_template.py your_fancy_extension_name
 ```
 
-- Install Isaac Lab, see the [installation guide](https://isaac-sim.github.io/IsaacLab/source/setup/installation/index.html).
-
 - Using a python interpreter that has Isaac Lab installed, install the library
 
 ```bash
-cd exts/ext_template
-python -m pip install -e .
+python -m pip install -e exts/ext_template
 ```
 
 - Verify that the extension is correctly installed by running the following command:
@@ -49,7 +60,7 @@ To setup the IDE, please follow these instructions:
 
 - Run VSCode Tasks, by pressing `Ctrl+Shift+P`, selecting `Tasks: Run Task` and running the `setup_python_env` in the drop down menu. When running this task, you will be prompted to add the absolute path to your Isaac Sim installation.
 
-If everything executes correctly, it should create a file .python.env in the .vscode directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
+If everything executes correctly, it should create a file .python.env in the `.vscode` directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
 
 #### Setup as Omniverse Extension (Optional)
 
