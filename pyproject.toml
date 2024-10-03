@@ -15,8 +15,8 @@ sections = [
     "FUTURE",
     "STDLIB",
     "THIRDPARTY",
-    "FIRSTPARTY",
     "ISAACLABPARTY",
+    "FIRSTPARTY",
     "LOCALFOLDER",
 ]
 extra_standard_library = [
@@ -36,6 +36,7 @@ extra_standard_library = [
     "toml",
     "trimesh",
     "tqdm",
+    "psutil",
 ]
 known_thirdparty = [
     "omni.isaac.core",
@@ -45,6 +46,7 @@ known_thirdparty = [
     "omni.kit.*",
     "warp",
     "carb",
+    "Semantics",
 ]
 known_isaaclabparty = [
     "omni.isaac.lab",

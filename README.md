@@ -1,7 +1,7 @@
 # Template for Isaac Lab Projects
 
-[![IsaacSim](https://img.shields.io/badge/IsaacSim-4.0.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
-[![Isaac Lab](https://img.shields.io/badge/IsaacLab-1.0.0-silver)](https://isaac-sim.github.io/IsaacLab)
+[![IsaacSim](https://img.shields.io/badge/IsaacSim-4.2.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
+[![Isaac Lab](https://img.shields.io/badge/IsaacLab-1.2.0-silver)](https://isaac-sim.github.io/IsaacLab)
 [![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://docs.python.org/3/whatsnew/3.10.html)
 [![Linux platform](https://img.shields.io/badge/platform-linux--64-orange.svg)](https://releases.ubuntu.com/20.04/)
 [![Windows platform](https://img.shields.io/badge/platform-windows--64-orange.svg)](https://www.microsoft.com/en-us/)
@@ -19,9 +19,7 @@ This repository serves as a template for building projects or extensions based o
 
 **Keywords:** extension, template, isaaclab
 
-
 ### Installation
-
 
 - Throughout the repository, the name `ext_template` only serves as an example and we provide a script to rename all the references to it automatically:
 
@@ -34,7 +32,7 @@ python scripts/rename_template.py your_fancy_extension_name
 
 - Using a python interpreter that has Isaac Lab installed, install the library
 
-```
+```bash
 cd exts/ext_template
 python -m pip install -e .
 ```
@@ -45,7 +43,6 @@ python -m pip install -e .
 python scripts/rsl_rl/train.py --task=Template-Isaac-Velocity-Rough-Anymal-D-v0
 ```
 
-
 #### Set up IDE (Optional)
 
 To setup the IDE, please follow these instructions:
@@ -53,7 +50,6 @@ To setup the IDE, please follow these instructions:
 - Run VSCode Tasks, by pressing `Ctrl+Shift+P`, selecting `Tasks: Run Task` and running the `setup_python_env` in the drop down menu. When running this task, you will be prompted to add the absolute path to your Isaac Sim installation.
 
 If everything executes correctly, it should create a file .python.env in the .vscode directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
-
 
 #### Setup as Omniverse Extension (Optional)
 
@@ -72,7 +68,6 @@ To enable your extension, follow these steps:
     - Find your extension under the `Third Party` category.
     - Toggle it to enable your extension.
 
-
 ## Code formatting
 
 We have a pre-commit template to automatically format your code.
@@ -88,12 +83,11 @@ Then you can run pre-commit with:
 pre-commit run --all-files
 ```
 
-
 ## Troubleshooting
 
 ### Pylance Missing Indexing of Extensions
 
-IN some VsCode versions, the indexing of part of the extensions is missing. In this case, add the path to your extension in `.vscode/settings.json` under the key `"python.analysis.extraPaths"`.
+In some VsCode versions, the indexing of part of the extensions is missing. In this case, add the path to your extension in `.vscode/settings.json` under the key `"python.analysis.extraPaths"`.
 
 ```json
 {
