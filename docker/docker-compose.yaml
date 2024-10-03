@@ -1,0 +1,16 @@
+services:
+  isaac-lab-template:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: isaac-lab-template
+    container_name: isaac-lab-template
+    volumes:
+      - type: bind
+        source: ../../IsaacLabExtensionTemplate
+        target: /workspace/IsaacLabExtensionTemplate
+    network_mode: host
+    # This is the entrypoint for the container
+    entrypoint: bash
+    stdin_open: true
+    tty: true
