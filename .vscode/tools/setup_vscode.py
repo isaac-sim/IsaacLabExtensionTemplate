@@ -13,8 +13,6 @@ when the "setup_python_env.sh" is run as part of the vs-code launch configuratio
 """
 
 import argparse
-import re
-import sys
 import os
 import pathlib
 import platform
