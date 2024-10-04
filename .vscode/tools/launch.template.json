@@ -4,16 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        // Attach to simulation during runtime. This is useful for debugging extensions.
-        // For more information, visit: https://docs.omniverse.nvidia.com/isaacsim/latest/advanced_tutorials/tutorial_advanced_python_debugging.html#attaching-the-debugger-to-a-running-app
-        {
-            "name": "Python: Attach (windows-x86_64/linux-x86_64)",
-            "type": "python",
-            "request": "attach",
-            "port": 3000,
-            "host": "localhost"
-        },
-
         // For standalone script execution
         {
             "name": "Python: Current File",
@@ -21,7 +11,6 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
         },
         {
             "name": "Python: Train Environment",
@@ -30,7 +19,6 @@
             "args" : ["--task", "Template-Isaac-Velocity-Flat-Anymal-D-v0", "--num_envs", "4096", "--headless"],
             "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
         },
         {
             "name": "Python: Play Environment",
@@ -39,7 +27,6 @@
             "args" : ["--task", "Template-Isaac-Velocity-Flat-Anymal-D-Play-v0", "--num_envs", "32"],
             "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
         },
 
         // For script execution inside a Docker
@@ -49,7 +36,6 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
             "env": {
                 "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
             }
@@ -61,7 +47,6 @@
             "args" : ["--task", "Template-Isaac-Velocity-Flat-Anymal-D-v0", "--num_envs", "4096", "--headless"],
             "program": "${workspaceFolder}/scripts/rsl_rl/train.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
             "env": {
                 "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
             }
@@ -73,7 +58,6 @@
             "args" : ["--task", "Template-Isaac-Velocity-Flat-Anymal-D-Play-v0", "--num_envs", "32"],
             "program": "${workspaceFolder}/scripts/rsl_rl/play.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/.vscode/.python.env",
             "env": {
                 "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
             }
