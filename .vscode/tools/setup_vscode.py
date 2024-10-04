@@ -13,11 +13,11 @@ when the "setup_python_env.sh" is run as part of the vs-code launch configuratio
 """
 
 import argparse
-import re
-import sys
 import os
 import pathlib
-
+import platform
+import re
+import sys
 
 PROJECT_DIR = pathlib.Path(__file__).parents[2]
 """Path to the the project directory."""
@@ -37,7 +37,8 @@ except ModuleNotFoundError or ImportError:
     # check if the isaac-sim directory is provided
     if not os.path.exists(isaacsim_dir):
         raise FileNotFoundError(
-            f"Could not find the isaac-sim directory: {isaacsim_dir}. Please provide the correct path to the Isaac Sim installation."
+            f"Could not find the isaac-sim directory: {isaacsim_dir}. Please provide the correct path to the Isaac Sim"
+            " installation."
         )
 except EOFError:
     print("Unable to trigger EULA acceptance. This is likely due to the script being run in a non-interactive shell.")
@@ -49,7 +50,7 @@ except EOFError:
 if not os.path.exists(isaacsim_dir):
     raise FileNotFoundError(
         f"Could not find the isaac-sim directory: {isaacsim_dir}. There are two possible reasons for this:"
-        f"\n\t1. The Isaac Sim directory does not exist as provided CLI path."
+        "\n\t1. The Isaac Sim directory does not exist as provided CLI path."
         "\n\t2. The script could import the 'isaacsim' package. This could be due to the 'isaacsim' package not being "
         "installed in the Python environment.\n"
         "\nPlease make sure that the Isaac Sim directory exists or that the 'isaacsim' package is installed."
@@ -143,7 +144,16 @@ def overwrite_default_python_interpreter(isaaclab_settings: str) -> str:
         The settings string with overwritten default python interpreter.
     """
     # read executable name
-    python_exe = sys.executable.replace("\\", "/")
+    python_exe = os.path.normpath(sys.executable)
+
+    # replace with Isaac Sim's python.sh or python.bat scripts to make sure python with correct
+    # source paths is set as default
+    if f"kit{os.sep}python{os.sep}bin{os.sep}python" in python_exe:
+        # Check if the OS is Windows or Linux to use appropriate shell file
+        if platform.system() == "Windows":
+            python_exe = python_exe.replace(f"kit{os.sep}python{os.sep}bin{os.sep}python3", "python.bat")
+        else:
+            python_exe = python_exe.replace(f"kit{os.sep}python{os.sep}bin{os.sep}python3", "python.sh")
 
     # replace the default python interpreter in the Isaac Lab settings file with the path to the
     # python interpreter in the Isaac Lab directory
