@@ -19,7 +19,7 @@ This repository serves as a template for building projects or extensions based o
 
 **Keywords:** extension, template, isaaclab
 
-### Installation
+## Installation
 
 - Install Isaac Lab by following the [installation guide](https://isaac-sim.github.io/IsaacLab/source/setup/installation/index.html). We recommend using the conda installation as it simplifies calling Python scripts from the terminal.
 
@@ -54,7 +54,7 @@ python -m pip install -e exts/ext_template
 python scripts/rsl_rl/train.py --task=Template-Isaac-Velocity-Rough-Anymal-D-v0
 ```
 
-#### Set up IDE (Optional)
+### Set up IDE (Optional)
 
 To setup the IDE, please follow these instructions:
 
@@ -62,7 +62,7 @@ To setup the IDE, please follow these instructions:
 
 If everything executes correctly, it should create a file .python.env in the `.vscode` directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
 
-#### Setup as Omniverse Extension (Optional)
+### Setup as Omniverse Extension (Optional)
 
 We provide an example UI extension that will load upon enabling your extension defined in `exts/ext_template/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
