@@ -19,8 +19,8 @@ import os
 import pathlib
 
 
-ISAACLAB_DIR = pathlib.Path(__file__).parents[2]
-"""Path to the Isaac Lab directory."""
+PROJECT_DIR = pathlib.Path(__file__).parents[2]
+"""Path to the the project directory."""
 
 try:
     import isaacsim  # noqa: F401
@@ -97,7 +97,7 @@ def overwrite_python_analysis_extra_paths(isaaclab_settings: str) -> str:
         path_names = [path_name for path_name in path_names if len(path_name) > 0]
 
         # change the path names to be relative to the Isaac Lab directory
-        rel_path = os.path.relpath(ISAACSIM_DIR, ISAACLAB_DIR)
+        rel_path = os.path.relpath(ISAACSIM_DIR, PROJECT_DIR)
         path_names = ['"${workspaceFolder}/' + rel_path + "/" + path_name + '"' for path_name in path_names]
     else:
         path_names = []
@@ -110,8 +110,8 @@ def overwrite_python_analysis_extra_paths(isaaclab_settings: str) -> str:
         )
 
     # add the path names that are in the Isaac Lab extensions directory
-    isaaclab_extensions = os.listdir(os.path.join(ISAACLAB_DIR, "source", "extensions"))
-    path_names.extend(['"${workspaceFolder}/source/extensions/' + ext + '"' for ext in isaaclab_extensions])
+    isaaclab_extensions = os.listdir(os.path.join(PROJECT_DIR, "exts"))
+    path_names.extend(['"${workspaceFolder}/exts/' + ext + '"' for ext in isaaclab_extensions])
 
     # combine them into a single string
     path_names = ",\n\t\t".expandtabs(4).join(path_names)
@@ -159,7 +159,7 @@ def overwrite_default_python_interpreter(isaaclab_settings: str) -> str:
 
 def main():
     # Isaac Lab template settings
-    isaaclab_vscode_template_filename = os.path.join(ISAACLAB_DIR, ".vscode", "tools", "settings.template.json")
+    isaaclab_vscode_template_filename = os.path.join(PROJECT_DIR, ".vscode", "tools", "settings.template.json")
     # make sure the Isaac Lab template settings file exists
     if not os.path.exists(isaaclab_vscode_template_filename):
         raise FileNotFoundError(
@@ -185,13 +185,13 @@ def main():
     isaaclab_settings = header_message + isaaclab_settings
 
     # write the Isaac Lab settings file
-    isaaclab_vscode_filename = os.path.join(ISAACLAB_DIR, ".vscode", "settings.json")
+    isaaclab_vscode_filename = os.path.join(PROJECT_DIR, ".vscode", "settings.json")
     with open(isaaclab_vscode_filename, "w") as f:
         f.write(isaaclab_settings)
 
     # copy the launch.json file if it doesn't exist
-    isaaclab_vscode_launch_filename = os.path.join(ISAACLAB_DIR, ".vscode", "launch.json")
-    isaaclab_vscode_template_launch_filename = os.path.join(ISAACLAB_DIR, ".vscode", "tools", "launch.template.json")
+    isaaclab_vscode_launch_filename = os.path.join(PROJECT_DIR, ".vscode", "launch.json")
+    isaaclab_vscode_template_launch_filename = os.path.join(PROJECT_DIR, ".vscode", "tools", "launch.template.json")
     if not os.path.exists(isaaclab_vscode_launch_filename):
         # read template launch settings
         with open(isaaclab_vscode_template_launch_filename) as f:
