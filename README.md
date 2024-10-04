@@ -19,7 +19,7 @@ This repository serves as a template for building projects or extensions based o
 
 **Keywords:** extension, template, isaaclab
 
-### Installation
+## Installation
 
 - Install Isaac Lab by following the [installation guide](https://isaac-sim.github.io/IsaacLab/source/setup/installation/index.html). We recommend using the conda installation as it simplifies calling Python scripts from the terminal.
 
@@ -54,7 +54,7 @@ python -m pip install -e exts/ext_template
 python scripts/rsl_rl/train.py --task=Template-Isaac-Velocity-Rough-Anymal-D-v0
 ```
 
-#### Set up IDE (Optional)
+### Set up IDE (Optional)
 
 To setup the IDE, please follow these instructions:
 
@@ -62,7 +62,7 @@ To setup the IDE, please follow these instructions:
 
 If everything executes correctly, it should create a file .python.env in the `.vscode` directory. The file contains the python paths to all the extensions provided by Isaac Sim and Omniverse. This helps in indexing all the python modules for intelligent suggestions while writing code.
 
-#### Setup as Omniverse Extension (Optional)
+### Setup as Omniverse Extension (Optional)
 
 We provide an example UI extension that will load upon enabling your extension defined in `exts/ext_template/ext_template/ui_extension_example.py`. For more information on UI extensions, enable and check out the source code of the `omni.isaac.ui_template` extension and refer to the introduction on [Isaac Sim Workflows 1.2.3. GUI](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/tutorial_intro_workflows.html#gui).
 
@@ -79,10 +79,9 @@ To enable your extension, follow these steps:
     - Find your extension under the `Third Party` category.
     - Toggle it to enable your extension.
 
+## Docker setup
 
-### Docker setup
-
-#### Building Isaac Lab Base Image
+### Building Isaac Lab Base Image
 
 Currently, we don't have the Docker for Isaac Lab publicly available. Hence, you'd need to build the docker image
 for Isaac Lab locally by following the steps [here](https://isaac-sim.github.io/IsaacLab/source/deployment/index.html).
@@ -98,7 +97,7 @@ docker images
 # isaac-lab-base                   latest    28be62af627e   32 minutes ago   18.9GB
 ```
 
-#### Building Isaac Lab Template Image
+### Building Isaac Lab Template Image
 
 Following above, you can build the docker container for this project. It is called `isaac-lab-template`. However,
 you can modify this name inside the [`docker/docker-compose.yaml`](docker/docker-compose.yaml).
@@ -120,7 +119,7 @@ docker images
 # isaac-lab-base                   latest    892938acb55c   About an hour ago   18.9GB
 ```
 
-#### Running the container
+### Running the container
 
 After building, the usual next step is to start the containers associated with your services. You can do this with:
 
@@ -136,7 +135,7 @@ If you want to run it in detached mode (in the background), use:
 docker compose --file docker-compose.yaml up -d
 ```
 
-#### Interacting with a running container
+### Interacting with a running container
 
 If you want to run commands inside the running container, you can use the `exec` command:
 
@@ -144,7 +143,7 @@ If you want to run commands inside the running container, you can use the `exec`
 docker exec --interactive --tty -e DISPLAY=${DISPLAY} isaac-lab-template /bin/bash
 ```
 
-#### Shutting down the container
+### Shutting down the container
 
 When you are done or want to stop the running containers, you can bring down the services:
 
@@ -153,7 +152,6 @@ docker compose --file docker-compose.yaml down
 ```
 
 This stops and removes the containers, but keeps the images.
-
 
 ## Code formatting
 
