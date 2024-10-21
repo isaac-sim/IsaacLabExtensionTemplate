@@ -104,7 +104,7 @@ you can modify this name inside the [`docker/docker-compose.yaml`](docker/docker
 
 ```bash
 cd docker
-docker compose --file docker-compose.yaml build isaac-lab-template
+docker compose --env-file .env.base --file docker-compose.yaml build isaac-lab-template
 ```
 
 You can verify the image is built successfully using the same command as earlier:
@@ -124,7 +124,7 @@ docker images
 After building, the usual next step is to start the containers associated with your services. You can do this with:
 
 ```bash
-docker compose --file docker-compose.yaml up
+docker compose --env-file .env.base --file docker-compose.yaml up
 ```
 
 This will start the services defined in your `docker-compose.yaml` file, including isaac-lab-template.
@@ -132,7 +132,7 @@ This will start the services defined in your `docker-compose.yaml` file, includi
 If you want to run it in detached mode (in the background), use:
 
 ```bash
-docker compose --file docker-compose.yaml up -d
+docker compose --env-file .env.base --file docker-compose.yaml up -d
 ```
 
 ### Interacting with a running container
@@ -148,7 +148,7 @@ docker exec --interactive --tty -e DISPLAY=${DISPLAY} isaac-lab-template /bin/ba
 When you are done or want to stop the running containers, you can bring down the services:
 
 ```bash
-docker compose --file docker-compose.yaml down
+docker compose --env-file .env.base --file docker-compose.yaml down
 ```
 
 This stops and removes the containers, but keeps the images.
