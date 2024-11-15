@@ -84,7 +84,7 @@ To enable your extension, follow these steps:
 ### Building Isaac Lab Base Image
 
 Currently, we don't have the Docker for Isaac Lab publicly available. Hence, you'd need to build the docker image
-for Isaac Lab locally by following the steps [here](https://isaac-sim.github.io/IsaacLab/source/deployment/index.html).
+for Isaac Lab locally by following the steps [here](https://isaac-sim.github.io/IsaacLab/main/source/deployment/run_docker_example.html).
 
 Once you have built the base Isaac Lab image, you can check it exists by doing:
 
