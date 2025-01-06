@@ -37,17 +37,12 @@ import gymnasium as gym
 import os
 import torch
 
+from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper, export_policy_as_jit, export_policy_as_onnx
 from rsl_rl.runners import OnPolicyRunner
 
 from isaaclab.envs import DirectMARLEnv, multi_agent_to_single_agent
 from isaaclab.utils.dict import print_dict
 from isaaclab_tasks.utils import get_checkpoint_path, parse_env_cfg
-from isaaclab_tasks.utils.wrappers.rsl_rl import (
-    RslRlOnPolicyRunnerCfg,
-    RslRlVecEnvWrapper,
-    export_policy_as_jit,
-    export_policy_as_onnx,
-)
 
 # Import extensions to set up environment tasks
 import ext_template.tasks  # noqa: F401
