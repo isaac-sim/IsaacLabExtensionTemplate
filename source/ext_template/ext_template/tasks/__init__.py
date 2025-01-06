@@ -3,7 +3,7 @@
 import os
 import toml
 
-from omni.isaac.lab_tasks.utils import import_packages
+from isaaclab_tasks.utils import import_packages
 
 ##
 # Register Gym environments.

@@ -1,11 +1,11 @@
-from omni.isaac.lab.utils import configclass
+from isaaclab.utils import configclass
 
 from ext_template.tasks.locomotion.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg
 
 ##
 # Pre-defined configs
 ##
-from omni.isaac.lab_assets.anymal import ANYMAL_D_CFG  # isort: skip
+from isaaclab_assets.anymal import ANYMAL_D_CFG  # isort: skip
 
 
 @configclass
