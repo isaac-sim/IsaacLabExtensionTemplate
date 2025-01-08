@@ -5,7 +5,7 @@ from ext_template.tasks.locomotion.velocity.velocity_env_cfg import LocomotionVe
 ##
 # Pre-defined configs
 ##
-from isaaclab_assets.anymal import ANYMAL_D_CFG  # isort: skip
+from isaaclab_assets.robots.anymal import ANYMAL_D_CFG  # isort: skip
 
 
 @configclass
