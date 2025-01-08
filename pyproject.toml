@@ -50,7 +50,9 @@ known_thirdparty = [
 known_isaaclabparty = [
     "isaaclab",
     "isaaclab_tasks",
-    "isaaclab_assets"
+    "isaaclab_assets",
+    "isaaclab_mimic",
+    "isaaclab_rl"
 ]
 
 # Modify the following to include the package names of your first-party code
