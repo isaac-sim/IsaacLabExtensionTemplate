@@ -28,7 +28,7 @@ def rename_file_contents(root_dir_path: str, old_name: str, new_name: str, exclu
                 with open(os.path.join(dirpath, file_name), "w") as file:
                     file.write(file_contents)
             except Exception as e:
-                print(e)
+                print(f"Ignoring {file_name}: {e}")
                 continue
 
 
