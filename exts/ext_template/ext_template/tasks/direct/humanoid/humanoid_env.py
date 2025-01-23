@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 # from omni.isaac.lab_assets import HUMANOID_CFG
-from ext_assets_template.ext_assets_template import HUMANOID_CFG
+from ext_asset_template import HUMANOID_CFG # isort: skip
 
 import omni.isaac.lab.sim as sim_utils
 from omni.isaac.lab.assets import ArticulationCfg

@@ -12,7 +12,7 @@ from omni.isaac.lab.actuators import ImplicitActuatorCfg
 from omni.isaac.lab.assets import ArticulationCfg
 from omni.isaac.lab.utils.assets import ISAAC_NUCLEUS_DIR
 
-from ext_asset_template.ext_asset_template import ISAACLAB_ASSETS_DATA_DIR
+from ext_asset_template import ISAACLAB_ASSETS_DATA_DIR # isort: skip
 
 ##
 # Configuration
