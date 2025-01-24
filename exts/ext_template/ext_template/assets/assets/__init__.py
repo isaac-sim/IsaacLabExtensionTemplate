@@ -19,4 +19,5 @@ ISAACLAB_ASSETS_DATA_DIR = os.path.join(ISAACLAB_ASSETS_EXT_DIR, "data")
 # Configuration for different assets.
 ##
 
-from .humanoid import *
+from .anymal import *
+from .velodyne import *
