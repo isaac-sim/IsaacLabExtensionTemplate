@@ -24,7 +24,7 @@ from omni.isaac.lab.actuators import ActuatorNetLSTMCfg, DCMotorCfg
 from omni.isaac.lab.assets.articulation import ArticulationCfg
 from omni.isaac.lab.sensors import RayCasterCfg
 # from omni.isaac.lab.utils.assets import ISAACLAB_NUCLEUS_DIR
-from ext_template.assets.assets import ISAACLAB_ASSETS_DATA_DIR
+from . import ISAACLAB_ASSETS_DATA_DIR
 
 from .velodyne import VELODYNE_VLP_16_RAYCASTER_CFG
 
