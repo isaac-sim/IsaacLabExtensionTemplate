@@ -1,4 +1,4 @@
-from omni.isaac.lab.utils import configclass
+from isaaclab.utils import configclass
 
 from .rough_env_cfg import AnymalDRoughEnvCfg
 

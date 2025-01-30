@@ -15,9 +15,11 @@ repository = "https://github.com/isaac-sim/IsaacLabExtensionTemplate.git"
 keywords = ["extension", "template", "isaaclab"]
 
 [dependencies]
-"omni.isaac.lab" = {}
-"omni.isaac.lab_assets" = {}
-"omni.isaac.lab_tasks" = {}
+"isaaclab" = {}
+"isaaclab_assets" = {}
+"isaclab_mimic" = {}
+"isaaclab_rl" = {}
+"isaaclab_tasks" = {}
 # NOTE: Add additional dependencies here
 
 [[python.module]]
