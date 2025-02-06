@@ -8,10 +8,10 @@ from __future__ import annotations
 import gymnasium as gym
 import torch
 
-import omni.isaac.lab.sim as sim_utils
-from omni.isaac.lab.assets import Articulation
-from omni.isaac.lab.envs import DirectRLEnv
-from omni.isaac.lab.sensors import ContactSensor, RayCaster
+import isaaclab.sim as sim_utils
+from isaaclab.assets import Articulation
+from isaaclab.envs import DirectRLEnv
+from isaaclab.sensors import ContactSensor, RayCaster
 
 from .anymal_c_env_cfg import AnymalCFlatEnvCfg, AnymalCRoughEnvCfg
 

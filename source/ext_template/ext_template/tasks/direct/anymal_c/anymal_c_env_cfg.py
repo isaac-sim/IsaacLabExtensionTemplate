@@ -3,24 +3,24 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-import omni.isaac.lab.envs.mdp as mdp
-import omni.isaac.lab.sim as sim_utils
-from omni.isaac.lab.assets import ArticulationCfg
-from omni.isaac.lab.envs import DirectRLEnvCfg
-from omni.isaac.lab.managers import EventTermCfg as EventTerm
-from omni.isaac.lab.managers import SceneEntityCfg
-from omni.isaac.lab.scene import InteractiveSceneCfg
-from omni.isaac.lab.sensors import ContactSensorCfg, RayCasterCfg, patterns
-from omni.isaac.lab.sim import SimulationCfg
-from omni.isaac.lab.terrains import TerrainImporterCfg
-from omni.isaac.lab.utils import configclass
+import isaaclab.envs.mdp as mdp
+import isaaclab.sim as sim_utils
+from isaaclab.assets import ArticulationCfg
+from isaaclab.envs import DirectRLEnvCfg
+from isaaclab.managers import EventTermCfg as EventTerm
+from isaaclab.managers import SceneEntityCfg
+from isaaclab.scene import InteractiveSceneCfg
+from isaaclab.sensors import ContactSensorCfg, RayCasterCfg, patterns
+from isaaclab.sim import SimulationCfg
+from isaaclab.terrains import TerrainImporterCfg
+from isaaclab.utils import configclass
 
 ##
 # Pre-defined configs
 ##
-# from omni.isaac.lab_assets.anymal import ANYMAL_C_CFG  # isort: skip
+# from isaaclab_assets.anymal import ANYMAL_C_CFG  # isort: skip
 from ext_template.assets import ANYMAL_C_CFG
-from omni.isaac.lab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
+from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 
 @configclass

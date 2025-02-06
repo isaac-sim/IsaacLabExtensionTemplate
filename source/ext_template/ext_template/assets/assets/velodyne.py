@@ -6,7 +6,7 @@
 """Configuration for Velodyne LiDAR sensors."""
 
 
-from omni.isaac.lab.sensors import RayCasterCfg, patterns
+from isaaclab.sensors import RayCasterCfg, patterns
 
 ##
 # Configuration
