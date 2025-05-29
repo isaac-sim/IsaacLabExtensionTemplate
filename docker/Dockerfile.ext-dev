@@ -1,0 +1,234 @@
+# Unified Development Container with ROS2 and Dual-Mode Support
+# Supports both root and rootless operation modes
+FROM isaac-lab-ros2 AS base
+
+# =========================
+# Build Arguments and ENV
+# =========================
+ARG EXTENSION_NAME_ARG
+ARG EXT_PATH_ARG
+ARG DOCKER_EXT_PATH_ARG
+ARG DOCKER_USER_NAME_ARG
+ARG DOCKER_USER_HOME_ARG
+
+ENV EXT_PATH=${EXT_PATH_ARG} \
+    EXTENSION_NAME=${EXTENSION_NAME_ARG} \
+    DOCKER_EXT_PATH=${DOCKER_EXT_PATH_ARG} \
+    DOCKER_USER_NAME=${DOCKER_USER_NAME_ARG} \
+    DOCKER_USER_HOME=${DOCKER_USER_HOME_ARG} \
+    HOME=${DOCKER_USER_HOME}
+
+# =========================
+# Create User (for root mode)
+# =========================
+RUN useradd -d ${DOCKER_USER_HOME} -s /bin/bash ${DOCKER_USER_NAME} || true
+
+# =========================
+# Install System Dependencies
+# =========================
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    figlet \
+    gosu \
+    apt-utils \
+    libeigen3-dev \
+    locate \
+    wget \
+    pkg-config \
+    dialog \
+    tasksel \
+    curl \
+    python3-pip \
+    git \
+    git-lfs \
+    gnupg2 \
+    tmux \
+    libopen3d-dev \
+    software-properties-common \
+    rsync \
+    python3-colcon-common-extensions \
+    python3-colcon-mixin && \
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb && \
+    dpkg -i cuda-keyring_1.0-1_all.deb && \
+    rm -f cuda-keyring_1.0-1_all.deb && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends cuda-toolkit-11-8 && \
+    rm -rf /var/lib/apt/lists/*
+
+# =========================
+# Configure Git LFS
+# =========================
+RUN git lfs install
+
+# =========================
+# Remove Conflicting Eigen Packages
+# =========================
+RUN apt-get remove -y ros-humble-eigen3-cmake-module && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends libeigen3-dev
+
+# =========================
+# Install Pinocchio via Robotpkg
+# =========================
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends lsb-release curl && \
+    mkdir -p /etc/apt/keyrings && \
+    curl http://robotpkg.openrobots.org/packages/debian/robotpkg.asc \
+    | tee /etc/apt/keyrings/robotpkg.asc && \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
+    | tee /etc/apt/sources.list.d/robotpkg.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends robotpkg-py3*-pinocchio
+RUN rm -f /etc/apt/sources.list.d/robotpkg.list
+
+# =========================
+# Set CUDA Environment Variables
+# =========================
+ENV PATH=/usr/local/cuda-11.8/bin${PATH:+:${PATH}} \
+    LD_LIBRARY_PATH=/usr/local/cuda-11.8/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+# =========================
+# Install Colcon Mixin
+# =========================
+RUN colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
+    colcon mixin update default
+
+# =========================
+# Install Python Dependencies
+# =========================
+RUN python3 -m pip install --no-cache-dir \
+    simple-parsing \
+    cupy-cuda11x \
+    scipy \
+    shapely \
+    ros2-numpy \
+    panda3d_viewer \
+    ruamel.yaml \
+    --upgrade transforms3d \
+    torch
+
+# =========================
+# Install Development Tools
+# =========================
+RUN ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --no-cache-dir \
+    ruff \
+    black \
+    mypy \
+    bandit \
+    vulture \
+    pre-commit \
+    pytest \
+    pytest-cov \
+    warp-lang
+
+# =========================
+# Install Node.js and Claude Code
+# =========================
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm config set registry https://registry.npmjs.org/ && \
+    npm install -g @anthropic-ai/claude-code && \
+    rm -rf /var/lib/apt/lists/*
+
+# =========================
+# Install ROS2 Packages
+# =========================
+RUN rm -f /etc/apt/sources.list.d/deb.sury.org.list && \
+    apt-get update && \
+    apt-get install -y --allow-downgrades libbrotli1=1.0.9-2build6 && \
+    apt-get install -y \
+    libfontconfig1-dev libfreetype6-dev \
+    ros-humble-xacro \
+    ros-humble-vision-opencv \
+    ros-humble-joint-state-publisher-gui \
+    ros-humble-filters \
+    ros-humble-nav2-msgs \
+    ros-humble-tf-transformations \
+    ros-humble-gazebo-ros-pkgs \
+    ros-humble-gazebo-plugins \
+    ros-humble-turtlebot3* \
+    ros-humble-turtlebot3-simulations \
+    ros-humble-octomap-msgs \
+    ros-humble-octomap \
+    ros-humble-octomap-rviz-plugins \
+    ros-humble-octomap-server \
+    ros-humble-tf2 \
+    ros-humble-tf2-geometry-msgs \
+    ros-humble-tf2-sensor-msgs \
+    ros-humble-rqt-graph \
+    ros-humble-pcl-ros \
+    ros-humble-nav2-costmap-2d \
+    ros-humble-robot-state-publisher \
+    ros-humble-rviz-common \
+    ros-humble-rviz2 \
+    ros-humble-zenoh-cpp-vendor && \
+    rm -rf /var/lib/apt/lists/*
+
+# =========================
+# Setup Extension Directories
+# =========================
+RUN mkdir -p ${DOCKER_EXT_PATH}/data ${DOCKER_EXT_PATH}/logs && \
+    chmod -R 777 ${DOCKER_EXT_PATH}
+
+# =========================
+# Copy and Install Extension
+# =========================
+COPY --chown=root:root source/${EXTENSION_NAME} ${DOCKER_EXT_PATH}/source/${EXTENSION_NAME}
+RUN --mount=type=cache,target=/root/.cache/pip \
+    cd ${DOCKER_EXT_PATH} && \
+    ${ISAACLAB_PATH}/isaaclab.sh -p -m pip install -e source/${EXTENSION_NAME}
+
+# =========================
+# Clean Up Extension Directory
+# =========================
+RUN rm -rf ${DOCKER_EXT_PATH}/source/${EXTENSION_NAME}
+
+# =========================
+# Create Symlinks for Sensors
+# =========================
+RUN mkdir -p /workspace/isaaclab/source/exts/ && \
+    ln -s /workspace/isaaclab/_isaac_sim/exts/isaacsim.sensors.rtx /workspace/isaaclab/source/exts/isaacsim.sensors.rtx
+
+# =========================
+# Clone and Install rsl_rl
+# =========================
+RUN git clone https://github.com/leggedrobotics/rsl_rl.git /tmp/rsl_rl && \
+    cd /tmp/rsl_rl && \
+    ${ISAACLAB_PATH}/isaaclab.sh -p -m pip install . && \
+    rm -rf /tmp/rsl_rl
+
+# =========================
+# Set Ownership and Permissions
+# =========================
+# Make kit directory accessible to all users
+RUN chmod -R 777 /isaac-sim/kit
+
+# Create alternative home for rootless mode
+RUN mkdir -p /root/project && chmod 777 /root/project
+
+# =========================
+# Environment Setup
+# =========================
+COPY docker/bashrc /home/bash.bashrc
+RUN chmod a+rwx /home/bash.bashrc
+
+# Copy bashrc also to root for rootless mode
+RUN cp /home/bash.bashrc /root/.bashrc
+
+# Dynamic entrypoint that handles both modes
+COPY docker/dynamic_entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# =========================
+# Set Up Python Aliases
+# =========================
+RUN echo "alias python3='${ISAACLAB_PATH}/_isaac_sim/python.sh'" >> /home/bash.bashrc && \
+    echo "alias python='${ISAACLAB_PATH}/_isaac_sim/python.sh'" >> /home/bash.bashrc && \
+    echo "alias python3='${ISAACLAB_PATH}/_isaac_sim/python.sh'" >> /root/.bashrc && \
+    echo "alias python='${ISAACLAB_PATH}/_isaac_sim/python.sh'" >> /root/.bashrc
+
+# =========================
+# Final Configuration
+# =========================
+WORKDIR ${DOCKER_USER_HOME}
+ENTRYPOINT ["/entrypoint.sh"]

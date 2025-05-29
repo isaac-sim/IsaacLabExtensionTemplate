@@ -1,7 +1,46 @@
-x-default-isaac-lab-template-environment: &default-isaac-lab-template-environment
-  - OMNI_KIT_ALLOW_ROOT=1
+x-default-isaac-lab-volumes: &default-isaac-lab-volumes
+  - type: volume
+    source: isaac-cache-kit
+    target: ${DOCKER_ISAACSIM_ROOT_PATH}/kit/cache
+  - type: volume
+    source: isaac-cache-ov
+    target: ${DOCKER_USER_HOME}/.cache/ov
+  - type: volume
+    source: isaac-cache-pip
+    target: ${DOCKER_USER_HOME}/.cache/pip
+  - type: volume
+    source: isaac-cache-gl
+    target: ${DOCKER_USER_HOME}/.cache/nvidia/GLCache
+  - type: volume
+    source: isaac-cache-compute
+    target: ${DOCKER_USER_HOME}/.nv/ComputeCache
+  - type: volume
+    source: isaac-logs
+    target: ${DOCKER_USER_HOME}/.nvidia-omniverse/logs
+  - type: volume
+    source: isaac-carb-logs
+    target: ${DOCKER_ISAACSIM_ROOT_PATH}/kit/logs/Kit/Isaac-Sim
+  - type: volume
+    source: isaac-data
+    target: ${DOCKER_USER_HOME}/.local/share/ov/data
+  - type: volume
+    source: isaac-docs
+    target: ${DOCKER_USER_HOME}/Documents
+  - type: volume
+    source: isaac-lab-docs
+    target: ${DOCKER_ISAACLAB_PATH}/docs/_build
+  - type: volume
+    source: isaac-lab-logs
+    target: ${DOCKER_ISAACLAB_PATH}/logs
+  - type: volume
+    source: isaac-lab-data
+    target: ${DOCKER_ISAACLAB_PATH}/data_storage
 
-x-default-isaac-lab-template-deploy: &default-isaac-lab-template-deploy
+x-default-isaac-lab-environment: &default-isaac-lab-environment
+  ISAACSIM_PATH: /isaac-sim
+  OMNI_KIT_ALLOW_ROOT: 1
+
+x-default-isaac-lab-deploy: &default-isaac-lab-deploy
   resources:
     reservations:
       devices:
@@ -10,24 +49,144 @@ x-default-isaac-lab-template-deploy: &default-isaac-lab-template-deploy
           capabilities: [ gpu ]
 
 services:
-  isaac-lab-template:
-    env_file: .env.base
+  # Production container for cluster deployment
+  isaac-lab-ext:
+    env_file:
+      - .env.ext_template
     build:
       context: ../
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.ext
       args:
-        - ISAACLAB_BASE_IMAGE_ARG=${ISAACLAB_BASE_IMAGE}
-        - DOCKER_ISAACLAB_EXTENSION_TEMPLATE_PATH_ARG=${DOCKER_ISAACLAB_EXTENSION_TEMPLATE_PATH}
-    image: isaac-lab-template
-    container_name: isaac-lab-template
+        EXTENSION_NAME_ARG: ${EXTENSION_NAME}
+        EXT_PATH_ARG: ${EXT_PATH}
+        DOCKER_EXT_PATH_ARG: ${DOCKER_EXT_PATH}
+        DOCKER_USER_NAME_ARG: ${DOCKER_USER_NAME}
+        DOCKER_USER_HOME_ARG: ${DOCKER_USER_HOME}
+    image: isaac-lab-${EXTENSION_NAME}
+    container_name: isaac-lab-${EXTENSION_NAME}
     volumes:
+      - <<: *default-isaac-lab-volumes
       - type: bind
-        source: ../
-        target: ${DOCKER_ISAACLAB_EXTENSION_TEMPLATE_PATH}
+        source: ${EXT_PATH}
+        target: /workspace/${EXTENSION_NAME}
+    environment:
+      <<: *default-isaac-lab-environment
+      WANDB_API_KEY: ${WANDB_API_KEY}
+      WANDB_USERNAME: ${WANDB_USERNAME}
     network_mode: host
-    environment: *default-isaac-lab-template-environment
-    deploy: *default-isaac-lab-template-deploy
-    # This is the entrypoint for the container
+    deploy: *default-isaac-lab-deploy
     entrypoint: bash
     stdin_open: true
     tty: true
+
+  # Unified development container with ROS2 and dual-mode support
+  isaac-lab-ext-dev:
+    env_file:
+      - .env.ext_template-dev
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.ext-dev
+      args:
+        EXTENSION_NAME_ARG: ${EXTENSION_NAME}
+        EXT_PATH_ARG: ${EXT_PATH}
+        DOCKER_EXT_PATH_ARG: ${DOCKER_EXT_PATH}
+        DOCKER_USER_NAME_ARG: ${DOCKER_USER_NAME}
+        DOCKER_USER_HOME_ARG: ${DOCKER_USER_HOME}
+    image: isaac-lab-${EXTENSION_NAME}-dev
+    container_name: isaac-lab-${EXTENSION_NAME}-dev
+    volumes:
+      - <<: *default-isaac-lab-volumes
+      - type: bind
+        source: ${HOST_HOME}
+        target: ${DOCKER_USER_HOME}
+      - type: bind
+        source: ${EXT_PATH}
+        target: /workspace/${EXTENSION_NAME}
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - ${SSH_AUTH_SOCK}:/ssh-agent
+      - /lib/modules:/lib/modules
+      - /etc/localtime:/etc/localtime:ro
+      - /dev/input:/dev/input
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/shadow:/etc/shadow:ro
+      - /etc/group:/etc/group:ro
+    environment:
+      <<: *default-isaac-lab-environment
+      DISPLAY: ${DISPLAY}
+      QT_X11_NO_MITSHM: 1
+      XAUTHORITY: /tmp/.docker.xauth
+      SSH_AUTH_SOCK: /ssh-agent
+      NVIDIA_DRIVER_CAPABILITIES: all
+      HOST_USERNAME: ${DOCKER_USER_NAME}
+      HOST_SHELL: ${SHELL}
+      DOCKER_USER_HOME: ${DOCKER_USER_HOME}
+      WANDB_API_KEY: ${WANDB_API_KEY}
+      WANDB_USERNAME: ${WANDB_USERNAME}
+      # Control rootless mode
+      DOCKER_ROOTLESS_MODE: ${DOCKER_ROOTLESS_MODE:-false}
+      # Local user ID/GID for proper permission mapping
+      LOCAL_UID: ${LOCAL_UID:-1000}
+      LOCAL_GID: ${LOCAL_GID:-1000}
+      # Enable permission fixing on exit
+      FIX_PERMISSIONS: ${FIX_PERMISSIONS:-true}
+    devices:
+      - /dev/dri:/dev/dri
+    privileged: true
+    network_mode: host
+    ipc: host
+    deploy: *default-isaac-lab-deploy
+    shm_size: '2gb'
+    cap_add:
+      - ALL
+    stdin_open: true
+    tty: true
+
+  # Rootless variant of the development container
+  # Uses the same image but with different environment and volume configuration
+  isaac-lab-ext-dev-rootless:
+    extends:
+      service: isaac-lab-ext-dev
+    container_name: isaac-lab-${EXTENSION_NAME}-dev-rootless
+    volumes:
+      - <<: *default-isaac-lab-volumes
+      - type: bind
+        source: ${EXTENSION_FOLDER}
+        target: /root/project
+      - type: bind
+        source: ${EXT_PATH}
+        target: /workspace/${EXTENSION_NAME}
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - ${SSH_AUTH_SOCK}:/ssh-agent
+      - /lib/modules:/lib/modules
+      - /etc/localtime:/etc/localtime:ro
+      # Reduced host system access for rootless mode
+    environment:
+      <<: *default-isaac-lab-environment
+      DISPLAY: ${DISPLAY}
+      QT_X11_NO_MITSHM: 1
+      XAUTHORITY: /tmp/.docker.xauth
+      SSH_AUTH_SOCK: /ssh-agent
+      NVIDIA_DRIVER_CAPABILITIES: all
+      WANDB_API_KEY: ${WANDB_API_KEY}
+      WANDB_USERNAME: ${WANDB_USERNAME}
+      # Force rootless mode
+      DOCKER_ROOTLESS_MODE: "true"
+      # Override home to /root for rootless
+      DOCKER_USER_HOME: /root
+      HOME: /root
+
+volumes:
+  isaac-cache-kit:
+  isaac-cache-ov:
+  isaac-cache-pip:
+  isaac-cache-gl:
+  isaac-cache-compute:
+  isaac-logs:
+  isaac-carb-logs:
+  isaac-data:
+  isaac-docs:
+  isaac-lab-docs:
+  isaac-lab-logs:
+  isaac-lab-data:

@@ -29,6 +29,13 @@
 docker/artifacts/
 *.tmp
 
+# Docker user-specific files
+docker/.env.ext_template
+docker/.env.ext_template-dev
+docker/.mount.config
+docker/docker-compose.override.yaml
+docker/.container.cfg
+
 # Isaac-Sim packman
 _isaac_sim*
 _repo
