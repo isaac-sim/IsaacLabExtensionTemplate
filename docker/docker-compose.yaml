@@ -143,10 +143,19 @@ services:
     tty: true
 
   # Rootless variant of the development container
-  # Uses the same image but with different environment and volume configuration
   isaac-lab-ext-dev-rootless:
-    extends:
-      service: isaac-lab-ext-dev
+    env_file:
+      - .env.ext_template-dev
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.ext-dev
+      args:
+        EXTENSION_NAME_ARG: ${EXTENSION_NAME}
+        EXT_PATH_ARG: ${EXT_PATH}
+        DOCKER_EXT_PATH_ARG: ${DOCKER_EXT_PATH}
+        DOCKER_USER_NAME_ARG: ${DOCKER_USER_NAME}
+        DOCKER_USER_HOME_ARG: ${DOCKER_USER_HOME}
+    image: isaac-lab-${EXTENSION_NAME}-dev
     container_name: isaac-lab-${EXTENSION_NAME}-dev-rootless
     volumes:
       - <<: *default-isaac-lab-volumes
@@ -161,7 +170,6 @@ services:
       - ${SSH_AUTH_SOCK}:/ssh-agent
       - /lib/modules:/lib/modules
       - /etc/localtime:/etc/localtime:ro
-      # Reduced host system access for rootless mode
     environment:
       <<: *default-isaac-lab-environment
       DISPLAY: ${DISPLAY}
@@ -171,11 +179,16 @@ services:
       NVIDIA_DRIVER_CAPABILITIES: all
       WANDB_API_KEY: ${WANDB_API_KEY}
       WANDB_USERNAME: ${WANDB_USERNAME}
-      # Force rootless mode
       DOCKER_ROOTLESS_MODE: "true"
-      # Override home to /root for rootless
       DOCKER_USER_HOME: /root
       HOME: /root
+    privileged: false
+    network_mode: host
+    ipc: host
+    deploy: *default-isaac-lab-deploy
+    shm_size: '2gb'
+    stdin_open: true
+    tty: true
 
 volumes:
   isaac-cache-kit:
