@@ -84,10 +84,16 @@ parse_git_branch() {
 }
 
 export PS1=$PS1"\[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
-export PS1="(D) "$PS1
+export PS1="\[\e[95m\]🐳 DOCKER\[\e[00m\] "$PS1
 
-# Claude Code available - use 'claude' command for AI coding assistance
-echo "🤖 Claude Code is available! Type 'claude' to start AI coding assistance."
+# Docker container welcome message
+echo -e "\n\e[95m╔════════════════════════════════════════════════════════════╗\e[0m"
+echo -e "\e[95m║     🐳 You are now inside a Docker container! 🐳          ║\e[0m"
+echo -e "\e[95m╚════════════════════════════════════════════════════════════╝\e[0m"
+echo -e "\e[93mContainer: ext_template-dev\e[0m"
+echo -e "\e[92mIsaacLab path: /workspace/isaaclab\e[0m"
+echo -e "\e[92mExtension path: /workspace/ext_template\e[0m"
+echo -e "\e[96m🤖 Claude Code is available! Type 'claude' for AI assistance.\e[0m\n"
 
 FILE_ROS2=/opt/ros/humble/setup.bash
 source $FILE_ROS2

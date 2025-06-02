@@ -24,35 +24,15 @@ ENV EXT_PATH=${EXT_PATH_ARG} \
 RUN useradd -d ${DOCKER_USER_HOME} -s /bin/bash ${DOCKER_USER_NAME} || true
 
 # =========================
-# Install System Dependencies
+# Install Minimal System Dependencies
 # =========================
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    figlet \
     gosu \
-    apt-utils \
-    libeigen3-dev \
-    locate \
-    wget \
-    pkg-config \
-    dialog \
-    tasksel \
-    curl \
-    python3-pip \
     git \
     git-lfs \
-    gnupg2 \
-    tmux \
-    libopen3d-dev \
-    software-properties-common \
-    rsync \
-    python3-colcon-common-extensions \
-    python3-colcon-mixin && \
-    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb && \
-    dpkg -i cuda-keyring_1.0-1_all.deb && \
-    rm -f cuda-keyring_1.0-1_all.deb && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends cuda-toolkit-11-8 && \
+    curl \
+    python3-colcon-common-extensions && \
     rm -rf /var/lib/apt/lists/*
 
 # =========================
@@ -61,108 +41,29 @@ RUN apt-get update && \
 RUN git lfs install
 
 # =========================
-# Remove Conflicting Eigen Packages
-# =========================
-RUN apt-get remove -y ros-humble-eigen3-cmake-module && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends libeigen3-dev
-
-# =========================
-# Install Pinocchio via Robotpkg
-# =========================
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends lsb-release curl && \
-    mkdir -p /etc/apt/keyrings && \
-    curl http://robotpkg.openrobots.org/packages/debian/robotpkg.asc \
-    | tee /etc/apt/keyrings/robotpkg.asc && \
-    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
-    | tee /etc/apt/sources.list.d/robotpkg.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends robotpkg-py3*-pinocchio
-RUN rm -f /etc/apt/sources.list.d/robotpkg.list
-
-# =========================
-# Set CUDA Environment Variables
-# =========================
-ENV PATH=/usr/local/cuda-11.8/bin${PATH:+:${PATH}} \
-    LD_LIBRARY_PATH=/usr/local/cuda-11.8/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-
-# =========================
 # Install Colcon Mixin
 # =========================
 RUN colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
     colcon mixin update default
 
 # =========================
-# Install Python Dependencies
+# Install Minimal Python Dependencies
 # =========================
-RUN python3 -m pip install --no-cache-dir \
-    simple-parsing \
-    cupy-cuda11x \
-    scipy \
-    shapely \
-    ros2-numpy \
-    panda3d_viewer \
-    ruamel.yaml \
-    --upgrade transforms3d \
-    torch
+# Users should add their own dependencies as needed
 
 # =========================
-# Install Development Tools
+# Install Basic Development Tools
 # =========================
 RUN ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --no-cache-dir \
-    ruff \
-    black \
-    mypy \
-    bandit \
-    vulture \
-    pre-commit \
     pytest \
-    pytest-cov \
-    warp-lang
+    ruff
+
 
 # =========================
-# Install Node.js and Claude Code
+# ROS2 Core Packages Only
 # =========================
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    npm config set registry https://registry.npmjs.org/ && \
-    npm install -g @anthropic-ai/claude-code && \
-    rm -rf /var/lib/apt/lists/*
-
-# =========================
-# Install ROS2 Packages
-# =========================
-RUN rm -f /etc/apt/sources.list.d/deb.sury.org.list && \
-    apt-get update && \
-    apt-get install -y --allow-downgrades libbrotli1=1.0.9-2build6 && \
-    apt-get install -y \
-    libfontconfig1-dev libfreetype6-dev \
-    ros-humble-xacro \
-    ros-humble-vision-opencv \
-    ros-humble-joint-state-publisher-gui \
-    ros-humble-filters \
-    ros-humble-nav2-msgs \
-    ros-humble-tf-transformations \
-    ros-humble-gazebo-ros-pkgs \
-    ros-humble-gazebo-plugins \
-    ros-humble-turtlebot3* \
-    ros-humble-turtlebot3-simulations \
-    ros-humble-octomap-msgs \
-    ros-humble-octomap \
-    ros-humble-octomap-rviz-plugins \
-    ros-humble-octomap-server \
-    ros-humble-tf2 \
-    ros-humble-tf2-geometry-msgs \
-    ros-humble-tf2-sensor-msgs \
-    ros-humble-rqt-graph \
-    ros-humble-pcl-ros \
-    ros-humble-nav2-costmap-2d \
-    ros-humble-robot-state-publisher \
-    ros-humble-rviz-common \
-    ros-humble-rviz2 \
-    ros-humble-zenoh-cpp-vendor && \
-    rm -rf /var/lib/apt/lists/*
+# Users should install additional ROS2 packages as needed
+# Example: apt-get install ros-humble-xacro ros-humble-tf2
 
 # =========================
 # Setup Extension Directories
@@ -222,10 +123,10 @@ RUN chmod +x /entrypoint.sh
 # =========================
 # Set Up Python Aliases
 # =========================
-RUN echo "alias python3='${ISAACLAB_PATH}/_isaac_sim/python.sh'" >> /home/bash.bashrc && \
-    echo "alias python='${ISAACLAB_PATH}/_isaac_sim/python.sh'" >> /home/bash.bashrc && \
-    echo "alias python3='${ISAACLAB_PATH}/_isaac_sim/python.sh'" >> /root/.bashrc && \
-    echo "alias python='${ISAACLAB_PATH}/_isaac_sim/python.sh'" >> /root/.bashrc
+RUN echo "alias python3='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /home/bash.bashrc && \
+    echo "alias python='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /home/bash.bashrc && \
+    echo "alias python3='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /root/.bashrc && \
+    echo "alias python='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /root/.bashrc
 
 # =========================
 # Final Configuration

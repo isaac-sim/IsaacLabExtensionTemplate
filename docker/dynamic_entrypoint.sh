@@ -73,11 +73,10 @@ else
     fi
     chown $USER_NAME:$USER_NAME "$USER_HOME"
     
-    # Set up user's bashrc
-    if [ ! -f "$USER_HOME/.bashrc" ]; then
-        cp /home/bash.bashrc "$USER_HOME/.bashrc"
-        chown $USER_NAME:$USER_NAME "$USER_HOME/.bashrc"
-    fi
+    # Always copy the container's bashrc to ensure Docker prompt is available
+    # This is needed because the home directory might be mounted from host
+    cp /home/bash.bashrc "$USER_HOME/.bashrc_container"
+    chown $USER_NAME:$USER_NAME "$USER_HOME/.bashrc_container"
     
     echo "Setting up permissions in the background..."
     
@@ -112,6 +111,10 @@ EOF
         trap /usr/local/bin/fix-permissions EXIT
     fi
     
-    # Execute as the user
-    exec gosu $USER_NAME bash --rcfile $USER_HOME/.bashrc
+    # Ensure PATH is set for the user
+    export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    
+    # Execute as the user with the container's bashrc
+    # Use --rcfile to explicitly load the container's bashrc
+    exec gosu $USER_NAME /bin/bash --rcfile "$USER_HOME/.bashrc_container"
 fi
