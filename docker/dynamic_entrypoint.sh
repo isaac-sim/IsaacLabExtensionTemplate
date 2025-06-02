@@ -7,7 +7,7 @@
 # Mode is determined by DOCKER_ROOTLESS_MODE environment variable
 
 # Print welcome message
-figlet Isaac Lab Extension
+echo "=== Isaac Lab Extension ==="
 
 # Always add root sudo permissions
 echo "root ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers

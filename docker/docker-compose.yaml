@@ -141,7 +141,7 @@ services:
       - ALL
     stdin_open: true
     tty: true
-    entrypoint: ["/entrypoint.sh"]
+    entrypoint: ["/dynamic_entrypoint.sh"]
 
   # Rootless variant of the development container
   isaac-lab-ext-dev-rootless:
@@ -190,7 +190,7 @@ services:
     shm_size: '2gb'
     stdin_open: true
     tty: true
-    entrypoint: ["/entrypoint.sh"]
+    entrypoint: ["/dynamic_entrypoint.sh"]
 
 volumes:
   isaac-cache-kit:
