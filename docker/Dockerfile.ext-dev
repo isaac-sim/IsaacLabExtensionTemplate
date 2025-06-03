@@ -84,19 +84,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # =========================
 RUN rm -rf ${DOCKER_EXT_PATH}/source/${EXTENSION_NAME}
 
-# =========================
-# Create Symlinks for Sensors
-# =========================
-RUN mkdir -p /workspace/isaaclab/source/exts/ && \
-    ln -s /workspace/isaaclab/_isaac_sim/exts/isaacsim.sensors.rtx /workspace/isaaclab/source/exts/isaacsim.sensors.rtx
 
-# =========================
-# Clone and Install rsl_rl
-# =========================
-RUN git clone https://github.com/leggedrobotics/rsl_rl.git /tmp/rsl_rl && \
-    cd /tmp/rsl_rl && \
-    ${ISAACLAB_PATH}/isaaclab.sh -p -m pip install . && \
-    rm -rf /tmp/rsl_rl
 
 # =========================
 # Set Ownership and Permissions

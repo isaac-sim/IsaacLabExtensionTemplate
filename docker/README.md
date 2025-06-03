@@ -73,7 +73,7 @@ Two primary containers are provided:
 - **Production (`isaac-lab-ext`)**:
   - **Dockerfile:** `Dockerfile.ext`
   - **Purpose:** A minimal, lightweight container designed for headless training and cluster deployment
-  - **Includes:** Isaac Lab, RSL-RL, and your extension
+  - **Includes:** Isaac Lab (with RSL-RL) and your extension
   - **Excludes:** ROS2, GUI tools, and other development dependencies
 
 - **Development (`isaac-lab-ext-dev`)**:
@@ -265,11 +265,6 @@ export DISPLAY="${DISPLAY:-:0}"
    ./docker/container.sh -p ext-dev exec nvidia-smi
    ```
 4. Ensure your NVIDIA drivers are up to date
-
-## Migration Guide
-
-- **From 4-Container Setup:** The `ext-ros2` and `ext-dev-rootless` containers are now handled by the unified `ext-dev` container and its profile flags (`--rootless`)
-- **From Old Mount System:** The old environment variables (`EXTERNAL_ISAACLAB_PATH`, etc.) are deprecated. Use the new mount management system: `./docker/container.sh mount-setup`
 
 ## Best Practices
 

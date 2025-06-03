@@ -34,14 +34,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     cd ${DOCKER_EXT_PATH} && \
     /workspace/isaaclab/isaaclab.sh -p -m pip install -e source/${EXTENSION_NAME} --no-build-isolation
 
-# Create required symlinks for sensors
-RUN mkdir -p /workspace/isaaclab/source/exts/ && \
-    ln -s /workspace/isaaclab/_isaac_sim/exts/isaacsim.sensors.rtx /workspace/isaaclab/source/exts/isaacsim.sensors.rtx
 
-# Clone and Install rsl_rl
-RUN git clone https://github.com/leggedrobotics/rsl_rl.git /tmp/rsl_rl && \
-    cd /tmp/rsl_rl && \
-    ${ISAACLAB_PATH}/isaaclab.sh -p -m pip install .
 
 # (Do not remove the DOCKER_EXT_PATH folder; keep it for the bind mount)
 
