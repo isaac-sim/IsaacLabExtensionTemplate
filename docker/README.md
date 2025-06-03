@@ -4,384 +4,276 @@ This guide provides comprehensive documentation for building, running, and deplo
 
 ## Table of Contents
 
-- [Overview](#overview)
+- [Quick Start: Local Development](#quick-start-local-development)
 - [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Container Architecture](#container-architecture)
+- [Core Concepts](#core-concepts)
   - [Container Types](#container-types)
-  - [Permission System](#permission-system)
-- [Building Containers](#building-containers)
-- [Running Containers](#running-containers)
-  - [Development Workflow](#development-workflow)
-  - [Production Usage](#production-usage)
-- [Mount Configuration System](#mount-configuration-system)
-  - [Quick Setup](#quick-setup)
-  - [Mount Management](#mount-management)
-  - [Technical Details](#technical-details)
+  - [User Permissions System](#user-permissions-system)
+- [Usage Guide](#usage-guide)
+  - [The container.sh Script](#the-containersh-script)
+  - [Building the Containers](#building-the-containers)
+  - [Running Containers & Workflows](#running-containers--workflows)
+  - [Managing External Mounts](#managing-external-mounts)
 - [Cluster Deployment](#cluster-deployment)
 - [Troubleshooting](#troubleshooting)
 - [Migration Guide](#migration-guide)
+- [Best Practices](#best-practices)
 
-## Overview
+## Quick Start: Local Development
 
-The Docker setup provides two main containers:
+This is the fastest way to get a development environment running.
 
-1. **Production Container** (`isaac-lab-ext`) - Minimal container for training and cluster deployment
-2. **Development Container** (`isaac-lab-ext-dev`) - Full-featured container with ROS2, development tools, and dual-mode support
+1. **Set up environment files:**
+   ```bash
+   # Run this once to create your local .env files
+   cp docker/.env.ext_template.template docker/.env.ext_template
+   cp docker/.env.ext_template-dev.template docker/.env.ext_template-dev
+   # You can optionally edit these files with custom settings.
+   ```
 
-Both containers include:
-- Isaac Lab and Isaac Sim integration
-- RSL-RL for reinforcement learning
-- Your extension package
-- Optional mounting of external codebases
+2. **Run the development container:**
+   ```bash
+   # Start an interactive shell in the dev container
+   ./docker/run_dev.sh
+
+   # Or, run a specific command directly
+   ./docker/run_dev.sh python scripts/rsl_rl/train.py --task YourTask
+   ```
+
+   > **Note:** For systems where you don't have root access for Docker (e.g., some university PCs), use the `--rootless` flag:
+   > ```bash
+   > ./docker/run_dev.sh --rootless
+   > ```
 
 ## Prerequisites
 
-1. **Docker and Docker Compose** installed on your system
-2. **NVIDIA GPU** with appropriate drivers
-3. **Environment files** - Create by copying templates:
-   ```bash
-   cp docker/.env.ext_template.template docker/.env.ext_template
-   cp docker/.env.ext_template-dev.template docker/.env.ext_template-dev
-   ```
-   Edit these files with your settings (they're git-ignored).
-4. **IsaacLab base images** - Either pull from DockerHub or build locally (see [Building Containers](#building-containers))
+- [ ] NVIDIA GPU with current drivers installed
+- [ ] Docker and Docker Compose installed
+- [ ] NVIDIA Container Toolkit installed ([installation guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html))
+- [ ] For local development, optionally symlink IsaacLab as `_isaaclab` in the repository root
 
-## Quick Start
+### Environment Files Setup
 
-### Using container.sh (Recommended)
+Before running any extension containers, you must create the environment files from their templates:
 
 ```bash
-# Build and run development container
-./docker/container.sh -p ext-dev build
-./docker/container.sh -p ext-dev run
-
-# Run with a specific command
-./docker/container.sh -p ext-dev run python scripts/rsl_rl/train.py --task YourTask
-
-# Run in rootless mode (for systems without root Docker)
-./docker/container.sh -p ext-dev-rootless run
+# Create the required .env files
+cp docker/.env.ext_template.template docker/.env.ext_template
+cp docker/.env.ext_template-dev.template docker/.env.ext_template-dev
 ```
 
-### Production Container
+These files contain container-specific configuration and are required for the containers to start properly. You can edit them to customize settings if needed, but the defaults should work for most use cases.
 
-```bash
-# Build and run production container
-./docker/container.sh -p ext build
-./docker/container.sh -p ext run
-```
-
-## Container Architecture
+## Core Concepts
 
 ### Container Types
 
-#### 1. Production Container (`Dockerfile.ext`)
-- **Base Image**: `isaac-lab-base`
-- **Purpose**: Cluster deployment and training
-- **Features**:
-  - Minimal footprint for performance
-  - Includes RSL-RL
-  - No development tools or ROS2
-- **Use Cases**: Training jobs, performance testing, deployment
+Two primary containers are provided:
 
-#### 2. Development Container (`Dockerfile.ext-dev`)
-- **Base Image**: `isaac-lab-ros2`
-- **Purpose**: Local development with all features
-- **Features**:
-  - ROS2 packages and integration
-  - Development tools (Claude Code, pytest, ruff, etc.)
-  - Pinocchio robotics library
-  - CUDA toolkit
-  - Git LFS support
-  - Dual-mode operation (root/rootless)
-- **Use Cases**: Development, debugging, ROS2 integration, testing
+- **Production (`isaac-lab-ext`)**:
+  - **Dockerfile:** `Dockerfile.ext`
+  - **Purpose:** A minimal, lightweight container designed for headless training and cluster deployment
+  - **Includes:** Isaac Lab, RSL-RL, and your extension
+  - **Excludes:** ROS2, GUI tools, and other development dependencies
 
-### Permission System
+- **Development (`isaac-lab-ext-dev`)**:
+  - **Dockerfile:** `Dockerfile.ext-dev`
+  - **Purpose:** A full-featured environment for local development and debugging
+  - **Includes:** Everything in the production container, plus ROS2 Humble, development tools (like pytest, ruff), and GPU-accelerated libraries
 
-The development container supports flexible permission management through two modes:
+### User Permissions System
 
-#### Root Mode (Default)
-- Traditional Docker behavior with user switching
-- Preserves host user permissions
-- Files created match host user ownership
-- Uses `gosu` for seamless user switching
+To prevent file ownership issues when mounting local directories, the development container synchronizes the container's user with your host's user ID (UID) and group ID (GID).
 
-#### Rootless Mode
-- Everyone runs as root inside container
-- Simplified permission model
-- Suitable for Docker installations without root access
-- Ideal for student PCs or restricted environments
+- **Default Mode (User-Preserving):** Files created inside the container are owned by you on the host. This is the recommended mode for personal machines.
+- **Rootless Mode (`--rootless`):** Runs as root inside the container. This simplifies permissions and is ideal for environments where you cannot manage Docker users.
 
-#### Quick Permission Reference
+| Use Case | Command | Outcome |
+|----------|---------|---------|
+| Personal Dev Machine | `./docker/run_dev.sh` | Files created match your host user |
+| Restricted PC (No Root) | `./docker/run_dev.sh --rootless` | Runs as root inside the container |
+| Auto-Fix Permissions | `./docker/run_dev.sh --fix-perms` | chowns files to your user on exit |
+| Shared Server | `./docker/run_dev.sh -u 2000 -g 2000` | Uses a custom UID/GID |
 
-| Use Case | Command | Result |
-|----------|---------|--------|
-| Personal dev machine | `./docker/container.sh -p ext-dev run` | Files owned by your user |
-| Student PC (no root) | `./docker/container.sh -p ext-dev-rootless run` | Run as root inside container |
-| Shared server | `FIX_PERMISSIONS=true ./docker/container.sh -p ext-dev run` | Auto-fix ownership on exit |
+## Usage Guide
 
-#### Environment Variables
+### The container.sh Script
 
-- `DOCKER_ROOTLESS_MODE`: Enable rootless mode (true/false)
-- `FIX_PERMISSIONS`: Auto-fix file permissions on exit (true/false)
-- `LOCAL_UID`: Override user ID (default: current user)
-- `LOCAL_GID`: Override group ID (default: current group)
+The `./docker/container.sh` script is the main interface for managing containers. The `./docker/run_dev.sh` script is a convenient wrapper around it.
 
-## Building Containers
+**Basic Syntax:** `./docker/container.sh -p <profile> <command>`
 
-### Step 1: Obtain Base Images
+| Command | Description | Example |
+|---------|-------------|---------|
+| `build` | Builds the container image | `./docker/container.sh -p ext-dev build` |
+| `run` | Runs the container | `./docker/container.sh -p ext-dev run` |
+| `attach` | Attaches to a running container | `./docker/container.sh -p ext-dev attach` |
+| `exec` | Executes a command in a running container | `./docker/container.sh -p ext-dev exec nvidia-smi` |
+| `logs` | Shows container logs | `./docker/container.sh -p ext-dev logs` |
+| `mount-setup` | Interactively configure mounts | `./docker/container.sh mount-setup` |
+
+### Building the Containers
+
+First, ensure you have the base images from IsaacLab. If not, build them from the IsaacLab-Internal repository:
+
+#### Prerequisites: Building Base IsaacLab Containers
+
+Before building extension containers, you need to build the base IsaacLab containers from the [IsaacLab-Internal repository](https://github.com/leggedrobotics/IsaacLab-Internal).
+
+1. **Clone and navigate to IsaacLab-Internal:**
+   ```bash
+   git clone https://github.com/leggedrobotics/IsaacLab-Internal
+   cd IsaacLab-Internal/docker
+   ```
+
+2. **Build the base containers:**
+   ```bash
+   # Build the ROS2 base container
+   docker compose --env-file docker/.env.ros2 --file docker/docker-compose.yaml build isaac-lab-ros2
+   
+   # Build and run the base container
+   docker compose --env-file docker/.env.base --file docker/docker-compose.yaml run isaac-lab-base
+   ```
+
+#### Building Extension Containers
+
+Once you have the base images, you can build the extension containers:
 
 ```bash
-# Option 1: Pull from DockerHub (recommended)
-docker pull jmanan/isaac-lab-base:latest
-docker tag jmanan/isaac-lab-base:latest isaac-lab-base
-
-docker pull jmanan/isaac-lab-ros2:latest
-docker tag jmanan/isaac-lab-ros2:latest isaac-lab-ros2
-
-# Option 2: Build locally (if you have IsaacLab source)
-cd /path/to/isaaclab
-./docker/container.py build isaac-lab-base
-./docker/container.py build isaac-lab-ros2
-```
-
-### Step 2: Build Extension Containers
-
-```bash
-# Build production container
-./docker/container.sh -p ext build
-
-# Build development container
+# Build the development container (most common)
 ./docker/container.sh -p ext-dev build
+
+# Build the production container
+./docker/container.sh -p ext build
 ```
 
-## Running Containers
+### Running Containers & Workflows
 
-### Development Workflow
-
+**Development:**
 ```bash
-# Standard development mode
+# Start an interactive shell
 ./docker/container.sh -p ext-dev run
 
-# Rootless mode for restricted systems
-./docker/container.sh -p ext-dev-rootless run
-
-# Run specific command
-./docker/container.sh -p ext-dev run python scripts/rsl_rl/train.py --task YourTask
-
-# Attach to running container
-./docker/container.sh -p ext-dev attach
-
-# Execute command in running container
-./docker/container.sh -p ext-dev exec nvidia-smi
+# Run a specific training task
+./docker/container.sh -p ext-dev run python scripts/rsl_rl/train.py --task=YourTask
 ```
 
-### Production Usage
-
+**Production:**
 ```bash
-# Run production container
-./docker/container.sh -p ext run
-
-# Training example
+# Run a headless training job in the production container
 ./docker/container.sh -p ext run python scripts/rsl_rl/train.py \
-    --task YourTask --num_envs 1024
+   --task=YourTask --num_envs 1024
 ```
 
-### Claude Code AI Assistant
+### Managing External Mounts
 
-The development container includes Claude Code for AI-assisted development:
-
-```bash
-# Inside the container
-claude
-```
-
-## Mount Configuration System
-
-The unified mount system allows optional mounting of external IsaacLab and RSL-RL codebases in both Docker and Singularity environments.
-
-### Quick Setup
+You can optionally mount external checkouts of isaaclab or rsl_rl to override the versions built into the container. This is useful for development.
 
 ```bash
-# Interactive setup
+# Start the interactive setup wizard (recommended)
 ./docker/container.sh mount-setup
 
-# This will:
-# 1. Create .mount.config with your preferences
-# 2. Validate paths
-# 3. Generate docker-compose.override.yaml
-```
-
-### Mount Management
-
-```bash
-# Show current configuration
-./docker/container.sh mount-show
-
-# Enable/disable mounts
+# Manually enable/disable a mount
 ./docker/container.sh mount-enable isaaclab
-./docker/container.sh mount-disable rsl_rl
+./docker/container.sh mount-disable isaaclab
 
-# Set mount paths
-./docker/container.sh mount-set isaaclab ~/my-isaaclab
-./docker/container.sh mount-set rsl_rl ~/my-rsl-rl
+# Manually set a mount path
+./docker/container.sh mount-set isaaclab ~/dev/my-isaaclab
 
-# Validate configuration
-./docker/container.sh mount-validate
+# Check your current mount configuration
+./docker/container.sh mount-show
 ```
 
-### Technical Details
-
-#### Configuration File (.mount.config)
-
-```json
-{
-  "mounts": {
-    "isaaclab": {
-      "enabled": false,
-      "local_path": "/path/to/isaaclab",
-      "container_path": "/workspace/isaaclab",
-      "mount_type": "source",  // Mounts only source/ subdirectory
-      "description": "External IsaacLab installation"
-    },
-    "rsl_rl": {
-      "enabled": false,
-      "local_path": "/path/to/rsl_rl",
-      "container_path": "/workspace/isaaclab/_isaac_sim/.../rsl_rl",
-      "mount_type": "full",  // Completely overrides built-in
-      "description": "External RSL-RL installation"
-    }
-  }
-}
-```
-
-#### How It Works
-
-1. **Configuration**: User preferences stored in `.mount.config`
-2. **Docker**: Generates `docker-compose.override.yaml` with bind mounts
-3. **Singularity**: Reads config and adds `-B` bind flags
-4. **Validation**: Paths validated before container startup
-
-The system uses Docker Compose's override mechanism, automatically merging:
-- Base configuration: `docker-compose.yaml`
-- User mounts: `docker-compose.override.yaml` (auto-generated)
+This system works by creating a `.mount.config` file and auto-generating a `docker-compose.override.yaml` which is git-ignored.
 
 ## Cluster Deployment
 
-For detailed cluster operations, see [docker/cluster/README.md](cluster/README.md).
+For detailed cluster operations, see `docker/cluster/README.md`.
 
-### Quick Cluster Workflow
-
+**Quick Workflow:**
 ```bash
-# 1. Configure mounts (optional)
+# 1. (Optional) Configure mounts for cluster usage
 ./docker/container.sh mount-setup
 
-# 2. Push container to cluster
+# 2. Navigate to the cluster directory
 cd docker/cluster
+
+# 3. Push the container image to the cluster's registry
 ./cluster_interface.sh push ext_template
 
-# 3. Submit job
+# 4. Submit a job
 ./cluster_interface.sh job ext_template --task YourTask --num_envs 64000
-
-# 4. Sync logs back
-./sync_experiments.sh --remove ~/experiments/logs
 ```
 
 ## Troubleshooting
 
-### Permission Issues
+### Problem: Docker/Apptainer Version Compatibility
 
+When pushing to cluster, you may see warnings about non-tested Docker/Apptainer versions. The tested combinations are:
+- Docker 24.0.7 + Apptainer 1.2.5
+- Docker ≥ 27.0.0 + Apptainer ≥ 1.3.4
+
+If you encounter issues with other versions, consider updating to a tested combination.
+
+### Problem: Permission Denied on Mounted Files
+
+**Cause:** Files created in the container are owned by root.
+
+**Solution 1 (Auto-fix):** Use the `--fix-perms` flag to chown files on exit.
 ```bash
-# Enable automatic permission fixing
-export FIX_PERMISSIONS=true
-./docker/container.sh -p ext-dev run
-
-# Use rootless mode
-./docker/container.sh -p ext-dev-rootless run
-
-# Manually fix permissions
-sudo chown -R $(id -u):$(id -g) /workspace/ext_template
+./docker/run_dev.sh --fix-perms
 ```
 
-### Build Issues
-
+**Solution 2 (Rootless):** Use rootless mode if you don't need user-preserving permissions.
 ```bash
-# Clean rebuild
-docker compose build --no-cache isaac-lab-ext-dev
-
-# Remove old images
-docker image prune -f
-
-# Check logs
-./docker/container.sh -p ext-dev logs
+./docker/run_dev.sh --rootless
 ```
 
-### Mount Issues
-
+**Solution 3 (Manual Fix):** Manually change ownership on your host.
 ```bash
-# Validate mounts
-./docker/container.sh mount-validate
-
-# Regenerate override file
-./docker/container.sh -r -p ext-dev run
-
-# Check mounted paths inside container
-./docker/container.sh -p ext-dev exec ls -la /workspace/isaaclab/source
+sudo chown -R $(id -u):$(id -g) .
 ```
 
-### GPU Access
+### Problem: Build Fails or Old Layers Persist
 
+**Solution:** Perform a clean rebuild.
 ```bash
-# Verify host GPU
-nvidia-smi
-
-# Check container GPU access
-./docker/container.sh -p ext-dev exec nvidia-smi
-
-# For rootless mode
-export NVIDIA_DRIVER_CAPABILITIES=all
-./docker/container.sh -p ext-dev-rootless run
+./docker/container.sh -p ext-dev build --no-cache
 ```
+
+### Problem: invalid spec: :/ssh-agent: empty section between colons warning
+
+**Cause:** The `SSH_AUTH_SOCK` or `DISPLAY` environment variables are not set on your host. Docker Compose shows a warning but continues.
+
+**Solution:** This is a harmless warning if you don't need SSH agent or GUI forwarding. To suppress it, you can set default values in your shell's startup file (e.g., `~/.bashrc` or `~/.zshrc`).
+```bash
+# Set default values for Docker environment variables
+export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-/dev/null}"
+export DISPLAY="${DISPLAY:-:0}"
+```
+
+### Problem: GPU Not Accessible Inside Container
+
+**Solution:**
+1. Verify `nvidia-smi` works on the host
+2. Verify NVIDIA Container Toolkit is installed:
+   ```bash
+   docker run --rm --gpus all nvidia/cuda:11.8.0-base-ubuntu20.04 nvidia-smi
+   ```
+3. Verify `nvidia-smi` works inside the container:
+   ```bash
+   ./docker/container.sh -p ext-dev exec nvidia-smi
+   ```
+4. Ensure your NVIDIA drivers are up to date
 
 ## Migration Guide
 
-### From Simple Docker Setup
-
-If using the previous simple Docker setup:
-- The single Dockerfile has been replaced with two specialized containers
-- Use `ext` for production/training
-- Use `ext-dev` for development
-
-### From Environment Variables
-
-Old approach with environment variables:
-```bash
-EXTERNAL_ISAACLAB_PATH=/path/to/isaaclab  # No longer used
-EXTERNAL_RSL_RL_PATH=/path/to/rsl_rl      # No longer used
-```
-
-New approach:
-```bash
-./docker/container.sh mount-setup  # Interactive configuration
-# or
-./docker/container.sh mount-set isaaclab /path/to/isaaclab
-```
+- **From 4-Container Setup:** The `ext-ros2` and `ext-dev-rootless` containers are now handled by the unified `ext-dev` container and its profile flags (`--rootless`)
+- **From Old Mount System:** The old environment variables (`EXTERNAL_ISAACLAB_PATH`, etc.) are deprecated. Use the new mount management system: `./docker/container.sh mount-setup`
 
 ## Best Practices
 
-1. **Container Selection**:
-   - Use production container for cluster training and deployment
-   - Use development container for local development and debugging
-
-2. **Permission Management**:
-   - Enable `FIX_PERMISSIONS` when working with mounted volumes
-   - Use rootless mode on systems without root Docker access
-
-3. **Mount Configuration**:
-   - Prefer built-in IsaacLab/RSL-RL for stability
-   - Test mounts locally before cluster deployment
-   - Don't commit `.mount.config` or `docker-compose.override.yaml`
-
-4. **Performance**:
-   - Use production container for training to minimize overhead
-   - Limit mounted volumes to necessary paths only
+- **Development:** Use the `isaac-lab-ext-dev` container for all local development
+- **Production:** Use the `isaac-lab-ext` container for cluster jobs and performance tests to minimize overhead
+- **Mounts:** Prefer the built-in libraries for stability. Only use external mounts when actively developing on them
+- **Permissions:** On your personal machine, use the default user-preserving mode. Use `--fix-perms` if you encounter ownership issues

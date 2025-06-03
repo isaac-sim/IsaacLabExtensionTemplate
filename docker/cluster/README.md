@@ -66,6 +66,8 @@ Submit jobs with custom arguments:
 ./cluster_interface.sh -c job ext_template --task YourTask
 ```
 
+**Note**: Each job submission creates a timestamped directory on the cluster (e.g., `${CLUSTER_ISAACLAB_DIR}_20231215_143022`) to ensure multiple jobs don't interfere with each other. The script arguments are properly preserved and passed through to your training script.
+
 ### External Codebase Mounting
 
 The cluster system supports the unified mount configuration:
@@ -132,10 +134,16 @@ ssh $CLUSTER_LOGIN "qdel <job_id>"
 
 ### View Job Output
 
-Job outputs are stored in the exports directory:
+Job outputs are written to the job scheduler's output location. The exact location depends on your cluster configuration:
 ```bash
-ssh $CLUSTER_LOGIN "ls -la $CLUSTER_ISAACLAB_DIR/exports/"
-ssh $CLUSTER_LOGIN "tail -f $CLUSTER_ISAACLAB_DIR/exports/<job_output_file>"
+# For SLURM (usually in the submission directory)
+ssh $CLUSTER_LOGIN "ls -la slurm-*.out"
+
+# For PBS (check your cluster's default output location)
+ssh $CLUSTER_LOGIN "ls -la *.o*"
+
+# View recent job output
+ssh $CLUSTER_LOGIN "tail -f <job_output_file>"
 ```
 
 ## Environment Variables
@@ -204,11 +212,21 @@ ssh $CLUSTER_LOGIN "df -h $CLUSTER_SIF_PATH"
 ssh $CLUSTER_LOGIN "ls -la $CLUSTER_SIF_PATH/*.tar"
 
 # Check job script was created
-ssh $CLUSTER_LOGIN "ls -la $CLUSTER_ISAACLAB_DIR/*.sh"
+ssh $CLUSTER_LOGIN "ls -la $CLUSTER_ISAACLAB_DIR_*/*.sh"
 
-# View error logs
-ssh $CLUSTER_LOGIN "cat $CLUSTER_ISAACLAB_DIR/exports/*.err"
+# View error logs from job scheduler
+# For SLURM
+ssh $CLUSTER_LOGIN "cat slurm-*.out"
+# For PBS
+ssh $CLUSTER_LOGIN "cat *.e*"
 ```
+
+### Mount Path Issues
+
+If you see errors about `$CLUSTER_USER` not being expanded:
+1. Ensure `CLUSTER_USER` is set in your `.env.cluster` file
+2. Check that the environment file is being sourced correctly
+3. Verify mount paths don't contain literal `$CLUSTER_USER` after expansion
 
 ### Performance Tips
 
