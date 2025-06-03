@@ -79,6 +79,7 @@ done
 echo "[DEBUG] run_singularity.sh: Final MOUNT_ISAACLAB_PATH: $MOUNT_ISAACLAB_PATH"
 echo "[DEBUG] run_singularity.sh: Final MOUNT_RSL_RL_PATH: $MOUNT_RSL_RL_PATH"
 echo "[DEBUG] run_singularity.sh: Final SCRIPT_ARGS: ${SCRIPT_ARGS[*]}"
+echo "[DEBUG] run_singularity.sh: Number of script args: ${#SCRIPT_ARGS[@]}"
 
 #==
 # Helper functions
@@ -130,6 +131,7 @@ fi
 source "$ENV_CLUSTER_PATH"
 source "$ENV_BASE_PATH"
 
+echo "[DEBUG] CLUSTER_USER: $CLUSTER_USER"
 echo "[DEBUG] CLUSTER_SIF_PATH: $CLUSTER_SIF_PATH"
 echo "[DEBUG] Container profile: $2"
 
@@ -192,9 +194,19 @@ if [ -f "$MOUNT_CONFIG_FILE" ]; then
     ADDITIONAL_BINDS=$(python3 - <<EOF
 import json
 import os
+import sys
 
 with open("$MOUNT_CONFIG_FILE", 'r') as f:
     config = json.load(f)
+
+# Get cluster user from environment - passed directly from shell
+cluster_user = "$CLUSTER_USER"
+print(f"[DEBUG] Python: CLUSTER_USER = {cluster_user}", file=sys.stderr)
+
+# Check if CLUSTER_USER was properly set
+if not cluster_user or cluster_user == "" or cluster_user.startswith("$"):
+    print("[ERROR] CLUSTER_USER environment variable is not set or not expanded!", file=sys.stderr)
+    sys.exit(1)
 
 binds = []
 for mount_name, mount_config in config.get('mounts', {}).items():
@@ -214,6 +226,14 @@ for mount_name, mount_config in config.get('mounts', {}).items():
         if not mount_path:
             print(f"[WARNING] No cluster path set for mount-only {mount_name}, skipping", file=sys.stderr)
             continue
+    
+    # Expand environment variables in mount_path
+    original_path = mount_path
+    # Expand $CLUSTER_USER and any other environment variables
+    mount_path = mount_path.replace('$CLUSTER_USER', cluster_user)
+    # Also handle ${CLUSTER_USER} syntax
+    mount_path = mount_path.replace('${CLUSTER_USER}', cluster_user)
+    print(f"[DEBUG] Python: Mount {mount_name}: {original_path} -> {mount_path}", file=sys.stderr)
     
     container_path = mount_config['container_path']
     
@@ -235,7 +255,15 @@ print(' '.join(binds))
 EOF
 )
     
+    # Check if Python script failed
+    if [ $? -ne 0 ]; then
+        echo "[ERROR] Failed to parse mount configuration"
+        exit 1
+    fi
+    
     if [ -n "$ADDITIONAL_BINDS" ]; then
+        # Expand any remaining environment variables in the bind paths
+        ADDITIONAL_BINDS=$(echo "$ADDITIONAL_BINDS" | sed "s/\$CLUSTER_USER/$CLUSTER_USER/g")
         echo "[INFO] Adding mounts from unified config: $ADDITIONAL_BINDS"
         SINGULARITY_BINDS="$SINGULARITY_BINDS $ADDITIONAL_BINDS"
     fi
@@ -275,11 +303,23 @@ fi
 
 # NOTE: ISAACLAB_PATH is normally set in `isaaclab.sh` but we directly call the isaac-sim python because we sync the entire
 # Isaac Lab directory to the compute node and remote the symbolic link to isaac-sim
+
+# Pass script args as environment variable to avoid expansion issues
+SCRIPT_ARGS_STRING="${SCRIPT_ARGS[*]}"
+
+# Add debug output
+echo "[DEBUG] SCRIPT_ARGS array has ${#SCRIPT_ARGS[@]} elements"
+for i in "${!SCRIPT_ARGS[@]}"; do
+    echo "[DEBUG] SCRIPT_ARGS[$i] = '${SCRIPT_ARGS[$i]}'"
+done
+echo "[DEBUG] SCRIPT_ARGS_STRING = '$SCRIPT_ARGS_STRING'"
+
 singularity exec \
     $SINGULARITY_BINDS \
     --nv --containall --writable-tmpfs \
     --env "WANDB_MODE=${WANDB_MODE:-offline}" \
     --env "ISAACLAB_PATH=/workspace/isaaclab" \
+    --env "SCRIPT_ARGS_STRING=$SCRIPT_ARGS_STRING" \
     $TMPDIR/$2.sif bash -c "
         # Source both bashrc files to get Python aliases
         source /etc/bash.bashrc 2>/dev/null || true
@@ -327,7 +367,8 @@ singularity exec \
         echo '[CONTAINER] Testing RSL-RL runners import:'
         python -c 'from rsl_rl.runners import OnPolicyRunner; print(\"OnPolicyRunner imported successfully\")' 2>/dev/null || echo 'Failed to import rsl_rl.runners'
         echo '[CONTAINER] Running main script: $CLUSTER_PYTHON_EXECUTABLE'
-        \$ISAACLAB_PATH/_isaac_sim/python.sh $CLUSTER_PYTHON_EXECUTABLE ${SCRIPT_ARGS[*]}
+        echo '[CONTAINER] Script arguments: \$SCRIPT_ARGS_STRING'
+        \$ISAACLAB_PATH/_isaac_sim/python.sh $CLUSTER_PYTHON_EXECUTABLE \$SCRIPT_ARGS_STRING
     "
 
 # copy resulting cache files back to host

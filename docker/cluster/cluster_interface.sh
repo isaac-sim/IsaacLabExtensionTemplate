@@ -96,13 +96,14 @@ sync_mount_config() {
     if [ -f "$mount_config_path" ]; then
         echo "[INFO] Found mount configuration file"
         
-        # Check if we need to sync any external codebases
-        python3 - <<EOF
+        # Create a temporary Python script
+        local temp_script=$(mktemp)
+        cat > "$temp_script" << 'PYTHON_SCRIPT'
 import json
 import sys
 import os
 
-config_path = "$mount_config_path"
+config_path = sys.argv[1]
 with open(config_path, 'r') as f:
     config = json.load(f)
 
@@ -114,12 +115,19 @@ for mount_name, mount_config in config.get('mounts', {}).items():
         print(f"[INFO] Will sync {mount_name} from {local_path}")
 
 sys.exit(0 if need_sync else 1)
-EOF
+PYTHON_SCRIPT
         
-        if [ $? -eq 0 ]; then
+        # Execute the Python script
+        # Save the result before any other commands
+        set +e  # Temporarily disable exit on error
+        python3 "$temp_script" "$mount_config_path"
+        sync_exit_code=$?
+        set -e  # Re-enable exit on error
+        if [ $sync_exit_code -eq 0 ]; then
             # Sync external codebases
             python3 "$CODEBASE_PATH/docker/cluster/sync_mounts.py" "$mount_config_path" "$CLUSTER_LOGIN"
         fi
+        rm -f "$temp_script"
     else
         echo "[INFO] No mount configuration found. Run './container.sh mount-setup' to configure external mounts."
     fi
@@ -143,7 +151,16 @@ submit_job() {
     esac
 
     # No mount args needed - mount config is handled by .mount.config file
-    ssh $CLUSTER_LOGIN "cd $CLUSTER_ISAACLAB_DIR && bash $CLUSTER_ISAACLAB_DIR/docker/cluster/$job_script_file \"$CLUSTER_ISAACLAB_DIR\" \"isaac-lab-$profile\" \"\" \"--\" ${@}"
+    # Build the command with properly quoted arguments
+    ssh_cmd="cd $CLUSTER_ISAACLAB_DIR && bash $CLUSTER_ISAACLAB_DIR/docker/cluster/$job_script_file \"$CLUSTER_ISAACLAB_DIR\" \"isaac-lab-$profile\" \"\" \"--\""
+    
+    # Add each argument properly quoted
+    for arg in "$@"; do
+        ssh_cmd="$ssh_cmd \"$arg\""
+    done
+    
+    # Execute the SSH command
+    ssh $CLUSTER_LOGIN "$ssh_cmd"
 }
 
 # Function to list all available profiles
