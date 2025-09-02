@@ -31,7 +31,19 @@ This is the fastest way to get a development environment running.
    # You can optionally edit these files with custom settings.
    ```
 
-2. **Run the development container:**
+2. **Validate your setup:**
+   ```bash
+   # Test basic Docker functionality
+   docker --version
+
+   # Verify environment files are configured
+   ./docker/run_dev.sh --help
+
+   # Test mount configuration system
+   ./docker/container.sh mount-show
+   ```
+
+3. **Run the development container:**
    ```bash
    # Start an interactive shell in the dev container
    ./docker/run_dev.sh
@@ -54,15 +66,50 @@ This is the fastest way to get a development environment running.
 
 ### Environment Files Setup
 
-Before running any extension containers, you must create the environment files from their templates:
+Before running any extension containers, you must create and configure the environment files from their templates:
 
+#### Step 1: Copy Templates
 ```bash
 # Create the required .env files
 cp docker/.env.ext_template.template docker/.env.ext_template
 cp docker/.env.ext_template-dev.template docker/.env.ext_template-dev
 ```
 
-These files contain container-specific configuration and are required for the containers to start properly. You can edit them to customize settings if needed, but the defaults should work for most use cases.
+#### Step 2: Configure Environment Files
+
+Edit `docker/.env.ext_template-dev` with your specific paths:
+
+```bash
+# =========================
+# Extension Configuration
+# =========================
+EXTENSION_NAME=ext_template
+EXTENSION_FOLDER=/path/to/your/project/folder        # ← CHANGE THIS
+EXT_PATH=$EXTENSION_FOLDER
+DOCKER_EXT_PATH=/workspace/$EXTENSION_NAME
+
+# =========================
+# Docker User Configuration  
+# =========================
+HOST_HOME=/home/your_username                        # ← CHANGE THIS
+DOCKER_USER_NAME=your_username                       # ← CHANGE THIS  
+DOCKER_USER_HOME=/home/your_username                 # ← CHANGE THIS
+```
+
+**Example Configuration:**
+```bash
+EXTENSION_FOLDER=/home/alice/projects/IsaacLabExtensionTemplate
+HOST_HOME=/home/alice
+DOCKER_USER_NAME=alice
+DOCKER_USER_HOME=/home/alice
+```
+
+#### Step 3: Validate Configuration
+```bash
+# Verify environment files are correctly configured
+./docker/run_dev.sh --help
+# Should show help without errors about missing environment files
+```
 
 ## Core Concepts
 
@@ -95,11 +142,32 @@ To prevent file ownership issues when mounting local directories, the developmen
 | Auto-Fix Permissions | `./docker/run_dev.sh --fix-perms` | chowns files to your user on exit |
 | Shared Server | `./docker/run_dev.sh -u 2000 -g 2000` | Uses a custom UID/GID |
 
+### Quick Start with run_dev.sh
+
+The `run_dev.sh` script provides the easiest way to get started:
+
+```bash
+# Basic usage - start interactive shell
+./docker/run_dev.sh
+
+# Run a command
+./docker/run_dev.sh python scripts/rsl_rl/train.py --task=YourTask
+
+# Rootless mode (for restricted environments)
+./docker/run_dev.sh --rootless
+
+# With permission fixing
+./docker/run_dev.sh --fix-perms
+
+# Custom user/group
+./docker/run_dev.sh --uid 1001 --gid 1001
+```
+
 ## Usage Guide
 
 ### The container.sh Script
 
-The `./docker/container.sh` script is the main interface for managing containers. The `./docker/run_dev.sh` script is a convenient wrapper around it.
+The `./docker/container.sh` script is the main interface for managing containers. The `./docker/run_dev.sh` script is a convenient wrapper that provides easy mode switching and user-friendly options.
 
 **Basic Syntax:** `./docker/container.sh -p <profile> <command>`
 
@@ -151,10 +219,14 @@ Once you have the base images, you can build the extension containers:
 
 **Development:**
 ```bash
-# Start an interactive shell
-./docker/container.sh -p ext-dev run
+# Start an interactive shell (recommended - use run_dev.sh)
+./docker/run_dev.sh
 
-# Run a specific training task
+# Run a specific training task (recommended - use run_dev.sh)
+./docker/run_dev.sh python scripts/rsl_rl/train.py --task=YourTask
+
+# Alternative: Using container.sh directly
+./docker/container.sh -p ext-dev run
 ./docker/container.sh -p ext-dev run python scripts/rsl_rl/train.py --task=YourTask
 ```
 
@@ -190,20 +262,55 @@ This system works by creating a `.mount.config` file and auto-generating a `dock
 
 For detailed cluster operations, see `docker/cluster/README.md`.
 
-**Quick Workflow:**
+**Quick Cluster Workflow:**
 ```bash
 # 1. (Optional) Configure mounts for cluster usage
 ./docker/container.sh mount-setup
 
-# 2. Navigate to the cluster directory
+# 2. Set up cluster environment (first time only)
+cp docker/cluster/.env.cluster.template docker/cluster/.env.cluster
+# Edit .env.cluster with your cluster-specific settings
+
+# 3. Navigate to the cluster directory
 cd docker/cluster
 
-# 3. Push the container image to the cluster's registry
+# 4. Push the container image to the cluster's registry
 ./cluster_interface.sh push ext_template
 
-# 4. Submit a job
+# 5. Submit a job
 ./cluster_interface.sh job ext_template --task YourTask --num_envs 64000
+
+# 6. Sync results back to local machine
+./sync_experiments.sh --remove ~/experiments/logs
 ```
+
+## System Requirements & Performance Expectations
+
+### Docker Version Compatibility
+**Tested Combinations:**
+- Docker 24.0.7 + Apptainer 1.2.5
+- Docker ≥ 27.0.0 + Apptainer ≥ 1.3.4
+
+**System Requirements:**
+- NVIDIA GPU with current drivers
+- 20GB+ free disk space for containers
+- 8GB+ RAM recommended for development
+- Fast internet connection for initial builds
+
+### Expected Performance
+**Container Build Times:**
+- Production container (`isaac-lab-ext`): ~5-10 minutes
+- Development container (`isaac-lab-ext-dev`): ~10-15 minutes
+- Subsequent builds with cache: ~2-5 minutes
+
+**Container Sizes:**
+- Production: ~26-27GB
+- Development: ~50-52GB
+
+**Cluster Operations:**
+- Container push to cluster: ~5-15 minutes (depending on network)
+- Code sync: ~30 seconds for typical extension
+- Job submission: ~1-5 seconds
 
 ## Troubleshooting
 
@@ -219,7 +326,7 @@ If you encounter issues with other versions, consider updating to a tested combi
 
 **Cause:** Files created in the container are owned by root.
 
-**Solution 1 (Auto-fix):** Use the `--fix-perms` flag to chown files on exit.
+**Solution 1 (Recommended - Auto-fix):** Use the `--fix-perms` flag to automatically fix permissions on exit.
 ```bash
 ./docker/run_dev.sh --fix-perms
 ```
@@ -252,6 +359,42 @@ export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-/dev/null}"
 export DISPLAY="${DISPLAY:-:0}"
 ```
 
+### Problem: Environment File Not Found or Configured
+
+**Cause:** Environment files not copied or paths not configured.
+
+**Solution:**
+1. Copy templates and configure paths:
+   ```bash
+   cp docker/.env.ext_template-dev.template docker/.env.ext_template-dev
+   # Edit the file with your actual paths (see Environment Files Setup section)
+   ```
+2. Validate configuration:
+   ```bash
+   ./docker/run_dev.sh --help  # Should not show missing file errors
+   ```
+
+### Problem: Mount Configuration Missing
+
+**Cause:** Docker compose override file not generated.
+
+**Solution:**
+```bash
+# Generate mount configuration (even if not using external mounts)
+cd docker
+python3 mount_config.py generate
+```
+
+### Problem: Container Build Timeout or Failure
+
+**Cause:** Network issues, insufficient disk space, or base image missing.
+
+**Solution:**
+1. Check available disk space: `df -h`
+2. Ensure base images exist: `docker images | grep isaac-lab`
+3. Clean Docker cache if needed: `docker system prune`
+4. Try building with no cache: `./docker/container.sh -p ext-dev build --no-cache`
+
 ### Problem: GPU Not Accessible Inside Container
 
 **Solution:**
@@ -268,7 +411,35 @@ export DISPLAY="${DISPLAY:-:0}"
 
 ## Best Practices
 
-- **Development:** Use the `isaac-lab-ext-dev` container for all local development
+- **Development:** Use `./docker/run_dev.sh` for all local development - it provides the easiest interface
 - **Production:** Use the `isaac-lab-ext` container for cluster jobs and performance tests to minimize overhead
 - **Mounts:** Prefer the built-in libraries for stability. Only use external mounts when actively developing on them
 - **Permissions:** On your personal machine, use the default user-preserving mode. Use `--fix-perms` if you encounter ownership issues
+- **Environment Setup:** Always copy and configure the environment templates before first use
+- **Cluster Operations:** Set up the cluster environment file before pushing containers to cluster
+
+### File Structure Overview
+
+```
+docker/
+├── README.md                           # This documentation
+├── run_dev.sh                         # Convenience script for development
+├── container.sh                       # Main container management script
+├── mount_config.py                    # Mount configuration management
+├── Dockerfile.ext                     # Production container
+├── Dockerfile.ext-dev                 # Development container
+├── docker-compose.yaml                # Container definitions
+├── docker-compose.override.yaml.template # Template for mount overrides
+├── .env.ext_template.template         # Production environment template
+├── .env.ext_template-dev.template     # Development environment template
+├── entrypoint.sh                      # Container entrypoint
+├── dynamic_entrypoint.sh              # Multi-mode entrypoint
+└── cluster/                           # Cluster deployment scripts
+    ├── README.md                      # Cluster-specific documentation
+    ├── cluster_interface.sh           # Main cluster interface
+    ├── .env.cluster.template          # Cluster environment template
+    ├── submit_job_slurm.sh            # SLURM job submission
+    ├── submit_job_pbs.sh              # PBS job submission
+    ├── sync_experiments.sh            # Experiment syncing
+    └── sync_mounts.py                 # Mount syncing for cluster
+```

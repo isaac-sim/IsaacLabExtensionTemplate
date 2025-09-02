@@ -8,21 +8,45 @@ This guide focuses on cluster-specific operations for deploying IsaacLab extensi
 2. **Docker and Apptainer** installed locally
 3. **Environment file**: Copy and configure the cluster environment:
    ```bash
-   cp .env.cluster.template .env.cluster
+   cp docker/cluster/.env.cluster.template docker/cluster/.env.cluster
    ```
-   Edit `.env.cluster` with your cluster-specific settings:
-   - `CLUSTER_USER`: Your cluster username
-   - `CLUSTER_LOGIN`: SSH login string (e.g., `username@euler.ethz.ch`)
-   - `CLUSTER_ISAACLAB_DIR`: Base directory for experiments on cluster
-   - `CLUSTER_SIF_PATH`: Directory for Singularity images
-   - `CLUSTER_JOB_SCHEDULER`: SLURM or PBS
-   - `CLUSTER_PYTHON_EXECUTABLE`: Script to run (e.g., `scripts/rsl_rl/train.py`)
+
+#### Cluster Configuration Examples
+
+Edit `docker/cluster/.env.cluster` with your cluster-specific settings:
+
+**Generic University Cluster:**
+```bash
+CLUSTER_USER=your_username                    # ← CHANGE THIS
+CLUSTER_LOGIN=$CLUSTER_USER@cluster.university.edu  # ← CHANGE THIS
+CLUSTER_ISAACLAB_DIR=/cluster/home/$CLUSTER_USER/$EXTENSION_NAME
+CLUSTER_SIF_PATH=/cluster/scratch/$CLUSTER_USER
+CLUSTER_JOB_SCHEDULER=SLURM                  # or PBS
+```
+
+**ETH Euler Example:**
+```bash
+CLUSTER_USER=your_nethz_id
+CLUSTER_LOGIN=$CLUSTER_USER@euler.ethz.ch
+CLUSTER_ISAACLAB_DIR=/cluster/home/$CLUSTER_USER/$EXTENSION_NAME
+CLUSTER_SIF_PATH=/cluster/work/rsl/$CLUSTER_USER
+CLUSTER_JOB_SCHEDULER=SLURM
+```
+
+#### Validate Cluster Setup
+```bash
+# Test SSH connection
+ssh $CLUSTER_USER@your_cluster_address "echo 'Connection successful'"
+
+# Verify directories exist
+ssh $CLUSTER_USER@your_cluster_address "mkdir -p /path/to/cluster/directories"
+```
 
 ## Quick Start
 
 ```bash
 # 1. Build container locally (if not already done)
-cd ../
+cd docker
 ./container.sh -p ext build
 
 # 2. Push container to cluster
@@ -74,7 +98,7 @@ The cluster system supports the unified mount configuration:
 
 ```bash
 # Configure mounts locally before pushing
-cd ../
+cd docker
 ./container.sh mount-setup
 
 # Mounts are automatically synced with the container
@@ -89,7 +113,7 @@ cd cluster
 
 ```bash
 # Configure mount-only mode
-cd ../
+cd docker
 ./container.sh mount-enable isaaclab
 ./container.sh mount-set-sync isaaclab off
 ./container.sh mount-set-cluster isaaclab /cluster/home/$USER/isaaclab
@@ -115,11 +139,24 @@ Sync experiment logs from cluster to local machine:
 ### Check Job Status
 
 ```bash
-# SLURM
-ssh $CLUSTER_LOGIN "squeue -u $USER"
+# SLURM - List your jobs
+ssh $CLUSTER_LOGIN "squeue -u \$USER"
 
-# PBS
-ssh $CLUSTER_LOGIN "qstat -u $USER"
+# SLURM - Detailed job information  
+ssh $CLUSTER_LOGIN "scontrol show job <job_id>"
+
+# PBS - List your jobs
+ssh $CLUSTER_LOGIN "qstat -u \$USER"
+
+# PBS - Detailed job information
+ssh $CLUSTER_LOGIN "qstat -f <job_id>"
+```
+
+**Example Output:**
+```bash
+$ ssh your_user@cluster.edu "squeue -u \$USER"
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          12345678  gpuhe.4h isaaclab your_user  R       2:15      1 gpu-node-001
 ```
 
 ### Cancel Jobs
@@ -277,10 +314,53 @@ ENV_CLUSTER_PATH=.env.cluster.gpu2 \
     ./cluster_interface.sh push ext_template
 ```
 
+## Complete Workflow Example
+
+Here's a complete example of training a quadruped robot on a cluster:
+
+```bash
+# 1. Setup (one-time)
+cp docker/cluster/.env.cluster.template docker/cluster/.env.cluster
+# Edit .env.cluster with your cluster credentials
+
+# 2. Test locally first
+./docker/run_dev.sh python scripts/rsl_rl/train.py --task Isaac-Velocity-Flat-Anymal-D-v0 --num_envs 64 --headless
+
+# 3. Build and push to cluster  
+cd docker
+./container.sh -p ext build
+cd cluster
+./cluster_interface.sh push ext_template
+
+# 4. Submit training job
+./cluster_interface.sh job ext_template --task Isaac-Velocity-Flat-Anymal-D-v0 --num_envs 4096 --headless
+
+# 5. Monitor job
+ssh your_user@cluster.edu "squeue -u \$USER"
+
+# 6. Check logs during training
+ssh your_user@cluster.edu "tail -f /path/to/job/output.log"
+
+# 7. Sync results back when complete
+./sync_experiments.sh ~/experiments/logs
+
+# 8. Clean up (optional)
+./sync_experiments.sh --remove ~/experiments/logs
+```
+
+**Expected Timeline:**
+- Local test: ~2-5 minutes  
+- Container push: ~10-15 minutes
+- Job submission: ~5 seconds
+- Training time: varies (30 minutes to several hours)
+- Results sync: ~1-2 minutes
+
 ## Best Practices
 
 1. **Test Locally First**: Verify your code works in the Docker container before cluster submission
 2. **Start Small**: Test with fewer environments before scaling up
-3. **Monitor Resources**: Check cluster quotas and job limits
+3. **Monitor Resources**: Check cluster quotas and job limits  
 4. **Use Checkpointing**: Save models periodically for long-running jobs
 5. **Clean Up**: Remove old experiments to save cluster storage
+6. **Resource Planning**: Check queue wait times during peak hours
+7. **Validate Setup**: Use the validation commands before first cluster use
