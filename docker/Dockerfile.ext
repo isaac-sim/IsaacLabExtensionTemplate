@@ -1,0 +1,63 @@
+# we use the basic isaaclab image as the base
+FROM isaac-lab-base AS base
+
+# Declare build arguments
+ARG EXTENSION_NAME_ARG
+ARG DOCKER_EXT_PATH_ARG
+ARG DOCKER_USER_NAME_ARG
+ARG DOCKER_USER_HOME_ARG
+
+# Set environment variables
+ENV EXTENSION_NAME=${EXTENSION_NAME_ARG}
+ENV DOCKER_EXT_PATH=${DOCKER_EXT_PATH_ARG}
+ENV DOCKER_USER_NAME=${DOCKER_USER_NAME_ARG}
+ENV DOCKER_USER_HOME=${DOCKER_USER_HOME_ARG}
+
+# Set the home directory for the user
+ENV HOME=${DOCKER_USER_HOME}
+
+# Create necessary directories for the extension with proper permissions
+RUN mkdir -p ${DOCKER_EXT_PATH}/data && \
+    mkdir -p ${DOCKER_EXT_PATH}/logs && \
+    chmod -R 777 ${DOCKER_EXT_PATH}
+
+
+# Copy the entire extension directory
+COPY --chown=root:root . ${DOCKER_EXT_PATH}
+
+# Install required build dependencies
+RUN --mount=type=cache,target=/root/.cache/pip \
+    /workspace/isaaclab/isaaclab.sh -p -m pip install toml setuptools wheel build
+
+# Install extension with explicit setup dependencies
+RUN --mount=type=cache,target=/root/.cache/pip \
+    cd ${DOCKER_EXT_PATH} && \
+    /workspace/isaaclab/isaaclab.sh -p -m pip install -e source/${EXTENSION_NAME} --no-build-isolation
+
+
+
+# (Do not remove the DOCKER_EXT_PATH folder; keep it for the bind mount)
+
+# Minimal system packages for container functionality
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gosu && \
+    rm -rf /var/lib/apt/lists/*
+
+#==
+# Environment
+#==
+COPY docker/bashrc /home/bash.bashrc
+RUN chmod a+rwx /home/bash.bashrc
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set up Python alias
+RUN echo "alias python3='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /home/bash.bashrc && \
+    echo "alias python='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /home/bash.bashrc
+
+# Set working directory
+WORKDIR ${DOCKER_USER_HOME}
+
+# Set the entry point
+ENTRYPOINT ["/entrypoint.sh"]

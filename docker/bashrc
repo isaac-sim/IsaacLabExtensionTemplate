@@ -1,0 +1,124 @@
+# IsaacLab Extension Docker Environment Configuration
+
+export DOCKER=1
+
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+HISTCONTROL=ignoreboth
+shopt -s histappend
+HISTSIZE=1000
+HISTFILESIZE=2000
+shopt -s checkwinsize
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+        color_prompt=yes
+    else
+        color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w '
+fi
+unset color_prompt force_color_prompt
+
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -nsed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+if [[ ! -d ~/.fzf ]]
+then
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
+fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+export PS1=$PS1"\[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
+export PS1="\[\e[95m\]🐳 DOCKER\[\e[00m\] "$PS1
+
+# Docker container welcome message
+echo -e "\n\e[95m╔════════════════════════════════════════════════════════════╗\e[0m"
+echo -e "\e[95m║     🐳 You are now inside a Docker container! 🐳          ║\e[0m"
+echo -e "\e[95m╚════════════════════════════════════════════════════════════╝\e[0m"
+echo -e "\e[93mContainer: ext_template-dev\e[0m"
+echo -e "\e[92mIsaacLab path: /workspace/isaaclab\e[0m"
+echo -e "\e[92mExtension path: /workspace/ext_template\e[0m"
+echo -e "\e[96m🤖 Claude Code is available! Type 'claude' for AI assistance.\e[0m\n"
+
+FILE_ROS2=/opt/ros/humble/setup.bash
+source $FILE_ROS2
+
+export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+# Robotpkg environment variables
+export PATH=/opt/openrobots/bin:$PATH
+export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH
+export PYTHONPATH=/opt/openrobots/lib/python3.10/site-packages:$PYTHONPATH
+export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
+export PYTHONPATH="/workspace/isaaclab/_isaac_sim/kit/python/lib/python3.10/site-packages:$PYTHONPATH"
+# prevent the use of user packages 
+export PYTHONNOUSERSITE=1
+
+__conda_setup="$('/software/conda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/software/conda/etc/profile.d/conda.sh" ]; then
+        . "/software/conda/etc/profile.d/conda.sh"cd 
+    else
+        export PATH="/software/conda/bin:$PATH"
+    fi
+fi
+unset __conda_setup

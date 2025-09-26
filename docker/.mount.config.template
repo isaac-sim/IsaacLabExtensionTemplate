@@ -1,0 +1,22 @@
+{
+  "mounts": {
+    "isaaclab": {
+      "enabled": false,
+      "local_path": "/path/to/your/isaaclab",
+      "cluster_path": "",
+      "container_path": "/workspace/isaaclab",
+      "mount_type": "source",
+      "sync_to_cluster": true,
+      "description": "External IsaacLab installation (mounts only source/ subdirectory to preserve container's Python environment)"
+    },
+    "rsl_rl": {
+      "enabled": false,
+      "local_path": "/path/to/your/rsl_rl",
+      "cluster_path": "",
+      "container_path": "/workspace/isaaclab/_isaac_sim/kit/python/lib/python3.10/site-packages/rsl_rl",
+      "mount_type": "full",
+      "sync_to_cluster": true,
+      "description": "External RSL-RL installation (completely overrides built-in version)"
+    }
+  }
+}

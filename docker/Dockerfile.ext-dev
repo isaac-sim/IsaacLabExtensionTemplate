@@ -1,0 +1,123 @@
+# Unified Development Container with ROS2 and Dual-Mode Support
+# Supports both root and rootless operation modes
+FROM isaac-lab-ros2 AS base
+
+# =========================
+# Build Arguments and ENV
+# =========================
+ARG EXTENSION_NAME_ARG
+ARG EXT_PATH_ARG
+ARG DOCKER_EXT_PATH_ARG
+ARG DOCKER_USER_NAME_ARG
+ARG DOCKER_USER_HOME_ARG
+
+ENV EXT_PATH=${EXT_PATH_ARG} \
+    EXTENSION_NAME=${EXTENSION_NAME_ARG} \
+    DOCKER_EXT_PATH=${DOCKER_EXT_PATH_ARG} \
+    DOCKER_USER_NAME=${DOCKER_USER_NAME_ARG} \
+    DOCKER_USER_HOME=${DOCKER_USER_HOME_ARG} \
+    HOME=${DOCKER_USER_HOME}
+
+# =========================
+# Create User (for root mode)
+# =========================
+RUN useradd -d ${DOCKER_USER_HOME} -s /bin/bash ${DOCKER_USER_NAME} || true
+
+# =========================
+# Install Minimal System Dependencies
+# =========================
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gosu \
+    git \
+    git-lfs \
+    curl \
+    python3-colcon-common-extensions && \
+    rm -rf /var/lib/apt/lists/*
+
+# =========================
+# Configure Git LFS
+# =========================
+RUN git lfs install
+
+# =========================
+# Install Colcon Mixin
+# =========================
+RUN colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
+    colcon mixin update default
+
+# =========================
+# Install Minimal Python Dependencies
+# =========================
+# Users should add their own dependencies as needed
+
+# =========================
+# Install Basic Development Tools
+# =========================
+RUN ${ISAACLAB_PATH}/_isaac_sim/python.sh -m pip install --no-cache-dir \
+    pytest \
+    ruff
+
+
+# =========================
+# ROS2 Core Packages Only
+# =========================
+# Users should install additional ROS2 packages as needed
+# Example: apt-get install ros-humble-xacro ros-humble-tf2
+
+# =========================
+# Setup Extension Directories
+# =========================
+RUN mkdir -p ${DOCKER_EXT_PATH}/data ${DOCKER_EXT_PATH}/logs && \
+    chmod -R 777 ${DOCKER_EXT_PATH}
+
+# =========================
+# Copy and Install Extension
+# =========================
+COPY --chown=root:root source/${EXTENSION_NAME} ${DOCKER_EXT_PATH}/source/${EXTENSION_NAME}
+RUN --mount=type=cache,target=/root/.cache/pip \
+    cd ${DOCKER_EXT_PATH} && \
+    ${ISAACLAB_PATH}/isaaclab.sh -p -m pip install -e source/${EXTENSION_NAME}
+
+# =========================
+# Clean Up Extension Directory
+# =========================
+RUN rm -rf ${DOCKER_EXT_PATH}/source/${EXTENSION_NAME}
+
+
+
+# =========================
+# Set Ownership and Permissions
+# =========================
+# Make kit directory accessible to all users
+RUN chmod -R 777 /isaac-sim/kit
+
+# Create alternative home for rootless mode
+RUN mkdir -p /root/project && chmod 777 /root/project
+
+# =========================
+# Environment Setup
+# =========================
+COPY docker/bashrc /home/bash.bashrc
+RUN chmod a+rwx /home/bash.bashrc
+
+# Copy bashrc also to root for rootless mode
+RUN cp /home/bash.bashrc /root/.bashrc
+
+# Dynamic entrypoint that handles both modes
+COPY docker/dynamic_entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# =========================
+# Set Up Python Aliases
+# =========================
+RUN echo "alias python3='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /home/bash.bashrc && \
+    echo "alias python='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /home/bash.bashrc && \
+    echo "alias python3='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /root/.bashrc && \
+    echo "alias python='${ISAACLAB_PATH}/isaaclab.sh -p'" >> /root/.bashrc
+
+# =========================
+# Final Configuration
+# =========================
+WORKDIR ${DOCKER_USER_HOME}
+ENTRYPOINT ["/entrypoint.sh"]
