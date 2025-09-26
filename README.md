@@ -1,3 +1,15 @@
+# 🚨 Deprecation Notice
+
+This repository is no longer maintained.
+
+Since keeping this repo up-to-date with the continuous updates in Isaac Lab became difficult, we have migrated the project template generator directly into the [Isaac Lab](https://github.com/isaac-sim/IsaacLab) repository.
+
+👉 Please follow the steps in the Isaac Lab docs to set up your own project: [How to create your own Isaac Lab project](https://isaac-sim.github.io/IsaacLab/main/source/overview/own-project/index.html)
+
+If you would like to contribute to the extension template, please follow the [contribution guidelines](https://isaac-sim.github.io/IsaacLab/main/source/refs/contributing.html) in the Isaac Lab repository directly.
+ 
+---
+
 # Template for Isaac Lab Projects
 
 [![IsaacSim](https://img.shields.io/badge/IsaacSim-4.5.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
